@@ -1,0 +1,84 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 418bb1af3f145694b818e5bdea5e14f4, type: 3}
+  m_Name: LaborerSequence
+  m_EditorClassIdentifier: 
+  profession: 1
+  generalActSequenceIndex: 0
+  actions:
+  - type: 6
+    mode: 0
+    priority: 0
+    searchTarget: []
+    reaction: 
+    actVar: 
+    afterDelay: 0.4
+  - type: 7
+    mode: 0
+    priority: 0
+    searchTarget: []
+    reaction: 0300000003000000
+    actVar: 0000000000000000
+    afterDelay: 0
+  - type: 10
+    mode: 0
+    priority: 0
+    searchTarget: []
+    reaction: 01000000
+    actVar: 
+    afterDelay: 0.25
+  - type: 4
+    mode: 2
+    priority: 0
+    searchTarget:
+    - {fileID: 11400000, guid: 1ff5e058e275a4a4a87bc1cbb2034143, type: 2}
+    - {fileID: 11400000, guid: a598ffa8f99268148aca88eb1e14b156, type: 2}
+    - {fileID: 11400000, guid: 7abe834719711594a81dd96498af98e5, type: 2}
+    - {fileID: 11400000, guid: 57ffb537fad49fa42853bfd7ab99d133, type: 2}
+    reaction: 01000000
+    actVar: 
+    afterDelay: 0.4
+  - type: 2
+    mode: 0
+    priority: 0
+    searchTarget: []
+    reaction: 01000000
+    actVar: 
+    afterDelay: 0.25
+  - type: 8
+    mode: 5
+    priority: 5
+    searchTarget: []
+    reaction: 0100000001000000
+    actVar: 
+    afterDelay: 0
+  - type: 9
+    mode: 0
+    priority: 5
+    searchTarget: []
+    reaction: 01000000
+    actVar: 
+    afterDelay: 1
+  - type: 3
+    mode: 0
+    priority: 80
+    searchTarget: []
+    reaction: 01000000
+    actVar: 
+    afterDelay: 0
+  - type: 13
+    mode: 3
+    priority: 0
+    searchTarget: []
+    reaction: 0300000003000000
+    actVar: 0000000005000000
+    afterDelay: 0

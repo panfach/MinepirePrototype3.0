@@ -1,0 +1,111 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 418bb1af3f145694b818e5bdea5e14f4, type: 3}
+  m_Name: HunterSequence
+  m_EditorClassIdentifier: 
+  profession: 2
+  generalActSequenceIndex: 0
+  actions:
+  - type: 1
+    mode: 0
+    priority: 0
+    searchTarget: []
+    reaction: 01000000
+    actVar: 
+    afterDelay: 0
+  - type: 2
+    mode: 0
+    priority: 5
+    searchTarget: []
+    reaction: 0100000001000000
+    actVar: 
+    afterDelay: 0
+  - type: 3
+    mode: 0
+    priority: 80
+    searchTarget: []
+    reaction: 03000000
+    actVar: 06000000
+    afterDelay: 0
+  - type: 4
+    mode: 0
+    priority: 0
+    searchTarget:
+    - {fileID: 11400000, guid: 5c6fd11263809f74db8dbad0da16fcd9, type: 2}
+    reaction: 0100000004000000
+    actVar: 
+    afterDelay: 0
+  - type: 5
+    mode: 0
+    priority: 0
+    searchTarget: []
+    reaction: 0100000001000000
+    actVar: 
+    afterDelay: 0.1
+  - type: 2
+    mode: 0
+    priority: 5
+    searchTarget: []
+    reaction: 01000000
+    actVar: 
+    afterDelay: 0.1
+  - type: 4
+    mode: 2
+    priority: 0
+    searchTarget:
+    - {fileID: 11400000, guid: 595b24ca3bfca3149b273ab8bfb32020, type: 2}
+    - {fileID: 11400000, guid: dcfff9d31ff7b4d4288a5f56371f6627, type: 2}
+    reaction: 0100000003000000
+    actVar: 0000000003000000
+    afterDelay: 0
+  - type: 2
+    mode: 0
+    priority: 0
+    searchTarget: []
+    reaction: 0300000003000000
+    actVar: 0b0000000c000000
+    afterDelay: 0.1
+  - type: 8
+    mode: 5
+    priority: 5
+    searchTarget: []
+    reaction: 0100000003000000
+    actVar: 0000000003000000
+    afterDelay: 0.4
+  - type: 9
+    mode: 0
+    priority: 5
+    searchTarget: []
+    reaction: 01000000
+    actVar: 
+    afterDelay: 0
+  - type: 3
+    mode: 0
+    priority: 80
+    searchTarget: []
+    reaction: 01000000
+    actVar: 
+    afterDelay: 0
+  - type: 13
+    mode: 3
+    priority: 0
+    searchTarget: []
+    reaction: 0300000003000000
+    actVar: 0600000008000000
+    afterDelay: 0
+  - type: 13
+    mode: 3
+    priority: 0
+    searchTarget: []
+    reaction: 0300000003000000
+    actVar: 0300000008000000
+    afterDelay: 0

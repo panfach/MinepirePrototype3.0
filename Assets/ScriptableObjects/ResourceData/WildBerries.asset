@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6bc78457b8f163a449ca668ea128c1d7, type: 3}
+  m_Name: WildBerries
+  m_EditorClassIdentifier: 
+  _name: WildBerries
+  _name_rus: "\u0414\u0438\u043A\u0438\u0435 \u044F\u0433\u043E\u0434\u044B"
+  index: 4
+  type: 01000000
+  weight: 4
+  size: 4

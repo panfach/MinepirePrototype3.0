@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6ff17b494383fb45b9da5157e661600, type: 3}
+  m_Name: BerryBushes
+  m_EditorClassIdentifier: 
+  _name: BerryBushes
+  _name_rus: "\u042F\u0433\u043E\u0434\u043D\u044B\u0435 \u043A\u0443\u0441\u0442\u044B"
+  index: 4
+  resources:
+  - resource: {fileID: 11400000, guid: 57ffb537fad49fa42853bfd7ab99d133, type: 2}
+    amount: 1
+    extractSpeed: 1
+    recoverySpeed: 0.1
+    restorable: 1
+    sourceDeletionAfterExhaustion: 0
+  - resource: {fileID: 11400000, guid: 1ff5e058e275a4a4a87bc1cbb2034143, type: 2}
+    amount: 1
+    extractSpeed: 2
+    recoverySpeed: 0
+    restorable: 0
+    sourceDeletionAfterExhaustion: 1
+  friends: 0300000005000000

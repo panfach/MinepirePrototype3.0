@@ -1,0 +1,161 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6f31142c1388b64ba33f8ae24ce65e5, type: 3}
+  m_Name: Main DNChange Lighting Preset
+  m_EditorClassIdentifier: 
+  ambientColor:
+    serializedVersion: 2
+    key0: {r: 0.38354397, g: 0.41748765, b: 0.4811321, a: 1}
+    key1: {r: 0.3301887, g: 0.21704751, b: 0.19157174, a: 1}
+    key2: {r: 0.12615697, g: 0.13054338, b: 0.14150941, a: 0}
+    key3: {r: 0.3301887, g: 0.21704751, b: 0.19157174, a: 0}
+    key4: {r: 0.38431373, g: 0.41960785, b: 0.48235294, a: 0}
+    key5: {r: 0.38431373, g: 0.41960785, b: 0.48235294, a: 0}
+    key6: {r: 0.38431373, g: 0.41960785, b: 0.48235294, a: 0}
+    key7: {r: 0.3372549, g: 0.3647059, b: 0.42745098, a: 0}
+    ctime0: 13107
+    ctime1: 21627
+    ctime2: 32768
+    ctime3: 43908
+    ctime4: 52428
+    ctime5: 59753
+    ctime6: 59753
+    ctime7: 65535
+    atime0: 0
+    atime1: 65535
+    atime2: 0
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 0
+    m_NumColorKeys: 5
+    m_NumAlphaKeys: 2
+  directionalColor:
+    serializedVersion: 2
+    key0: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
+    key1: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
+    key2: {r: 1, g: 0.205793, b: 0, a: 0}
+    key3: {r: 1, g: 0.95686275, b: 0.8392157, a: 0}
+    key4: {r: 1, g: 0.95686275, b: 0.8392157, a: 0}
+    key5: {r: 0, g: 0, b: 0, a: 0}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 0
+    ctime1: 9830
+    ctime2: 31804
+    ctime3: 55705
+    ctime4: 65535
+    ctime5: 0
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 65535
+    atime2: 0
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 0
+    m_NumColorKeys: 5
+    m_NumAlphaKeys: 2
+  fogColor:
+    serializedVersion: 2
+    key0: {r: 0.7254902, g: 0.827451, b: 0.83137256, a: 1}
+    key1: {r: 0.6886792, g: 0.35214934, b: 0.28261837, a: 1}
+    key2: {r: 0.103773594, g: 0.103773594, b: 0.103773594, a: 0}
+    key3: {r: 0.6901961, g: 0.3529412, b: 0.28627452, a: 0}
+    key4: {r: 0.7254902, g: 0.827451, b: 0.83137256, a: 0}
+    key5: {r: 0, g: 0, b: 0, a: 0}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 16384
+    ctime1: 21627
+    ctime2: 31804
+    ctime3: 43908
+    ctime4: 49151
+    ctime5: 0
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 65535
+    atime2: 0
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 0
+    m_NumColorKeys: 5
+    m_NumAlphaKeys: 2
+  sunlightIntensity:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 136
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.3
+      value: 0.8
+      inSlope: -2.2074866
+      outSlope: -2.2074866
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.28686398
+      outWeight: 0.34337345
+    - serializedVersion: 3
+      time: 0.4
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.6
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.7
+      value: 0.8
+      inSlope: 2.2588308
+      outSlope: 2.2588308
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.28313228
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 1
+    m_PostInfinity: 1
+    m_RotationOrder: 4

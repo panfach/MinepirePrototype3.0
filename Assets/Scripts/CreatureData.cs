@@ -10,6 +10,23 @@ public class CreatureData : ScriptableObject
     [SerializeField] float maxHealth;
     [SerializeField] DroppedItem[] drop;
 
+    [Header("Time settings")]
+    public float timeOfBuildingEntering = 1f;
+    public float angleControlDelay = 0.18f;
+    public float checkEventsDelay = 0.11f;
+    public float defaultAttackDistance = 0.2f;
+    public float attackDelay = 0.9f;
+    public float constructionDistance = 1f;
+    public float constructionDelay = 1f;
+    public float defaultActionDistance = 0.2f;
+    public float takingDelay = 0.98f;
+    public float maxDistFromHome = 5f;
+
+
+    //const float timeOfBuildingEntering = 1f, angleControlDelay = 0.18f, checkEventsDelay = 0.11f;
+    //const float defaultAttackDistance = 0.2f, attackDelay = 0.9f, constructionDistance = 1f;
+    //const float constructionDelay = 1f, defaultActionDistance = 0.2f, takingDelay = 0.0f;
+
     public string Name { get => _name; }
     public CreatureIndex Index { get => index; }
     public float MaxHealth { get => maxHealth; }

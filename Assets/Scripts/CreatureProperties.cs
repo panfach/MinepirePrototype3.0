@@ -11,10 +11,14 @@ public class CreatureProperties : MonoBehaviour
     [SerializeField] float height;
 
     [Header("Info")]
+    [SerializeField] string _name;
     [SerializeField] bool gender;
     [SerializeField] float age;
     public Item[] droppedItems;                                                         // temporal
 
+    public string Name { get => _name; }
+    public bool Gender { get => gender; }
+    public float Age { get => age; }
     public Vector3 HeightVector { get => new Vector3(0f, height / 2, 0f); }
     public GameObject[] DroppedItemsAsGameObjects
     {

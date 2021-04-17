@@ -8,16 +8,18 @@ public class DisplayedItems : MonoBehaviour
 
     [Header("Settings")]
     [SerializeField] bool hasSelectionPlane;
+    [SerializeField] bool hasSilhouette;
     [SerializeField] bool hasDisplayedInventory;
     [SerializeField] Transform[] itemSpot;
     [SerializeField] GameObject selectionPlane;
+    [SerializeField] GameObject silhouette;
 
     GameObject[] displayedItem;
 
     public bool HasSelectionPlane { get => hasSelectionPlane; }
 
 
-    private void OnEnable()
+    private void OnEnable()                                                                                           // Add drag link to silhouette
     {
         if (hasSelectionPlane && entity.ColliderHandler != null)
         {
@@ -39,9 +41,19 @@ public class DisplayedItems : MonoBehaviour
         if (entity.BuildSet != null) selectionPlane.transform.position = new Vector3(entity.BuildSet.ModelPos.x, selectionPlane.transform.position.y, entity.BuildSet.ModelPos.z);
     }
 
+    public void DisplaySilhouette()
+    {
+                                                                                                                        // Silhouette must be moved by some input controller (in update)
+    }
+
     public void HideSelectionPlane()
     {
         selectionPlane.SetActive(false);
+    }
+
+    public void HideSilhouette()
+    {
+        silhouette.SetActive(false);
     }
 
     public void DisplayInventory() // This function is shit                      // Rewrite this function after "Inventory" rewriting

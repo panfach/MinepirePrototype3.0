@@ -5,7 +5,7 @@ using System;
 
 public class VillagerData
 {
-    public static Dictionary<Profession, string> profNameDict_rus = new Dictionary<Profession, string>()
+    public static Dictionary<Profession, string> profNameDict_rus = new Dictionary<Profession, string>()                       // This thing moved to DataList
     {
         {Profession.NONE, "Нет"},
         {Profession.LABORER, "Разнорабочий"},
@@ -203,18 +203,4 @@ public class VillagerData
         }
         return false;
     }
-}
-
-public enum Profession
-{
-    NONE,
-    LABORER,
-    HUNTER
-}
-
-public enum AppointMode
-{
-    NONE,
-    REASSIGNING,
-    SAVINGWORK
 }

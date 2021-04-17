@@ -8,7 +8,7 @@ using System.Linq;
 using System;
 
 // ------------------------------------------- // MINEPIRE // ------------------------------------------- //
-public class Villager : MonoBehaviour
+public class Villager_old : MonoBehaviour
 {
     public static GameObject selectionPlanePrefab, silhouettePrefab, silhouette;
     const float timeOfBuildingEntering = 1f, angleControlDelay = 0.18f, checkEventsDelay = 0.11f;

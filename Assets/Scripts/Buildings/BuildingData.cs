@@ -11,7 +11,7 @@ public class BuildingData : ScriptableObject
     [SerializeField] int sizeZ;
     [SerializeField] int constructionCost;
     [SerializeField] ResourceQuery resourceCost;
-    [SerializeField] int maxPeople;
+    //[SerializeField] int maxPeople;
     [SerializeField] BuildingType type;
     [SerializeField] Profession profession;
 
@@ -22,7 +22,7 @@ public class BuildingData : ScriptableObject
     public int SizeZ { get => sizeZ; }
     public int ConstrCost { get => constructionCost; }
     public ResourceQuery ResourceCost { get => resourceCost; }
-    public int MaxPeople { get => maxPeople; }
+    //public int MaxPeople { get => maxPeople; }
     public BuildingType BldType { get => type; }
     public Profession Profession { get => profession; }
 

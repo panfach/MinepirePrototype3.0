@@ -11,8 +11,8 @@ public class Building : Entity
     [SerializeField] BuildSet buildSet;
     [SerializeField] DisplayedItems displayedItems;
     [SerializeField] UIController uiController;
-    [SerializeField] PeopleContainer peopleContainer;
-    [SerializeField] PeopleAppointer peopleAppointer;
+    [SerializeField] CreatureContainer creatureContainer;
+    [SerializeField] Appointer appointer;
 
     public override BuildingData BldData { get => data; }
     public override BuildingProperties BldProp { get => properties; }
@@ -23,8 +23,8 @@ public class Building : Entity
     public override BuildSet BuildSet { get => buildSet; }
     public override DisplayedItems DisplayedItems { get => displayedItems; }
     public override UIController UIController { get => uiController; }
-    public override PeopleContainer PeopleContainer { get => peopleContainer; }
-    public override PeopleAppointer PeopleAppointer { get => peopleAppointer; }
+    public override CreatureContainer CreatureContainer { get => creatureContainer; }
+    public override Appointer Appointer { get => appointer; }
 
 
     public override void Die()

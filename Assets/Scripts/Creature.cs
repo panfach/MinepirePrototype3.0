@@ -38,3 +38,10 @@ public enum CreatureState
     RNDWALK,
     REST
 }
+
+public enum Profession
+{
+    NONE,
+    LABORER,
+    HUNTER
+}

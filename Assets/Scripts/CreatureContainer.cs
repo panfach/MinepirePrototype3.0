@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class PeopleContainer : MonoBehaviour
+public class CreatureContainer : MonoBehaviour
 {
     [Header("Entity")]
     public Entity entity;

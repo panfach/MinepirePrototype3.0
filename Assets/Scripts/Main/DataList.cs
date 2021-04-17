@@ -37,6 +37,13 @@ public class DataList : MonoBehaviour
 
     static Dictionary<CreatureIndex, GameObject> intCreatureObjDict = new Dictionary<CreatureIndex, GameObject>();
 
+    public static Dictionary<Profession, string> profNameDict_rus = new Dictionary<Profession, string>()          
+    {
+        {Profession.NONE, "Нет"},
+        {Profession.LABORER, "Разнорабочий"},
+        {Profession.HUNTER, "Охотник"}
+    };
+
 
     private void Awake()
     {

@@ -1,23 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class PeopleAppointer : MonoBehaviour
+public class PeopleAppointer_olc : MonoBehaviour
 {
-    [Header("Entity")]
-    public Entity entity;
-
-    [Header("Info")]
-    [SerializeField] int people;
-    [SerializeField] int maxPeople;
-    [SerializeField] List<VillagerData> peopleList = new List<VillagerData>();
-
-    public int People { get => people; }
-    public VillagerData GetPeople(int i) => peopleList[i];
-
-    public event SimpleEventHandler peopleChangedEvent;
-
     private void OnEnable()
-    {                                                                   
+    {
         maxPeople = entity.BldData.MaxPeople;
     }
 

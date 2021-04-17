@@ -16,8 +16,8 @@ public abstract class Entity : MonoBehaviour
     public virtual BuildSet BuildSet { get => null; }
     public virtual DisplayedItems DisplayedItems { get => null; }
     public virtual UIController UIController { get => null; }
-    public virtual PeopleContainer PeopleContainer { get => null; }
-    public virtual PeopleAppointer PeopleAppointer { get => null; }
+    public virtual CreatureContainer CreatureContainer { get => null; }
+    public virtual Appointer Appointer { get => null; }
     public virtual GeneralAI GeneralAI { get => null; }
     public virtual Health Health { get => null; }
     public virtual ResourceDeposit ResourceDeposit { get => null; }

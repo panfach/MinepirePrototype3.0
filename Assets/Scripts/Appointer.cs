@@ -47,6 +47,10 @@ public class Appointer : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Performs appointing to this appointer with all table changes
+    /// </summary>
+    /// <returns>Successful</returns>
     public bool Appoint(Appointer target)
     {
         if (!CheckAppointConditions(target)) return false;
@@ -54,11 +58,17 @@ public class Appointer : MonoBehaviour
         AddAppointment(target);
         target.AddAppointment(this);
 
-        if (type == AppointerType.VILLAGER) VillagerHandler(target);
+        if (type == AppointerType.VILLAGER) VillagerAddHandler(target);                                 // Bad
+        if (type == AppointerType.LIVINGPLACE) LivingPlaceAddHandler(target);
+        if (type == AppointerType.WORKPLACE) WorkPlaceAddHandler(target);
 
         return true;
     }
 
+    /// <summary>
+    /// Performs appointing to this appointer with all table changes (Appointment is selected by mouse)
+    /// </summary>
+    /// <returns>Successful</returns>
     public bool AppointByDragging()
     {
         Ray ray = Connector.mainCamera.ScreenPointToRay(Input.mousePosition);
@@ -74,116 +84,163 @@ public class Appointer : MonoBehaviour
         return false;
     }
 
+    /// <summary>
+    /// Performs removing of appointment from this appointer with all table changes
+    /// </summary>
     public void Remove(AppointerType _type, int index)
     {
         if (appointment[(int)_type].Count < index) return;
         Remove(appointment[(int)_type][index]);
     }
 
-    public void Remove(Appointer target)
+    /// <summary>
+    /// Performs removing of appointment from this appointer with all table changes
+    /// </summary>
+    public bool Remove(Appointer target)
     {
-        AppointerType _type = target.type;
-        //int index = appointment[(int)_type].IndexOf(target);
+        if (!CheckRemoveConditions(target)) return false;
 
         RemoveAppointment(target);
         target.RemoveAppointment(this);
+
+        if (type == AppointerType.VILLAGER) VillagerRemoveHandler(target);
+        if (type == AppointerType.LIVINGPLACE) LivingPlaceRemoveHandler(target);
+        if (type == AppointerType.WORKPLACE) WorkPlaceRemoveHandler(target);
+
+        return true;
+    }
+
+    public bool CheckAppointment(Appointer target)
+    {
+        for (int i = 0; i < AppointerTypeSize; i++)
+        {
+            for (int j = 0; j < appointment[i].Count; j++)
+            {
+                if (appointment[i][j] == target) return true;
+            }
+        }
+
+        return false;
     }
 
 
     bool CheckAppointConditions(Appointer target)
     {
+        if (target == null) return false;
         if (maxAppointments[(int)target.type] != 1 && appointment[(int)target.type].Count >= maxAppointments[(int)target.type]) return false;
         if (target.maxAppointments[(int)type] != 1 && target.appointment[(int)type].Count >= target.maxAppointments[(int)type]) return false;
 
         return true;
     }
 
+    bool CheckRemoveConditions(Appointer target)
+    {
+        if (target == null) return false;
+        if (!CheckAppointment(target)) return false;
+
+        return true;
+    }
+
+    /// <summary>
+    /// Performs appointing to this appointer WITHOUT table changes
+    /// </summary>
     void AddAppointment(Appointer target)
     {
         if (maxAppointments[(int)target.type] == 1)
         {
-            Remove(target.type, 0);                                                                             // Must contain homeless++ and etc
+            Remove(target.type, 0);                                                                
             appointment[(int)target.type][0] = target;
         }
         else appointment[(int)target.type].Add(target);
         appointmentChangedEvent?.Invoke();                                                                      // Add special conditions
     }
 
+    /// <summary>
+    /// Performs removing appointment form this appointer WITHOUT table changes
+    /// </summary>
     void RemoveAppointment(Appointer target)
     {
         appointment[(int)target.type].Remove(target);
         appointmentChangedEvent?.Invoke();
     }
 
-    void VillagerHandler(Appointer target)
+    void VillagerAddHandler(Appointer target)
     {
         switch (target.type)
         {
             case AppointerType.WORKPLACE:
-                VillageData.workers[(int)Profession.LABORER]--;                               // Remove(work) must laborer++
+                VillageData.workers[(int)Profession.LABORER]--;                            
                 VillageData.workers[(int)Profession]++;
                 VillageData.workersCount++;                                                   // ? Add property in VillageData 
-                if (Home == null) Remove(target.type, 0);
+                if (Home == null) Remove(AppointerType.WORKPLACE, 0);
                 break;
             case AppointerType.LIVINGPLACE:
                 VillageData.homeless--;
                 break;
         }
 
-        // workSequence = ActSequenceList.GetWorkSequence(profession);                                             ///////////////////////////
+        // workSequence = ActSequenceList.GetWorkSequence(profession);                        ///////////////////////////
+
+        entity.GeneralAI.DefineBehaviour();     
+    }
+
+    void VillagerRemoveHandler(Appointer target)
+    {
+        switch (target.type)
+        {
+            case AppointerType.WORKPLACE:
+                VillageData.workersCount--;                                                   // ? Add property in VillageData
+                VillageData.workers[(int)Profession]--;
+                VillageData.workers[(int)Profession.LABORER]++;
+                break;
+            case AppointerType.LIVINGPLACE:
+                if (Work != null) Remove(AppointerType.WORKPLACE, 0);
+                VillageData.homeless++;
+                break;
+        }
 
         entity.GeneralAI.DefineBehaviour();
-        
     }
 
-
-
-
-
-    public bool AddPeople(VillagerData villager)
+    void LivingPlaceAddHandler(Appointer target)
     {
-        if (People < maxPeople)
+        switch (target.type)
         {
-            peopleList.Add(villager);
-            people++;
-            peopleChangedEvent?.Invoke();
-            return true;
+            case AppointerType.VILLAGER:
+                target.VillagerAddHandler(this);
+                break;
         }
-        return false;
     }
 
-    public bool RemovePeople(VillagerData villager)
+    void LivingPlaceRemoveHandler(Appointer target)
     {
-        /*Debug.Log($"ReadySet.RemovePeople() Trying to remove people {villager.Name} {villager.Age}");
-        foreach(VillagerData item in peopleList)
+        switch (target.type)
         {
-            Debug.Log($"peopleList: {item.Name} {item.Age}");
-        }*/
-
-        if (peopleList.Remove(villager))
-        {
-            people--;
-            peopleChangedEvent?.Invoke();
-            return true;
+            case AppointerType.VILLAGER:
+                target.VillagerRemoveHandler(this);
+                break;
         }
-        return false;
     }
 
-    //public void ForgetPeopleAssignment()               // It doesn't need, because OnDisable exists
-    //{
-    //    people = 0;
-    //    peopleList.Clear();
+    void WorkPlaceAddHandler(Appointer target)
+    {
+        switch (target.type)
+        {
+            case AppointerType.VILLAGER:
+                target.VillagerAddHandler(this);
+                break;
+        }
+    }
 
-    //    for (int i = 0; i < AppointerTypeSize; i++)
-    //    {
-
-    //    }
-    //}
-
-    //public void SetDefaultPeople()
-    //{
-    //    people = 0;
-    //}
+    void WorkPlaceRemoveHandler(Appointer target)
+    {
+        switch (target.type)
+        {
+            case AppointerType.VILLAGER:
+                target.VillagerRemoveHandler(this);
+                break;
+        }
+    }
 
 
     private void OnDisable()
@@ -192,17 +249,13 @@ public class Appointer : MonoBehaviour
         {
             for (int j = 0; j < appointment[i].Count; j++)
             {
-                // Remove from Appointer
+                Remove((AppointerType)i, j);
             }
             appointment[i].Clear();
-
-            //if (entity.BldData.BldType == BuildingType.LIVING)
-            //    peopleList[0].Evict();                                    // Maybe use "RemovePeople()". Then its need to add some code in that function
-            //else if (entity.BldData.BldType == BuildingType.HUNT)
-            //    peopleList[0].Dismiss();
         }
     }
 }
+
 
 public enum AppointerType
 {

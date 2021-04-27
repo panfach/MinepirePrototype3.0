@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using ActSequenceSystem;
+using XNode;
 
 public class GeneralAI : MonoBehaviour
 {
@@ -13,11 +15,13 @@ public class GeneralAI : MonoBehaviour
     [SerializeField] float maxRandomWalkDelay;
 
     [Header("Info")]
-    [SerializeField] CreatureState state;
+    [SerializeField] ActionType actionType;
 
+    ActSequenceGraph currentSequence;
+    ActionNode currentAction;
     Vector3 dest;
 
-    public CreatureState State { get => state; }
+    public ActionType GetActionType { get => actionType; }
 
 
     private void OnEnable()
@@ -29,17 +33,36 @@ public class GeneralAI : MonoBehaviour
     public void DefineBehaviour()
     {
         StopAllCoroutines();
-        state = CreatureState.NONE;
+        actionType = ActionType.NONE;
 
-        StartCoroutine(RandomWalk());
+        currentAction = currentSequence.GetStart();
+        Act();
     }
 
-    private void DefineAngle()
+    public void SwitchCurrentAction(ActionNode action)
+    {
+        if (action == null)
+            currentAction = currentSequence.GetStart();
+        else
+            currentAction = action;
+    }
+
+    public void Act()
+    {
+        if (currentAction == null) currentAction = currentSequence.GetStart();
+
+        // Deferred DefineBehaviour
+
+        actionType = currentAction.Type;
+        StartCoroutine(currentAction.Algorithm(entity as Creature));
+    }
+
+
+    void DefineAngle()
     {
         float angle = -180f * Mathf.Atan(entity.Agent.velocity.z / entity.Agent.velocity.x) / Mathf.PI + ((entity.Agent.velocity.x < 0f) ? 180f : 0f);
         LeanTween.rotateY(gameObject, angle, angleControlDelay);
     }
-
 
     IEnumerator AngleControl()
     {
@@ -49,6 +72,7 @@ public class GeneralAI : MonoBehaviour
             yield return new WaitForSeconds(angleControlDelay);
         }
     }
+
 
     IEnumerator RandomWalk()
     {

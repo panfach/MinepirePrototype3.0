@@ -32,6 +32,10 @@ public class DisplayedItems : MonoBehaviour
             displayedItem = new GameObject[entity.Inventory.PackSize * entity.Inventory.PacksAmount];
             entity.Inventory.invChangedEvent += DisplayInventory;
         }
+        if (hasSilhouette && entity.ColliderHandler != null)
+        {
+            entity.ColliderHandler.mouseDragEvent += DisplaySilhouette;
+        }
     }
 
 
@@ -43,7 +47,7 @@ public class DisplayedItems : MonoBehaviour
 
     public void DisplaySilhouette()
     {
-                                                                                                                        // Silhouette must be moved by some input controller (in update)
+        silhouette.SetActive(true);                                                              // Silhouette must be moved by some input controller (in update)
     }
 
     public void HideSelectionPlane()
@@ -117,6 +121,10 @@ public class DisplayedItems : MonoBehaviour
             HideInventory();
             displayedItem = null;
             entity.Inventory.invChangedEvent -= DisplayInventory;
+        }
+        if (hasSilhouette && entity.ColliderHandler != null)
+        {
+            entity.ColliderHandler.mouseDragEvent -= DisplaySilhouette;
         }
     }
 }

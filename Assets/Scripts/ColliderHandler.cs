@@ -11,6 +11,8 @@ public class ColliderHandler : MonoBehaviour
     public event SimpleEventHandler mouseEnterEvent;
     public event SimpleEventHandler mouseDownEvent;
     public event SimpleEventHandler mouseExitEvent;
+    public event SimpleEventHandler mouseDragEvent;
+    public event SimpleEventHandler mouseUpEvent;
 
     public bool MouseOver { get => mouseOver; }
 
@@ -26,6 +28,20 @@ public class ColliderHandler : MonoBehaviour
     {
         if (EventSystem.current.IsPointerOverGameObject()) return;
         mouseDownEvent?.Invoke();
+    }
+
+    public void OnMouseDrag()
+    {
+        if (EventSystem.current.IsPointerOverGameObject()) return;
+        StateManager.VillagerDragging = true;
+        mouseDragEvent?.Invoke();
+    }
+
+    public void OnMouseUp()
+    {
+        if (EventSystem.current.IsPointerOverGameObject()) return;
+        StateManager.VillagerDragging = false;
+        mouseUpEvent?.Invoke();
     }
 
     public void OnMouseExit()

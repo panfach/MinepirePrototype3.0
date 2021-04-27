@@ -1,30 +1,24 @@
 ﻿using System;
 using System.Collections;
 using UnityEngine;
-using System.Collections.Generic;
 using XNode;
 
 namespace ActSequenceSystem
 {
-    public class EnterBuilding : ActionNode
+    public class RandomWalk : ActionNode
     {
         [Input] public Building building;
 
-        [NonSerialized] ActionType type = ActionType.ENTERBUILDING;
+        [NonSerialized] ActionType type = ActionType.RNDWALK;
 
-        [Range(0.0f, 5.0f)] public float initialDelay;
         [Range(0, 100)] public int priority;
-        [Range(0.0f, 5.0f)] public float finalDelay;
-
-        [Output] public Connection trueConnection;
-        [Output] public Connection falseConnection;
 
 
         public override ActionType Type { get => type; }
 
         public override IEnumerator Algorithm(Creature creature)
         {
-            return ActionAlgorithms.EnterBuilding(creature, this);
+            return ActionAlgorithms.RandomWalk(creature, this);
         }
 
         public override object GetValue(NodePort port)

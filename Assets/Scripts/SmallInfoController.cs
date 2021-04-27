@@ -25,12 +25,16 @@ public class SmallInfoController : MonoBehaviour
 
     private void OnEnable()
     {
-        smallInfo = Connector.dynamicGameCanvas.SpawnInfo(entity);                             // <--- In future this line must be correct
-        //Connector.dynamicGameCanvas.SpawnInfo(entity as Building);                                            // In future generalize. Temporal. In future each "SpawnInfo" function in dynamic game canvas
+        smallInfo = Connector.dynamicGameCanvas.SpawnInfo(entity);                           
         if (reactToMouseEnter)
         {
             entity.ColliderHandler.mouseEnterEvent += Set;                                                    // must return spawned object (small info). 
             entity.ColliderHandler.mouseExitEvent += Set;
+        }
+        if (reactToMouseDrag)
+        {
+            entity.ColliderHandler.mouseDragEvent += SetAllBuilding;                        // Strange place
+            entity.ColliderHandler.mouseUpEvent += SetAllBuilding;
         }
         if (reactToResourceDepositStatus) entity.ResourceDeposit.statusChangedEvent += Set;
         Set();
@@ -154,6 +158,11 @@ public class SmallInfoController : MonoBehaviour
         {
             entity.ColliderHandler.mouseEnterEvent -= Set;
             entity.ColliderHandler.mouseExitEvent -= Set;
+        }
+        if (reactToMouseDrag)
+        {     
+            entity.ColliderHandler.mouseDragEvent -= SetAllBuilding;
+            entity.ColliderHandler.mouseUpEvent -= SetAllBuilding;
         }
         if (reactToResourceDepositStatus) entity.ResourceDeposit.statusChangedEvent -= Set;
     }

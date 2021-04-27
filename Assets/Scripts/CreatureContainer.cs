@@ -8,17 +8,34 @@ public class CreatureContainer : MonoBehaviour
 
     [Header("Settings")]
     public BuildingEnterTrigger[] enter;
-    [SerializeField] bool hasPeopleLimit;
-    [SerializeField] int peopleLimit;
+    [SerializeField] bool hasCreatureLimit;
+    [SerializeField] int creatureLimit;
 
     [Header("Info")]
-    [SerializeField] int people;
-    [SerializeField] List<VillagerData> peopleList = new List<VillagerData>();
+    [SerializeField] int creatures;
+    [SerializeField] List<Creature> creatureList = new List<Creature>();
+
+    public int CreatureCount { get => creatures; }
 
 
     private void OnEnable()
     {
+        // Add reaction of change. Changes must refresh ui info at least
+    }
 
+
+    public void Add(Creature creature)
+    {
+        creatureList.Add(creature);
+        creatures++;
+        // ChangeEvent
+    }
+
+    public void Remove(Creature creature)
+    {
+        if (creatureList.Remove(creature))
+            creatures--;
+        // ChangeEvent
     }
 
 

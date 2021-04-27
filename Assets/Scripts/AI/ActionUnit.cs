@@ -21,6 +21,7 @@ public class ActionUnit
 public enum ActionType
 {
     NONE,
+    START,
     GOTOWORK,                // Идти в рабочее здание
     TAKE,                    // Пойти за указанным предметом и взять его
     EXITHOUSE,               // Выйти из текущего здания
@@ -33,7 +34,9 @@ public enum ActionType
     EXTRACT,                 // Добыть ресурс
     EAT,
     GOTOPOINT,
-    CHECK
+    CHECK,
+    ENTERBUILDING,
+    RNDWALK
 }
 
 public enum SequenceAction

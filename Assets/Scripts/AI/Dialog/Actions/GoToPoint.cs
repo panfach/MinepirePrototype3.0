@@ -15,7 +15,7 @@ namespace ActSequenceSystem
         [Range(0, 100)] public int priority;
         [Range(0.0f, 5.0f)] public float finalDelay;
 
-        [Output] public Connection end;
+        [Output] public Connection trueConnection;
 
 
         public override object GetValue(NodePort port)

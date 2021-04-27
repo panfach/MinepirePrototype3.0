@@ -23,7 +23,7 @@ public class VillagerData
     public float defaultDamage;
     public float satiety;
 
-    public VillagerData(bool gender, string name, float age, Building _home = null, Building _work = null, float _satiety = 2.0f)
+    public VillagerData(bool gender, string name, float age, Building _home = null, Building _work = null, float _satiety = 2.0f)     // Now it is in CreatureProperties
     {
         Gender = gender;
         Name = name;

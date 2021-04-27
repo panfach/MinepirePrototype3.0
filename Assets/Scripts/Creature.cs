@@ -1,6 +1,11 @@
 ﻿using UnityEngine;
 using UnityEngine.AI;
 
+[RequireComponent(typeof(CreatureProperties))]
+[RequireComponent(typeof(GeneralAI))]
+[RequireComponent(typeof(Health))]
+[RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(NavMeshAgent))]
 public class Creature : Entity
 {
     [SerializeField] CreatureData creatureData;

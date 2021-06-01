@@ -5,11 +5,12 @@ using UnityEngine;
 // ------------------------------------------- // MINEPIRE // ------------------------------------------- //
 public class CreatureManager : MonoBehaviour
 {
-    public static bool animalsWereSpawned = false;
+    public static bool creaturesWereSpawned = false;                                                                        // Why is it needed ?
+    public static bool villagersWereSpawned = false;
     public static int animalPopulation;
-    public static List<Creature> Creatures { get; private set; } = new List<Creature>();
-
-    //public GameObject animalPrefab;
+    public static int villagerPopulation;
+    public static List<Creature> Animals { get; private set; } = new List<Creature>();
+    public static List<Creature> Villagers { get; private set; } = new List<Creature>();
 
     bool spawnBreak = false;
     float spawnDelay = 0.2f;
@@ -20,46 +21,135 @@ public class CreatureManager : MonoBehaviour
 
     // -------------------------------------------------------------------------------------------------- //
 
-/*    private void Update()
-    {
-
-        if (StateManager.VillagerDragging)
+    /*    private void Update()
         {
-            ray = Connector.mainCamera.ScreenPointToRay(Input.mousePosition);
 
-            if (Physics.Raycast(ray, out hit, raycastLength) *//*&& hit.collider.tag == "TerrainMesh"*//*)
+            if (StateManager.VillagerDragging)
             {
-                if (Villager.silhouette != null) Villager.silhouette.transform.position = hit.point;
+                ray = Connector.mainCamera.ScreenPointToRay(Input.mousePosition);
+
+                if (Physics.Raycast(ray, out hit, raycastLength) *//*&& hit.collider.tag == "TerrainMesh"*//*)
+                {
+                    if (Villager.silhouette != null) Villager.silhouette.transform.position = hit.point;
+                }
             }
-        }
-    }*/
+        }*/
 
     // -------------------------------------------------------------------------------------------------- //
-    public void SpawnAnimal(Vector3 position, CreatureIndex index, float healthPoints = -1)
+
+    public void Spawn
+        (Vector3 position,
+        CreatureIndex index = CreatureIndex.NONE,
+        bool gender = false,
+        string _name = "Potato",
+        int age = 0,
+        Building home = null,
+        Building work = null,
+        float satiety = 2.0f,
+        float healthPoints = -1)
     {
-        if (!spawnBreak)
+        GameObject creature = Instantiate(DataList.GetCreatureObj(index), new Vector3(position.x, SCCoord.GetHeight(position) + 0.5f, position.z), Quaternion.identity);
+        Creature entity = creature.GetComponent<Creature>();
+        Add(entity);
+        entity.CrtProp.Init(gender, _name, age, home, work, satiety);
+        //animalScript.GeneralAI.DefineBehaviour();
+        entity.Health.Value = (healthPoints >= 0) ? healthPoints : entity.CrtData.MaxHealth;
+        //Connector.dynamicGameCanvas.SpawnInfo(animalScript);
+    }
+
+    public void SpawnSingle
+        (Vector3 _position,
+        CreatureIndex _index = CreatureIndex.NONE,
+        bool _gender = false,
+        string _name = "Potato",
+        int _age = 0,
+        Building _home = null,
+        Building _work = null,
+        float _satiety = 2.0f,
+        float _healthPoints = -1)
+    {
+        if (spawnBreak) return;
+
+        Spawn(_position, _index, _gender, _name, _age, _home, _work, _satiety, _healthPoints);
+        spawnBreak = true;
+        StartCoroutine(SpawnBreak(spawnDelay));
+    }
+
+    public void SpawnRandomAnimal(Vector3 pos)                                                                   // In future remake this function. Now it is only for deer
+    {
+        CreatureIndex _index = CreatureIndex.DEER;
+        bool _gender = (Random.Range(0, 2) == 0) ? true : false;
+        CreatureData data = DataList.GetCreatureObj(CreatureIndex.DEER).GetComponent<CreatureData>();
+        int _age = Random.Range(data.MinRandomAge, data.MaxRandomAge);
+
+        Spawn(pos, _index, _gender, age: _age);
+    }
+
+    public void SpawnVillager()
+    {
+        Vector3 _position = VillageData.townhall.transform.position + new Vector3(Random.Range(-0.5f, 0.5f), 0f, Random.Range(-0.5f, 0.5f));
+        SpawnVillager(_position);
+    }
+
+    public void SpawnVillager(Vector3 _position)
+    {
+        Spawn(_position, CreatureIndex.VILLAGER);
+    }
+
+    public void SpawnRandomVillager()
+    {
+
+    }
+
+/*    public void SpawnVillager(VillagerData data)
+    {
+        Vector3 spawnPos = VillageData.townhall.transform.position + new Vector3(Random.Range(-0.5f, 0.5f), 0f, Random.Range(-0.5f, 0.5f));
+        GameObject villager = Instantiate(villagerPrefab, spawnPos, Quaternion.identity);
+        Villager villagerScript = villager.GetComponent<Villager>();
+        villagerScript.data = data;
+        villagerScript.actions = null;
+        //villagerScript.uiElement.text = data.Name;
+        //villagerScript.DefineInventory(1, 2);
+
+        Villagers.Add(villagerScript);
+        villager.SetActive(true);
+
+        Connector.dynamicGameCanvas.SpawnInfo(villagerScript);
+        villagerScript.SetSmallInfo();
+    }*/
+
+    public void Add(Creature creature)
+    {
+        if (creature.CrtData.Index == CreatureIndex.VILLAGER)
         {
-            GameObject animal = Instantiate(DataList.GetCreatureObj(index), new Vector3(position.x, SCCoord.GetHeight(position) + 0.5f, position.z), Quaternion.identity);
-            Creature animalScript = animal.GetComponent<Creature>();
-            if (index != CreatureIndex.HUMAN) animalPopulation++;
-
-            Creatures.Add(animalScript);
-            animal.SetActive(true);
-            animalScript.CrtProp.Init((Random.Range(0, 2) == 0) ? true : false, Random.Range(0, 9));
-            //animalScript.GeneralAI.DefineBehaviour();
-            if (healthPoints >= 0) animalScript.Health.Value = healthPoints;
-            //Connector.dynamicGameCanvas.SpawnInfo(animalScript);
-
-            spawnBreak = true;
-            StartCoroutine(SpawnBreak(spawnDelay));
+            Villagers.Add(creature);
+            villagerPopulation++;
+        }
+        else
+        {
+            Animals.Add(creature);
+            animalPopulation++;
         }
     }
 
-    public void InstantSpawnAnimal(Vector3 position, CreatureIndex index, float healthPoints = -1)
+    public bool Remove(Creature creature)
     {
-        spawnBreak = false;
-        SpawnAnimal(position, index, healthPoints);
+        if (creature.CrtData.Index == CreatureIndex.VILLAGER)
+        {
+            if (!Villagers.Remove(creature)) 
+                return false;
+            villagerPopulation--;
+        }
+        else
+        {
+            if (!Animals.Remove(creature))
+                return false;
+            animalPopulation--;
+        }
+
+        return true;
     }
+        
 
     /*public void SpawnAllAnimals()
     {
@@ -73,11 +163,11 @@ public class CreatureManager : MonoBehaviour
         }
     }*/
 
-    public static void DefineAllBehaviours()
+    public static void DefineVillagerBehaviours(int priority = 0)
     {
-        foreach (Creature item in Creatures)
+        foreach (Creature item in Villagers)
         {
-            item.GeneralAI.DefineBehaviour();
+            item.GeneralAI.DefineBehaviour(priority);
         }
     }
 
@@ -107,11 +197,16 @@ public class CreatureManager : MonoBehaviour
 
     public void Clear()
     {
-        foreach (Creature item in Creatures)
+        foreach (Creature item in Animals)
         {
             Destroy(item);
         }
-        Creatures.Clear();
+        foreach (Creature item in Villagers)
+        {
+            Destroy(item);
+        }
+        Animals.Clear();
+        Villagers.Clear();
     }
 
     IEnumerator SpawnBreak(float time)

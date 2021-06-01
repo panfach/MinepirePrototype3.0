@@ -7,14 +7,8 @@ using UnityEngine;
 public class ActSequence : ScriptableObject
 {
     public Profession profession;
-    public GeneralActSequenceIndex generalActSequenceIndex;
+    public ActSequenceIndex generalActSequenceIndex;
     public ActionUnit[] actions;
 
     // additional options ...
-}
-
-public enum GeneralActSequenceIndex
-{
-    NONE,
-    EAT
 }

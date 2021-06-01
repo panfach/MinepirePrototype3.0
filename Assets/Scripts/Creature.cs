@@ -4,6 +4,7 @@ using UnityEngine.AI;
 [RequireComponent(typeof(CreatureProperties))]
 [RequireComponent(typeof(GeneralAI))]
 [RequireComponent(typeof(Health))]
+[RequireComponent(typeof(Satiety))]
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(NavMeshAgent))]
 public class Creature : Entity
@@ -15,8 +16,11 @@ public class Creature : Entity
     [SerializeField] ColliderHandler colliderHandler;
     [SerializeField] GeneralAI generalAI;
     [SerializeField] Health health;
+    [SerializeField] Satiety satiety;
     [SerializeField] Rigidbody _rigidbody;
     [SerializeField] NavMeshAgent navMeshAgent;
+    [SerializeField] Appointer appointer;
+    [SerializeField] AttackController attackController;
 
     public override CreatureData CrtData { get => creatureData; }
     public override CreatureProperties CrtProp { get => creatureProperties; }
@@ -25,13 +29,17 @@ public class Creature : Entity
     public override ColliderHandler ColliderHandler { get => colliderHandler; }
     public override GeneralAI GeneralAI { get => generalAI; }
     public override Health Health { get => health; }
+    public override Satiety Satiety { get => satiety; }
     public override Rigidbody Rigidbody { get => _rigidbody; }
     public override NavMeshAgent Agent { get => navMeshAgent; }
+    public override Appointer Appointer { get => appointer; }
+    public override AttackController AttackController { get => attackController; }
 
 
     public override void Die()
     {
-        CreatureManager.Creatures.Remove(this);
+        Connector.itemManager.DropItems(this, "Animal");                                            // What is "tag"?
+        Connector.creatureManager.Remove(this);
 
         Destroy(gameObject);
     }
@@ -42,6 +50,13 @@ public enum CreatureState
     NONE,
     RNDWALK,
     REST
+}
+
+public enum CreatureType
+{
+    NONE,
+    HUMAN,
+    ANIMAL
 }
 
 public enum Profession

@@ -10,7 +10,7 @@ using System;
 // ------------------------------------------- // MINEPIRE // ------------------------------------------- //
 public class Villager_old : MonoBehaviour
 {
-    public static GameObject selectionPlanePrefab, silhouettePrefab, silhouette;
+    /*public static GameObject selectionPlanePrefab, silhouettePrefab, silhouette;
     const float timeOfBuildingEntering = 1f, angleControlDelay = 0.18f, checkEventsDelay = 0.11f;
     const float defaultAttackDistance = 0.2f, attackDelay = 0.9f, constructionDistance = 1f;
     const float constructionDelay = 1f, defaultActionDistance = 0.2f, takingDelay = 0.0f;
@@ -147,7 +147,7 @@ public class Villager_old : MonoBehaviour
     {
         //Debug.Log("DefineBehaviour: actions =? null : " + actions == null);
         //Debug.Log("DefineBehaviour: actions =? null : " + actions == null + " workInd = " + workInd + " actions[workInd] : " + actions[workInd].type.ToString());
-        if (actions != null && workInd < actions.Length && priority < currentBehaviourPriority/*actions[workInd].priority*/)
+        if (actions != null && workInd < actions.Length && priority < currentBehaviourPriority*//*actions[workInd].priority*//*)
         {
             //Debug.Log("DefineBehaviour: deferred");
             deferredDefineBehaviour = true;
@@ -1243,7 +1243,7 @@ public class Villager_old : MonoBehaviour
         InfoDisplay.Refresh();
     }
 
-    public void SelfDeletion() { Destroy(gameObject); }
+    public void SelfDeletion() { Destroy(gameObject); }*/
 }
 
 public class WorkActionFlags

@@ -17,12 +17,10 @@ public class DynamicGameCanvas : MonoBehaviour
     public static List<SmallInfo> resourceSourceSmallInfoList = new List<SmallInfo>();
 
     public GameObject buildingInfoPrefab;
-    public GameObject villagerInfoPrefab;
-    public GameObject animalInfoPrefab;
+    public GameObject creatureInfoPrefab;
     public GameObject resourceInfoPrefab;
     public GameObject resourceSourceInfoPrefab; 
-    public float villagerInfoHeight;
-    public float animalInfoHeight;
+    public float creatureInfoHeight;
     public float resourceInfoHeight;
 
     SmallInfo info;
@@ -33,7 +31,7 @@ public class DynamicGameCanvas : MonoBehaviour
         UpdateBuildings();
         UpdateVillagers();
         UpdateAnimals();
-        UpdateResources();
+        UpdateItems();
         UpdateResourceSources();
     }
 
@@ -68,21 +66,11 @@ public class DynamicGameCanvas : MonoBehaviour
         return script;
     }
 
-    public void SpawnInfo(Villager villager)
-    {
-        GameObject obj;
-
-        obj = Instantiate(villagerInfoPrefab, transform);
-        SmallVillagerInfo script = obj.GetComponent<SmallVillagerInfo>();
-        script.Init(villager);
-        villagerSmallInfoList.Add(script);
-    }
-
     public SmallInfo SpawnInfo(Creature creature)
     {
         GameObject obj;
 
-        obj = Instantiate(animalInfoPrefab, transform);
+        obj = Instantiate(creatureInfoPrefab, transform);
         SmallAnimalInfo script = obj.GetComponent<SmallAnimalInfo>();
         script.Init(creature);
         animalSmallInfoList.Add(script);
@@ -144,7 +132,7 @@ public class DynamicGameCanvas : MonoBehaviour
         {
             if (!item.deletionFlag && item.gameObject.activeSelf)
             {
-                worldPosition = new Vector3(item.objectTransform.position.x, item.objectTransform.position.y + villagerInfoHeight, item.objectTransform.position.z);
+                worldPosition = new Vector3(item.objectTransform.position.x, item.objectTransform.position.y + creatureInfoHeight, item.objectTransform.position.z);
                 screenPosition = Connector.mainCamera.WorldToScreenPoint(worldPosition);
 
                 if (screenPosition.x > 0 && screenPosition.x < Screen.width && screenPosition.y > 0 && screenPosition.y < Screen.height)
@@ -186,7 +174,7 @@ public class DynamicGameCanvas : MonoBehaviour
             if (!info.deletionFlag && info.gameObject.activeSelf)
             {
                 worldPosition.x = info.objectTransform.position.x;
-                worldPosition.y = info.objectTransform.position.y + villagerInfoHeight;
+                worldPosition.y = info.objectTransform.position.y + creatureInfoHeight;
                 worldPosition.z = info.objectTransform.position.z;
                 screenPosition = Connector.mainCamera.WorldToScreenPoint(worldPosition);
 
@@ -202,13 +190,13 @@ public class DynamicGameCanvas : MonoBehaviour
         }
     }
 
-    void UpdateResources()
+    void UpdateItems()                                                                               
     {
         foreach (SmallResourceInfo item in resourceSmallInfoList)
         {
             if (!item.deletionFlag && item.gameObject.activeSelf)
             {
-                worldPosition = new Vector3(item.objectTransform.position.x, item.objectTransform.position.y + villagerInfoHeight, item.objectTransform.position.z);
+                worldPosition = new Vector3(item.objectTransform.position.x, item.objectTransform.position.y + 0.5f, item.objectTransform.position.z);           // 0.5f = itemInfoHeight <= add this variable
                 screenPosition = Connector.mainCamera.WorldToScreenPoint(worldPosition);
 
                 if (screenPosition.x > 0 && screenPosition.x < Screen.width && screenPosition.y > 0 && screenPosition.y < Screen.height)

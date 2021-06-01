@@ -2,16 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Health : MonoBehaviour
+public class Health : MonoBehaviour, IIndicator
 {
     [Header("Entity")]
-    [SerializeField] Entity entity;
+    public Entity entity;
 
     [Header("Info")]
     [SerializeField] float health;
-    public GameObject lastAttacker;                                                                  // temporal ?
+    [SerializeField] AttackController lastAttacker;                                                                  // temporal ?
 
-    public event SimpleEventHandler changeHealthEvent;
+    public event SimpleEventHandler changedValueEvent;
+
+    public AttackController LastAttacker { get => lastAttacker; }
 
 
     private void OnEnable()
@@ -26,25 +28,26 @@ public class Health : MonoBehaviour
         set
         {
             health = value;
-            if (health <= 0f)
-            {
-                Die(lastAttacker);
-            }
             health = Mathf.Clamp(health, 0f, entity.CrtData.MaxHealth);
-            changeHealthEvent?.Invoke();
+            changedValueEvent?.Invoke();
 
             //if (smallInfo != null && smallInfo.enabled) smallInfo.Refresh();                     // Implement this in future
+
+            if (health <= 0f)
+            {
+                entity.Die();
+            }
         }
     }
 
-    public void GetDamage(GameObject sender, float damage)
+    public void GetDamage(AttackController sender, float damage)
     {
-        if (sender.GetComponent<Villager>() != null) lastAttacker = sender;                        // Rewrite it to "if (sender.GetComponent<AttackController>() != null) ...
+        lastAttacker = sender;                                            
         Value -= damage;
     }
 
 
-    public void Die(GameObject killer = null)                                                              
+    /*public void Die(GameObject killer = null)                                                              
     {
         CreatureManager.Creatures.Remove(entity as Creature);                                          // In future merge VillagerManager and AnimalManager to new CreatureManager
         CreatureManager.animalPopulation--;                                                                // In future CreatureProperties should contain CreatureManager.Remove(entity) in OnDisable()
@@ -53,5 +56,5 @@ public class Health : MonoBehaviour
         killer?.GetComponent<Villager>()?.SetFutureDestObj(entity.CrtProp.DroppedItemsAsGameObjects);            // ~ Curve drop system
 
         Destroy(gameObject);
-    }
+    }*/
 }

@@ -20,9 +20,11 @@ public abstract class Entity : MonoBehaviour
     public virtual Appointer Appointer { get => null; }
     public virtual GeneralAI GeneralAI { get => null; }
     public virtual Health Health { get => null; }
+    public virtual Satiety Satiety { get => null; }
     public virtual ResourceDeposit ResourceDeposit { get => null; }
     public virtual Rigidbody Rigidbody { get => null; }
     public virtual NavMeshAgent Agent { get => null; }
+    public virtual AttackController AttackController { get => null; }
 
     public abstract void Die();
 }

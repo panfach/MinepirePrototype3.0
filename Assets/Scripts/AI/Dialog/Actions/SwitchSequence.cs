@@ -5,20 +5,23 @@ using XNode;
 
 namespace ActSequenceSystem
 {
-    public class RandomWalk : ActionNode
+    public class SwitchSequence : ActionNode
     {
         [Input] public Connection enter;
+        [Input] public ActSequenceIndex sequence;
 
-        [NonSerialized] ActionType type = ActionType.RNDWALK;
+        [NonSerialized] ActionType type = ActionType.SWITCHSEQ;
 
-        [Range(0, 100)] public int priority;
+        [NonSerialized] public int priority = 100;
+
+        [Output] public Connection trueConnection;
 
 
         public override ActionType Type { get => type; }
 
         public override IEnumerator Algorithm(Creature creature)
         {
-            return ActionAlgorithms.RandomWalk(creature, this);
+            return ActionAlgorithms.SwitchSequence(creature, this);
         }
 
         public override object GetValue(NodePort port)
@@ -27,3 +30,5 @@ namespace ActSequenceSystem
         }
     }
 }
+
+

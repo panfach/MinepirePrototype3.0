@@ -16,14 +16,14 @@ public class ResourceDeposit : MonoBehaviour
     [SerializeField] float[] amount;                                 // Количество ресурса
     [SerializeField] bool[] extractable;                             // Находится ли в очереди на добычу
     [SerializeField] bool[] occupied;                                // Есть ли житель, который собирается взаимодействовать с данным классом
-    [SerializeField] Villager[] owner;                               // Если есть, то ссылка на этого жителя
+    [SerializeField] GeneralAI[] owner;                              // Если есть, то ссылка на этого жителя
 
     public Transform ExtractPoint { get => extractPoint; }
     public ResourceIndex Index(int i) => index[i];
     public float Amount(int i) => amount[i];
     public bool Extractable(int i) => extractable[i];
     public bool Occupied(int i) => occupied[i];
-    public Villager Owner(int i) => owner[i];
+    public GeneralAI Owner(int i) => owner[i];
     public int Size { get => index.Length; }
 
     public event SimpleEventHandler resourceChangedEvent;
@@ -44,11 +44,11 @@ public class ResourceDeposit : MonoBehaviour
 
         occupied = new bool[size];
 
-        owner = new Villager[size];
+        owner = new GeneralAI[size];
     }
 
 
-    public bool Occupy(int ind, Villager _owner)
+    public bool Occupy(int ind, GeneralAI _owner)
     {
         if (occupied[ind] && _owner != owner[ind]) return false;
         else
@@ -60,7 +60,7 @@ public class ResourceDeposit : MonoBehaviour
         }
     }
 
-    public void RemoveOccupation(int ind, Villager _villager)
+    public void RemoveOccupation(int ind, GeneralAI _villager)
     {
         if (_villager == owner[ind])
         {
@@ -79,9 +79,9 @@ public class ResourceDeposit : MonoBehaviour
         VillageData.extractionQueue.Remove(new ExtractedResourceLink(this, ind));
         if (occupied[ind])
         {
-            Villager villager = owner[ind];
+            GeneralAI villager = owner[ind];
             owner = null;
-            villager.destExtractedResource = null;
+            villager.ForgetExtractedResource();
             villager.DefineBehaviour(7);
         }
 

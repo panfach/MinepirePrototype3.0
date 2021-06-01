@@ -1,31 +1,29 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using ActSequenceSystem;
 using System;
 
 public class ActSequenceList : MonoBehaviour
 {
-    [Header("Array of general act sequences")]
-    public ActSequence[] generalSequences;
-    [Header("Array of work sequences")]
-    public ActSequence[] workSequences;
+    [Header("Array of act sequences")]
+    public ActSequenceGraph[] actSequences;
 
-    static Dictionary<GeneralActSequenceIndex, ActSequence> generalDict = new Dictionary<GeneralActSequenceIndex, ActSequence>();
-    static Dictionary<Profession, ActSequence> workDict = new Dictionary<Profession, ActSequence>();
+    //static Dictionary<GeneralActSequenceIndex, ActSequence> generalDict = new Dictionary<GeneralActSequenceIndex, ActSequence>();
+    static Dictionary<ActSequenceIndex, ActSequenceGraph> actSeqDict = new Dictionary<ActSequenceIndex, ActSequenceGraph>();
 
     private void Awake()
     {
-        foreach (ActSequence item in generalSequences)
-        {
-            generalDict.Add(item.generalActSequenceIndex, item);
-        }
+        //foreach (ActSequence item in generalSequences)
+        //{
+        //    generalDict.Add(item.generalActSequenceIndex, item);
+        //}
 
-        foreach (ActSequence item in workSequences)
+        foreach (ActSequenceGraph item in actSequences)
         {
-            workDict.Add(item.profession, item);
+            actSeqDict.Add(item.Index, item);
         }
     }
 
-    public static ActSequence GetGeneralSequence(GeneralActSequenceIndex ind) => generalDict[ind];
-    public static ActSequence GetWorkSequence(Profession prof) => workDict[prof];
+    public static ActSequenceGraph GetSequence(ActSequenceIndex ind) => (ActSequenceGraph)actSeqDict[ind].Copy();
 }

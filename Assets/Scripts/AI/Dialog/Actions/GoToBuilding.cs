@@ -1,16 +1,16 @@
 ﻿using System;
-using System.Collections;
 using UnityEngine;
+using System.Collections;
 using XNode;
 
 namespace ActSequenceSystem
 {
-    public class EnterBuilding : ActionNode
+    public class GoToBuilding: ActionNode
     {
-        [Input] public Connection enter;
+        [Input] public Vector3 destPoint;
         [Input] public Building building;
 
-        [NonSerialized] ActionType type = ActionType.ENTERBUILDING;
+        [NonSerialized] public ActionType type = ActionType.GOTOBUILDING;
 
         [Range(0.0f, 5.0f)] public float initialDelay;
         [Range(0, 100)] public int priority;
@@ -24,7 +24,7 @@ namespace ActSequenceSystem
 
         public override IEnumerator Algorithm(Creature creature)
         {
-            return ActionAlgorithms.EnterBuilding(creature, this);
+            return ActionAlgorithms.GoToBuilding(creature, this);
         }
 
         public override object GetValue(NodePort port)

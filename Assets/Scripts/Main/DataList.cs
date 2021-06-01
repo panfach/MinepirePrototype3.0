@@ -181,7 +181,7 @@ public enum BuildingIndex
 public enum CreatureIndex
 {
     NONE,
-    HUMAN,
+    VILLAGER,
     DEER
 }
 

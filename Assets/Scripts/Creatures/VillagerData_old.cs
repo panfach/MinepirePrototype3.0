@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class VillagerData
+public class VillagerData_old
 {
-    public static Dictionary<Profession, string> profNameDict_rus = new Dictionary<Profession, string>()                       // This thing moved to DataList
+    /*public static Dictionary<Profession, string> profNameDict_rus = new Dictionary<Profession, string>()                       // This thing moved to DataList
     {
         {Profession.NONE, "Нет"},
         {Profession.LABORER, "Разнорабочий"},
@@ -202,5 +202,5 @@ public class VillagerData
             return true;
         }
         return false;
-    }
+    }*/
 }

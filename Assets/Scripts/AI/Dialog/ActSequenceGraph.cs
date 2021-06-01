@@ -7,6 +7,11 @@ namespace ActSequenceSystem
 	[CreateAssetMenu]
 	public class ActSequenceGraph : NodeGraph 
 	{ 
+		public ActSequenceIndex Index
+        {
+			get => ((StartAction)GetStart()).Index;
+        }
+
 		public ActionNode GetStart()
         {
 			foreach (Node node in nodes)
@@ -19,4 +24,12 @@ namespace ActSequenceSystem
 
 	[Serializable]
 	public struct Connection { }
+}
+
+public enum ActSequenceIndex
+{
+	NONE,
+	EAT,
+	VILLAGER_GENERAL,
+	EVENING
 }

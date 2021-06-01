@@ -13,30 +13,52 @@ public class GeneralAI : MonoBehaviour
 
     [Header("Settings")]
     [SerializeField] float maxRandomWalkDelay;
+    [SerializeField] ActSequenceIndex generalActSequence;
 
     [Header("Info")]
     [SerializeField] ActionType actionType;
+    [SerializeField] ExtractedResourceLink destExtractedResource;
 
-    ActSequenceGraph currentSequence;
     ActionNode currentAction;
-    Vector3 dest;
+    ActSequenceGraph currentSequence;
 
     public ActionType GetActionType { get => actionType; }
+    public void ForgetExtractedResource() { destExtractedResource = null; }
 
 
     private void OnEnable()
     {
+        StartCoroutine(AngleControl());
         DefineBehaviour();
     }
 
 
-    public void DefineBehaviour()
+    public void DefineBehaviour(int priority = 0)
     {
         StopAllCoroutines();
         actionType = ActionType.NONE;
 
+        currentSequence = ActSequenceList.GetSequence(generalActSequence);
         currentAction = currentSequence.GetStart();
-        Act();
+        StartCoroutine(Act());
+    }
+
+    public IEnumerator Act()
+    {
+        if (currentAction == null)
+        {
+            if (currentSequence == null)
+                currentSequence = ActSequenceList.GetSequence(generalActSequence);
+            currentAction = currentSequence.GetStart();
+        }
+
+        // Deferred DefineBehaviour                                                                                  // Add deferred define behaviour
+
+        while(currentAction != null)
+        {
+            actionType = currentAction.Type;
+            yield return StartCoroutine(currentAction.Algorithm(entity as Creature));
+        }
     }
 
     public void SwitchCurrentAction(ActionNode action)
@@ -47,14 +69,13 @@ public class GeneralAI : MonoBehaviour
             currentAction = action;
     }
 
-    public void Act()
+    public void SwitchCurrentSequence(ActSequenceIndex sequenceIndex)
     {
-        if (currentAction == null) currentAction = currentSequence.GetStart();
-
-        // Deferred DefineBehaviour
-
-        actionType = currentAction.Type;
-        StartCoroutine(currentAction.Algorithm(entity as Creature));
+        if (sequenceIndex == ActSequenceIndex.NONE)
+            currentSequence = ActSequenceList.GetSequence(generalActSequence);
+        else
+            currentSequence = ActSequenceList.GetSequence(sequenceIndex);
+        currentAction = currentSequence.GetStart();
     }
 
 
@@ -70,25 +91,6 @@ public class GeneralAI : MonoBehaviour
         {
             if (entity.Agent.velocity.sqrMagnitude > 0.01f) DefineAngle();
             yield return new WaitForSeconds(angleControlDelay);
-        }
-    }
-
-
-    IEnumerator RandomWalk()
-    {
-        StartCoroutine(AngleControl());
-        state = CreatureState.RNDWALK;
-
-        Vector3 dest;
-        while (true)
-        {
-            float delayTime = Random.Range(1f, maxRandomWalkDelay);
-            yield return new WaitForSeconds(delayTime);
-
-            dest = transform.position;
-            dest += new Vector3(Random.Range(-2f, 2f), 0f, Random.Range(-2f, 2f));
-            dest.y = SCCoord.GetHeight(dest);
-            entity.Agent.SetDestination(dest);
         }
     }
 

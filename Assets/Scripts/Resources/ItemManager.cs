@@ -20,7 +20,8 @@ public class ItemManager : MonoBehaviour
                 dropItems.Add(CreateItem(randDropPos, drop.resourceIndex, Random.Range(drop.minAmount, drop.maxAmount)));
         }
 
-        creature.CrtProp.droppedItems = dropItems.ToArray();
+        //creature.CrtProp.droppedItems = dropItems.ToArray();
+        creature.Health.LastAttacker.AssignDrop(dropItems.ToArray());
     }
 
     public void ExecuteExtracting(ResourceDeposit resourceDeposit, int ind, float amount)

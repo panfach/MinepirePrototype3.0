@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // ------------------------------------------- // MINEPIRE // ------------------------------------------- //
-public class VillagerManager : MonoBehaviour
+public class VillagerManager_old : MonoBehaviour
 {
     public static bool villagersWereSpawned = false;
     public static List<Villager> Villagers { get; private set; } = new List<Villager>();

@@ -7,7 +7,7 @@ public class CreatureContainer : MonoBehaviour
     public Entity entity;
 
     [Header("Settings")]
-    public BuildingEnterTrigger[] enter;
+    [SerializeField] Transform[] enter;                                    
     [SerializeField] bool hasCreatureLimit;
     [SerializeField] int creatureLimit;
 
@@ -15,6 +15,8 @@ public class CreatureContainer : MonoBehaviour
     [SerializeField] int creatures;
     [SerializeField] List<Creature> creatureList = new List<Creature>();
 
+    public Transform Enter { get => enter[0]; }
+    public Transform GetEnter(int i) { return enter[i]; }
     public int CreatureCount { get => creatures; }
 
 

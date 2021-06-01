@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PeopleAppointer_olc : MonoBehaviour
+public class PeopleAppointer_old : MonoBehaviour
 {
-    private void OnEnable()
+    /*private void OnEnable()
     {
         maxPeople = entity.BldData.MaxPeople;
     }
@@ -24,11 +24,11 @@ public class PeopleAppointer_olc : MonoBehaviour
 
     public bool RemovePeople(VillagerData villager)
     {
-        /*Debug.Log($"ReadySet.RemovePeople() Trying to remove people {villager.Name} {villager.Age}");
-        foreach(VillagerData item in peopleList)
-        {
-            Debug.Log($"peopleList: {item.Name} {item.Age}");
-        }*/
+        //Debug.Log($"ReadySet.RemovePeople() Trying to remove people {villager.Name} {villager.Age}");
+        //foreach(VillagerData item in peopleList)
+        //{
+        //    Debug.Log($"peopleList: {item.Name} {item.Age}");
+        //}
 
         if (peopleList.Remove(villager))
         {
@@ -63,5 +63,5 @@ public class PeopleAppointer_olc : MonoBehaviour
 
         ForgetPeopleAssignment();
         maxPeople = 0;
-    }
+    }*/
 }

@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 
-public class BuildingEnterTrigger : MonoBehaviour
+public class BuildingEnterTrigger_old : MonoBehaviour
 {
-    public Building building;
+    /*public Building building;
     Villager villager;
 
     private void OnTriggerEnter(Collider other)
@@ -16,5 +16,5 @@ public class BuildingEnterTrigger : MonoBehaviour
                 villager.EnterBuilding(building);
             }
         }
-    }
+    }*/
 }

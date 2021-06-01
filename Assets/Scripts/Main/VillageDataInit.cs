@@ -18,7 +18,7 @@ public class VillageDataInit : MonoBehaviour
         VillageData.Clear();
         DefaultInit();
         InfoDisplay.Refresh();
-        Connector.villagerManager.SpawnAllVillagers();
+        //Connector.villagerManager.SpawnAllVillagers();
     }
 
 
@@ -26,7 +26,7 @@ public class VillageDataInit : MonoBehaviour
     {
         for (int i = 0; i < startPopulation; i++)
         {
-            VillageData.NewRandomVillager();
+            Connector.creatureManager.SpawnRandomVillager();
         }
         VillageData.Recalculate();
     }
@@ -35,9 +35,6 @@ public class VillageDataInit : MonoBehaviour
 public static class VillageData
 {
     // --------------------------------------------------- Data ------------------------------------------------------------ //
-    public static int Population { get; private set; }
-    public static List<VillagerData> Villagers { get; private set; } = new List<VillagerData>();
-
     public static int homeless;
     public static int workersCount;
     public static int[] workers = new int[Enum.GetNames(typeof(Profession)).Length];
@@ -50,45 +47,29 @@ public static class VillageData
 
     public static float[] resources = new float[Enum.GetNames(typeof(ResourceIndex)).Length];
 
-    public static List<Building> Constructions { get; private set; } = new List<Building>();
+    public static List<Building> Constructions { get; private set; } = new List<Building>();                                         // Maybe GeneralBuilder (or BuildingManager) must contain it
     public static List<Building> Buildings { get; private set; } = new List<Building>();
     public static Dictionary<int, GameObject> uniqIndexDict = new Dictionary<int, GameObject>();
     public static Building townhall = null;
     public static BuildingIndex townhallIndex = BuildingIndex.TRIBLEADER;
     public static List<ExtractedResourceLink> extractionQueue = new List<ExtractedResourceLink>();
     // --------------------------------------------------------------------------------------------------------------------- //
-    //public static List<Building> finishedConstructionsQueue = new List<Building>();
-    //public static List<Building> deletedBuildingsQueue = new List<Building>();
-    //public static List<Animal> deletedAnimalsQueue = new List<Animal>();
-    //public static List<ResourceInstance> deletedResourceInstancesQueue = new List<ResourceInstance>();
-    //public static List<ResourceSourceInstance> deletedResourceSourceInstancesQueue = new List<ResourceSourceInstance>();
-    public static List<SmallInfo> deletedSmallInfoQueue = new List<SmallInfo>();
-    public static List<Villager> deletedVillagersQueue = new List<Villager>();
 
     public static List<GameObject> staticBatchingObjects = new List<GameObject>();
     // --------------------------------------------------------------------------------------------------------------------- //
 
-    public static VillagerData NewRandomVillager()
+    /*public static Creature NewRandomVillager()
     {
-        Names _names = Connector.names ?? GameObject.Find("GameManager").GetComponent<Names>();
+        //Names _names = Connector.names ?? GameObject.Find("GameManager").GetComponent<Names>();
+        return Connector.creatureManager.SpawnRandomVillager();
+    }*/
 
-        Villagers.Add(new VillagerData(
-            ((int)UnityEngine.Random.Range(0f, 2f) == 1) ? true : false,
-            _names.GetRndName(true),
-            (int)UnityEngine.Random.Range(10f, 40f)
-        ));
-
-        Population++;
-
-        return Villagers[Population - 1];
-    }
-
-    public static void RemoveVillager(VillagerData data)
+    /*public static void RemoveVillager(Creature creature)
     {
         if (Villagers.Remove(data)) Population--;
-    }
+    }*/
 
-    public static int GetBuildPoint() => Builders * 1;
+    //public static int GetBuildPoint() => Builders * 1;
 
     public static void AddConstruction(Building item)
     {
@@ -98,7 +79,7 @@ public static class VillageData
     public static void RemoveConstruction(Building item)
     {
         Debug.Log("VillageData.RemoveConstruction() Construction was removed ... ");
-        Constructions.Remove(item); // Возможно, это очень неэффективно (Можно попробовать искать по уникальному номеру постройки)
+        Constructions.Remove(item);                                         
     }
 
     public static void AddBuilding(Building item)
@@ -126,13 +107,13 @@ public static class VillageData
             workers[i] = 0;
         }
 
-        foreach (VillagerData data in Villagers)
+        foreach (Creature villager in CreatureManager.Villagers)
         {
-            if (data.home == null) homeless++;
+            if (villager.Appointer.Home == null) homeless++;
             else
             {
-                workers[(int)data.profession]++;
-                if (data.profession != Profession.LABORER) workersCount++;
+                workers[(int)villager.Appointer.Profession]++;
+                if (villager.Appointer.Profession != Profession.LABORER) workersCount++;
             }
         }
 
@@ -142,12 +123,12 @@ public static class VillageData
     public static int CountReadyBuildings()
     {
         var seq = from item in Buildings
-                  where item.BldProp.deletionFlag == false && item.isActiveAndEnabled
+                  where item.BuildSet.ConstrStatus == ConstructionStatus.READY
                   select item;
         return seq.Count();
     }
 
-    public static void VillagerPlacesReassigning()
+/*    public static void VillagerPlacesReassigning()
     {
         if (!VillagerManager.villagersWereSpawned) return;
 
@@ -173,7 +154,7 @@ public static class VillageData
             }
             if (data.work != null) data.AssignJob(data.work, AppointMode.REASSIGNING);
         }
-    }
+    }*/
 
     public static void ResourcesReassigning()
     {
@@ -198,43 +179,8 @@ public static class VillageData
         }
     }
 
-    public static void CleanDeletedObjects()
+/*    public static void CleanDeletedObjects()
     {
-        //foreach (Building item in finishedConstructionsQueue)
-        //{
-        //    Constructions.Remove(item);
-        //    ((ConstructionSet)item).ScriptSelfDeletion();
-        //}
-        //finishedConstructionsQueue.Clear();
-
-        //foreach (Building item in deletedBuildingsQueue)
-        //{
-        //    Buildings.Remove(item);
-        //    item.SelfDeletion();
-        //}
-        //deletedBuildingsQueue.Clear();
-
-        /*foreach (Animal item in deletedAnimalsQueue)
-        {
-            AnimalManager.Animals.Remove(item);
-            item.SelfDeletion();
-        }
-        deletedAnimalsQueue.Clear();
-
-        foreach (ResourceInstance item in deletedResourceInstancesQueue)
-        {
-            ResourceManager.resourceInstances.Remove(item);
-            item.SelfDeletion();
-        }
-        deletedResourceInstancesQueue.Clear();
-
-        foreach (ResourceSourceInstance item in deletedResourceSourceInstancesQueue)
-        {
-            EnvironmentManager.resourceInstances.Remove(item);
-            item.SelfDeletion();
-        }
-        deletedResourceSourceInstancesQueue.Clear();*/
-
         foreach (Villager item in deletedVillagersQueue)
         {
             Villagers.Remove(item.data);
@@ -259,66 +205,7 @@ public static class VillageData
             //if (item is SmallVillagerInfo) item.Delete();
         }
         deletedSmallInfoQueue.Clear();
-
-        // Версии без foreach.
-        /*i = 0;
-        count = DynamicGameCanvas.buildingSmallInfoList.Count;
-        SmallInfo info;
-        while (true)
-        {
-            if (i >= count) break;
-
-            info = DynamicGameCanvas.buildingSmallInfoList[i];
-            if (info.deletionFlag)
-            {
-                DynamicGameCanvas.buildingSmallInfoList.RemoveAt(i);
-                info.SelfDeletion();
-                count--;
-            }
-            else
-            {
-                i++;
-            }
-        }
-
-        i = 0;
-        count = DynamicGameCanvas.villagerSmallInfoList.Count;
-        while (true)
-        {
-            if (i >= count) break;
-
-            info = DynamicGameCanvas.villagerSmallInfoList[i];
-            if (info.deletionFlag)
-            {
-                DynamicGameCanvas.villagerSmallInfoList.RemoveAt(i);
-                info.SelfDeletion();
-                count--;
-            }
-            else
-            {
-                i++;
-            }
-        }
-
-        i = 0;
-        count = DynamicGameCanvas.animalSmallInfoList.Count;
-        while (true)
-        {
-            if (i >= count) break;
-
-            info = DynamicGameCanvas.animalSmallInfoList[i];
-            if (info.deletionFlag)
-            {
-                DynamicGameCanvas.animalSmallInfoList.RemoveAt(i);
-                info.SelfDeletion();
-                count--;
-            }
-            else
-            {
-                i++;
-            }
-        }*/
-    }
+    }*/
 
     public static void Save(BinaryWriter writer)
     {
@@ -346,21 +233,21 @@ public static class VillageData
             //writer.Write((byte)((ReadySet)building).People);
         }
 
-        writer.Write((short)Population); //Debug.Log("VillageData.Load() (short)Population = " + (short)Population);
-        foreach (VillagerData data in Villagers)
+        writer.Write((short)CreatureManager.villagerPopulation); //Debug.Log("VillageData.Load() (short)Population = " + (short)Population);
+        foreach (Creature data in CreatureManager.Villagers)
         {
-            writer.Write(data.Gender);
-            writer.Write(data.Name);
-            writer.Write((byte)data.Age);
-            if (data.home == null) writer.Write((short)0);
-            else writer.Write((short)data.home.BldProp.UniqueIndex);
-            if (data.work == null) writer.Write((short)0);  
-            else writer.Write((short)data.work.BldProp.UniqueIndex);
-            writer.Write((float)data.satiety);
+            writer.Write(data.CrtProp.Gender);
+            writer.Write(data.CrtProp.Name);
+            writer.Write((byte)data.CrtProp.Age);
+            if (data.Appointer.Home == null) writer.Write((short)0);
+            else writer.Write((short)data.Appointer.Home.entity.BldProp.UniqueIndex);
+            if (data.Appointer.Work == null) writer.Write((short)0);  
+            else writer.Write((short)data.Appointer.Work.entity.BldProp.UniqueIndex);
+            writer.Write((float)data.Satiety.Value);
         }
 
         writer.Write((short)CreatureManager.animalPopulation);
-        foreach (Creature animal in CreatureManager.Creatures)
+        foreach (Creature animal in CreatureManager.Animals)
         {
             SCCoord animalPos = SCCoord.FromPos(animal.transform.position);
             writer.Write((byte)animal.CrtData.Index);
@@ -545,7 +432,6 @@ public static class VillageData
             //cs.uniqueIndex = uniqueIndex;
             //cs.IncreaseProcess(reader.ReadInt16());
         }
-        CleanDeletedObjects();
 
         short readyCount = reader.ReadInt16(); //Debug.Log("VillageData.Load() readyCount = " + readyCount);
         for (int i = 0; i < readyCount; i++)
@@ -559,28 +445,30 @@ public static class VillageData
             //rs.uniqueIndex = uniqueIndex;
         }
 
-        Population = reader.ReadInt16(); //Debug.Log("VillageData.Load() Population = " + Population);
-        for (int i = 0; i < Population; i++)
+        int population = reader.ReadInt16(); //Debug.Log("VillageData.Load() Population = " + Population);
+        for (int i = 0; i < population; i++)
         {
-            Villagers.Add(new VillagerData(
-                reader.ReadBoolean(),
+            Connector.creatureManager.SpawnVillager
+                (reader.ReadBoolean(),
                 reader.ReadString(),
                 reader.ReadByte(),
+                ((uniqueIndex = reader.ReadInt16()) == 0) ? null : uniqIndexDict[uniqueIndex].GetComponent<Building>(),                              // Dictionary Error (Maybe while construction doesn't refresh)
                 ((uniqueIndex = reader.ReadInt16()) == 0) ? null : uniqIndexDict[uniqueIndex].GetComponent<Building>(),
-                ((uniqueIndex = reader.ReadInt16()) == 0) ? null : uniqIndexDict[uniqueIndex].GetComponent<Building>(),
-                reader.ReadSingle()
-            ));
+                _satiety: reader.ReadSingle());
         }
 
         int animalPopul = reader.ReadInt16();
         for (int i = 0; i < animalPopul; i++)
         {
             reader.ReadByte();
-            animIndex =CreatureIndex.DEER;
+            animIndex = CreatureIndex.DEER;
 
-            /*animIndex = (AnimalIndex)reader.ReadByte();*/
+            animIndex = (CreatureIndex)reader.ReadByte();
             scc = new SCCoord(reader.ReadInt16(), reader.ReadInt16());
-            Connector.creatureManager.InstantSpawnAnimal(SCCoord.GetCenter(scc), animIndex, reader.ReadSingle());
+            Connector.creatureManager.Spawn
+                (SCCoord.GetCenter(scc), 
+                animIndex, 
+                healthPoints: reader.ReadSingle());
         }
 
         for (int i = 0; i < resources.Length; i++)
@@ -606,19 +494,16 @@ public static class VillageData
         {
             Connector.villageDataInit.Start();
         }
-        Connector.villagerManager.SpawnAllVillagers();
+        //Connector.villagerManager.SpawnAllVillagers();
         extractionQueue.Clear();
         ResourcesReassigning();
-        VillagerPlacesReassigning();
+        //VillagerPlacesReassigning();
         Recalculate();
         SmallInfoController.SetAllBuilding();
     }
 
     public static void Clear()
     {
-        Population = 0;
-        Villagers = new List<VillagerData>();
-
         homeless = 0;
         workersCount = 0;
         workers = new int[Enum.GetNames(typeof(Profession)).Length];

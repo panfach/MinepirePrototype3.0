@@ -9,14 +9,15 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1066544336706940259}
+  - component: {fileID: 3591495974343621970}
   - component: {fileID: 1066544336706940262}
   - component: {fileID: 1066544336706940258}
-  - component: {fileID: 3591495974343621970}
   - component: {fileID: 6151977069390399636}
   - component: {fileID: 4788245625042760887}
   - component: {fileID: 972053296393211329}
   - component: {fileID: 8271142170319578457}
   - component: {fileID: 2510483437292284732}
+  - component: {fileID: 3666596505451067972}
   - component: {fileID: 4148754911773210568}
   - component: {fileID: 3939281289569579912}
   m_Layer: 11
@@ -42,6 +43,30 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3591495974343621970
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1066544336706940263}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d98563093260744eab40e07a9f70d40, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  creatureData: {fileID: 11400000, guid: 5c6fd11263809f74db8dbad0da16fcd9, type: 2}
+  creatureProperties: {fileID: 6151977069390399636}
+  displayedItems: {fileID: 4788245625042760887}
+  smallInfoController: {fileID: 972053296393211329}
+  colliderHandler: {fileID: 4148754911773210568}
+  generalAI: {fileID: 8271142170319578457}
+  health: {fileID: 2510483437292284732}
+  satiety: {fileID: 3666596505451067972}
+  _rigidbody: {fileID: 3939281289569579912}
+  navMeshAgent: {fileID: 1066544336706940258}
+  appointer: {fileID: 0}
+  attackController: {fileID: 0}
 --- !u!65 &1066544336706940262
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -77,27 +102,6 @@ NavMeshAgent:
   m_BaseOffset: 0.5
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 2
---- !u!114 &3591495974343621970
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1066544336706940263}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5d98563093260744eab40e07a9f70d40, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  creatureData: {fileID: 11400000, guid: 5c6fd11263809f74db8dbad0da16fcd9, type: 2}
-  creatureProperties: {fileID: 6151977069390399636}
-  displayedItems: {fileID: 4788245625042760887}
-  smallInfoController: {fileID: 972053296393211329}
-  colliderHandler: {fileID: 4148754911773210568}
-  generalAI: {fileID: 8271142170319578457}
-  health: {fileID: 2510483437292284732}
-  _rigidbody: {fileID: 3939281289569579912}
-  navMeshAgent: {fileID: 1066544336706940258}
 --- !u!114 &6151977069390399636
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -112,9 +116,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   entity: {fileID: 3591495974343621970}
   height: 0.4
+  _name: 
   gender: 0
   age: 0
-  droppedItems: []
+  placeOfStay: {fileID: 0}
 --- !u!114 &4788245625042760887
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -129,9 +134,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   entity: {fileID: 3591495974343621970}
   hasSelectionPlane: 1
+  hasSilhouette: 0
   hasDisplayedInventory: 0
   itemSpot: []
   selectionPlane: {fileID: 7073293573120617727}
+  silhouette: {fileID: 0}
 --- !u!114 &972053296393211329
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -149,7 +156,9 @@ MonoBehaviour:
   reactToMouseDrag: 0
   reactToZeroAppointedPeople: 0
   reactToResourceDepositStatus: 0
+  reactToHomeAbsence: 0
   height: 0.6
+  smallInfo: {fileID: 0}
 --- !u!114 &8271142170319578457
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -164,7 +173,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   entity: {fileID: 3591495974343621970}
   maxRandomWalkDelay: 8
-  state: 0
+  generalActSequence: 0
+  actionType: 0
 --- !u!114 &2510483437292284732
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -179,6 +189,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   entity: {fileID: 3591495974343621970}
   health: 0
+  lastAttacker: {fileID: 0}
+--- !u!114 &3666596505451067972
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1066544336706940263}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04ff5a3a365282a4191ecf1500a11fc9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  entity: {fileID: 3591495974343621970}
+  satiety: 0
   lastAttacker: {fileID: 0}
 --- !u!114 &4148754911773210568
 MonoBehaviour:

@@ -155,8 +155,8 @@ MonoBehaviour:
   buildSet: {fileID: 3008800800784930573}
   displayedItems: {fileID: 1489804274193333951}
   uiController: {fileID: 1300100247009878926}
-  peopleContainer: {fileID: 7520685104771697573}
-  peopleAppointer: {fileID: 8497921559147476390}
+  creatureContainer: {fileID: 7520685104771697573}
+  appointer: {fileID: 8497921559147476390}
 --- !u!114 &1224176906205342183
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -219,9 +219,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   entity: {fileID: 4035997816149852852}
   hasSelectionPlane: 1
+  hasSilhouette: 0
   hasDisplayedInventory: 0
   itemSpot: []
   selectionPlane: {fileID: 1271354151193961082}
+  silhouette: {fileID: 0}
 --- !u!114 &5822528088461329228
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -256,8 +258,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   entity: {fileID: 4035997816149852852}
-  people: 0
-  maxPeople: 0
+  type: 0
+  maxAppointments: 00000000000000000000000000000000
 --- !u!114 &7520685104771697573
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -272,10 +274,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   entity: {fileID: 4035997816149852852}
   enter:
-  - {fileID: 8401079805890207288}
-  hasPeopleLimit: 0
-  peopleLimit: 0
-  people: 0
+  - {fileID: 0}
+  hasCreatureLimit: 0
+  creatureLimit: 0
+  creatures: 0
+  creatureList: []
 --- !u!114 &3019166115846740041
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -293,7 +296,9 @@ MonoBehaviour:
   reactToMouseDrag: 0
   reactToZeroAppointedPeople: 0
   reactToResourceDepositStatus: 0
+  reactToHomeAbsence: 0
   height: 0
+  smallInfo: {fileID: 0}
 --- !u!114 &1300100247009878926
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -366,7 +371,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff31fdaecc90ad04aad0ad51eadda6b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  building: {fileID: 4035997816149852852}
 --- !u!54 &7530236291655696547
 Rigidbody:
   m_ObjectHideFlags: 0

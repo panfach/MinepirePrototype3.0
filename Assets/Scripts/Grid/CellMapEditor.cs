@@ -69,7 +69,7 @@ public class CellMapEditor : MonoBehaviour
 	void EditCreatures(Vector3 point)
     {
 		if (applyCreature != CreatureIndex.NONE)
-			Connector.creatureManager.SpawnAnimal(point, applyCreature);
+			Connector.creatureManager.SpawnRandomAnimal(point);
     }
 
 

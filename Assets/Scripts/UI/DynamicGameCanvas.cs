@@ -10,18 +10,18 @@ public class DynamicGameCanvas : MonoBehaviour
     public static List<SmallResourceInfo> resourceSmallInfoList = new List<SmallResourceInfo>();
     public static List<SmallResourceSourceInfo> resourceSourceSmallInfoList = new List<SmallResourceSourceInfo>();*/
 
-    public static List<SmallInfo> villagerSmallInfoList = new List<SmallInfo>();
+    public static List<SmallInfo> creatureSmallInfoList = new List<SmallInfo>();
     public static List<SmallInfo> buildingSmallInfoList = new List<SmallInfo>();
-    public static List<SmallInfo> animalSmallInfoList = new List<SmallInfo>();
+    //public static List<SmallInfo> animalSmallInfoList = new List<SmallInfo>();
     public static List<SmallInfo> resourceSmallInfoList = new List<SmallInfo>();
-    public static List<SmallInfo> resourceSourceSmallInfoList = new List<SmallInfo>();
+    public static List<SmallInfo> natureSmallInfoList = new List<SmallInfo>();
 
     public GameObject buildingInfoPrefab;
     public GameObject creatureInfoPrefab;
     public GameObject resourceInfoPrefab;
-    public GameObject resourceSourceInfoPrefab; 
+    public GameObject natureInfoPrefab; 
     public float creatureInfoHeight;
-    public float resourceInfoHeight;
+    public float itemInfoHeight;
 
     SmallInfo info;
     Vector3 worldPosition = new Vector3(), screenPosition = new Vector3();
@@ -29,10 +29,9 @@ public class DynamicGameCanvas : MonoBehaviour
     void Update()
     {
         UpdateBuildings();
-        UpdateVillagers();
-        UpdateAnimals();
+        UpdateCreatures();
         UpdateItems();
-        UpdateResourceSources();
+        UpdateNatures();
     }
 
     public SmallInfo SpawnInfo(Entity entity)
@@ -49,9 +48,9 @@ public class DynamicGameCanvas : MonoBehaviour
         SmallInfo info = entity.SmallInfoController.Info;
 
         if (entity is Building) buildingSmallInfoList.Remove(info);
-        else if (entity is Creature) animalSmallInfoList.Remove(info);
+        else if (entity is Creature) creatureSmallInfoList.Remove(info);
         else if (entity is Item) resourceSmallInfoList.Remove(info);
-        else if (entity is Nature) resourceSourceSmallInfoList.Remove(info);
+        else if (entity is Nature) natureSmallInfoList.Remove(info);
     }
 
     public SmallInfo SpawnInfo(Building building)
@@ -71,9 +70,9 @@ public class DynamicGameCanvas : MonoBehaviour
         GameObject obj;
 
         obj = Instantiate(creatureInfoPrefab, transform);
-        SmallAnimalInfo script = obj.GetComponent<SmallAnimalInfo>();
+        SmallCreatureInfo script = obj.GetComponent<SmallCreatureInfo>();
         script.Init(creature);
-        animalSmallInfoList.Add(script);
+        creatureSmallInfoList.Add(script);
 
         return script;
     }
@@ -94,10 +93,10 @@ public class DynamicGameCanvas : MonoBehaviour
     {
         GameObject obj;
 
-        obj = Instantiate(resourceSourceInfoPrefab, transform);
-        SmallResourceSourceInfo script = obj.GetComponent<SmallResourceSourceInfo>();
+        obj = Instantiate(natureInfoPrefab, transform);
+        SmallNatureInfo script = obj.GetComponent<SmallNatureInfo>();
         script.Init(nature);
-        resourceSourceSmallInfoList.Add(script);
+        natureSmallInfoList.Add(script);
 
         return script;
     }
@@ -126,56 +125,16 @@ public class DynamicGameCanvas : MonoBehaviour
         }
     }
 
-    void UpdateVillagers()
+    void UpdateCreatures()
     {
-        foreach (SmallVillagerInfo item in villagerSmallInfoList)
+        for (int i = 0; i < creatureSmallInfoList.Count; i++)
         {
-            if (!item.deletionFlag && item.gameObject.activeSelf)
+            info = creatureSmallInfoList[i];
+
+            if (info.gameObject.activeSelf)
             {
-                worldPosition = new Vector3(item.objectTransform.position.x, item.objectTransform.position.y + creatureInfoHeight, item.objectTransform.position.z);
-                screenPosition = Connector.mainCamera.WorldToScreenPoint(worldPosition);
-
-                if (screenPosition.x > 0 && screenPosition.x < Screen.width && screenPosition.y > 0 && screenPosition.y < Screen.height)
-                {
-                    item._transform.position = screenPosition;
-                }
-                else
-                {
-                    item._transform.position = CellMetrics.hidedObjectsUI;
-                }
-            }
-        }
-    }
-
-    void UpdateAnimals()
-    {
-        /*foreach (SmallAnimalInfo item in animalSmallInfoList)
-        {
-            if (!item.deletionFlag && item.gameObject.activeSelf)
-            {
-                worldPosition = new Vector3(item.objectTransform.position.x, item.objectTransform.position.y + villagerInfoHeight, item.objectTransform.position.z);
-                screenPosition = Connector.mainCamera.WorldToScreenPoint(worldPosition);
-
-                if (screenPosition.x > 0 && screenPosition.x < Screen.width && screenPosition.y > 0 && screenPosition.y < Screen.height)
-                {
-                    item._transform.position = screenPosition;
-                }
-                else
-                {
-                    item._transform.position = CellMetrics.hidedObjectsUI;
-                }
-            }
-        }*/
-
-        for (int i = 0; i < animalSmallInfoList.Count; i++)
-        {
-            info = animalSmallInfoList[i];
-
-            if (!info.deletionFlag && info.gameObject.activeSelf)
-            {
-                worldPosition.x = info.objectTransform.position.x;
-                worldPosition.y = info.objectTransform.position.y + creatureInfoHeight;
-                worldPosition.z = info.objectTransform.position.z;
+                worldPosition = info.objectTransform.position;
+                worldPosition.y += creatureInfoHeight;
                 screenPosition = Connector.mainCamera.WorldToScreenPoint(worldPosition);
 
                 if (screenPosition.x > 0 && screenPosition.x < Screen.width && screenPosition.y > 0 && screenPosition.y < Screen.height)
@@ -211,23 +170,25 @@ public class DynamicGameCanvas : MonoBehaviour
         }
     }
 
-    void UpdateResourceSources()
+    void UpdateNatures()
     {
-        foreach (SmallResourceSourceInfo item in resourceSourceSmallInfoList)
+        for (int i = 0; i < natureSmallInfoList.Count; i++)
         {
-            if (!item.deletionFlag && item.gameObject.activeSelf)
+            info = natureSmallInfoList[i];
+
+            if (info.gameObject.activeSelf)
             {
-                Vector3 centerPos = item.instance.ResourceDeposit.ExtractPoint.position;
-                worldPosition = new Vector3(centerPos.x, centerPos.y + item.instance.SmallInfoController.height, centerPos.z);
+                Vector3 centerPos = info.instance.ResourceDeposit.ExtractPoint.position;
+                worldPosition = new Vector3(centerPos.x, centerPos.y + info.instance.SmallInfoController.height, centerPos.z);
                 screenPosition = Connector.mainCamera.WorldToScreenPoint(worldPosition);
 
                 if (screenPosition.x > 0 && screenPosition.x < Screen.width && screenPosition.y > 0 && screenPosition.y < Screen.height)
                 {
-                    item._transform.position = screenPosition;
+                    info._transform.position = screenPosition;
                 }
                 else
                 {
-                    item._transform.position = CellMetrics.hidedObjectsUI;
+                    info._transform.position = CellMetrics.hidedObjectsUI;
                 }
             }
         }

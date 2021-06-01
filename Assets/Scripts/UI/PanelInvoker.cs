@@ -9,8 +9,8 @@ public class PanelInvoker : MonoBehaviour
     public GameObject mapEditor;
     public BuildingInfo buildingInfo;
     public BuildPanelInfo buildPanelInfo;
-    public ResourceSourceInfo resourceSourceInfo;
-    public VillagerInfo villagerInfo;
+    public NatureInfo natureInfo;
+    public CreatureInfo creatureInfo;
     public PauseMenu pauseMenu;
     public GameObject buildingRotationTooltip;
 
@@ -20,11 +20,11 @@ public class PanelInvoker : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Escape))
             {
-                Debug.Log("Escape. BuildingInfo = " + StateManager.BuildingInfo + ", VillagerInfo = " + StateManager.VillagerInfo + "ResourceSourceInfo = " + StateManager.ResourceSourceInfo);
-                if (StateManager.BuildingInfo || StateManager.VillagerInfo || StateManager.ResourceSourceInfo)
+                //Debug.Log("Escape. BuildingInfo = " + StateManager.BuildingInfo + ", VillagerInfo = " + StateManager.VillagerInfo + "ResourceSourceInfo = " + StateManager.ResourceSourceInfo);
+                if (StateManager.BuildingInfo || StateManager.CreatureInfo || StateManager.ResourceSourceInfo)
                 {
                     CloseBuildingInfo();
-                    CloseVillagerInfo();
+                    CloseCreatureInfo();
                     CloseNatureInfo();
                 }
                 else
@@ -84,6 +84,8 @@ public class PanelInvoker : MonoBehaviour
             OpenBuildingInfo(entity as Building);
         else if (entity is Nature)
             OpenNatureInfo(entity as Nature);
+        else if (entity is Creature)
+            OpenCreatureInfo(entity as Creature);
         // ...
     }
 
@@ -92,8 +94,10 @@ public class PanelInvoker : MonoBehaviour
     {
         if (entity is Building && BuildingInfo.activeBuilding == entity as Building)
             CloseBuildingInfo(entity as Building);
-        if (entity is Nature && ResourceSourceInfo.activeNature == entity as Nature)
+        else if (entity is Nature && NatureInfo.activeNature == entity as Nature)
             CloseNatureInfo(entity as Nature);
+        else if (entity is Creature)
+            CloseCreatureInfo(entity as Creature);
         // ...
     }
 
@@ -102,8 +106,10 @@ public class PanelInvoker : MonoBehaviour
     {
         if (entity is Building && BuildingInfo.activeBuilding == entity as Building)
             RefreshBuildingInfo();
-        else if (entity is Nature && ResourceSourceInfo.activeNature == entity as Nature)
+        else if (entity is Nature && NatureInfo.activeNature == entity as Nature)
             RefreshNatureInfo();
+        else if (entity is Creature)
+            RefreshCreatureInfo();
         // ....
     }
 
@@ -113,8 +119,8 @@ public class PanelInvoker : MonoBehaviour
 
         BuildingInfo.activeBuilding = building;
 
-        resourceSourceInfo.Open(false);
-        buildingInfo.Open(true);
+        natureInfo.Set(false);
+        buildingInfo.Set(true);
     }
 
     public void CloseBuildingInfo(Building building)
@@ -125,43 +131,47 @@ public class PanelInvoker : MonoBehaviour
     public void CloseBuildingInfo()
     {
         Connector.effectSoundManager.PlaySlideSound();
-        buildingInfo.Open(false);
+        buildingInfo.Set(false);
     }
 
     public void OpenNatureInfo(Nature nature)
     {
         Connector.effectSoundManager.PlaySlideSound();
 
-        ResourceSourceInfo.activeNature = nature;
+        NatureInfo.activeNature = nature;
 
-        buildingInfo.Open(false);
-        resourceSourceInfo.Open(true);
+        buildingInfo.Set(false);
+        natureInfo.Set(true);
     }
 
     public void CloseNatureInfo(Nature nature)
     {
-        if (ResourceSourceInfo.activeNature == nature) CloseNatureInfo();
+        if (NatureInfo.activeNature == nature) CloseNatureInfo();
     }
 
     public void CloseNatureInfo()
     {
         Connector.effectSoundManager.PlaySlideSound();    
-        resourceSourceInfo.Open(false);                                                               // Change name. Bad name of function "Open", though we are closing
+        natureInfo.Set(false);                                                               // Change name. Bad name of function "Open", though we are closing
     }
 
-    public void OpenVillagerInfo(Villager villager)
+    public void OpenCreatureInfo(Creature creature)
     {
         Connector.effectSoundManager.PlaySlideSound();
 
-        VillagerInfo.activeVillager = villager;
-        villagerInfo.Open(true);
+        CreatureInfo.activeCreature = creature;
+        creatureInfo.Set(true);
     }
 
-    public void CloseVillagerInfo()
+    public void CloseCreatureInfo(Creature creature)
+    {
+        if (CreatureInfo.activeCreature == creature) CloseCreatureInfo();
+    }
+
+    public void CloseCreatureInfo()
     {
         Connector.effectSoundManager.PlaySlideSound();
-
-        villagerInfo.Open(false);
+        creatureInfo.Set(false);
     }
 
     public void RefreshBuildingInfo()
@@ -171,12 +181,12 @@ public class PanelInvoker : MonoBehaviour
 
     public void RefreshNatureInfo()
     {
-        resourceSourceInfo.Refresh();                                          // Change name
+        natureInfo.Refresh();                                          // Change name
     }
 
-    public void RefreshVillagerInfo()
+    public void RefreshCreatureInfo()
     {
-        villagerInfo.Refresh();
+        creatureInfo.Refresh();
     }
 
     public void SetTimeScale(int speed)

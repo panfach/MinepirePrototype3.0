@@ -10,7 +10,7 @@ public class InfoDisplay : MonoBehaviour
     public PopulationInfo populInfo;
     public ResourceInfo resInfo;
     public BuildingInfo bldInfo;
-    public VillagerInfo vlgInfo;
+    public CreatureInfo crtInfo;
 
     [Header("Other elements")]
     public Slider happinessSlider;
@@ -38,7 +38,7 @@ public class InfoDisplay : MonoBehaviour
         populInfo.Refresh();
         resInfo.Refresh();
         bldInfo.Refresh();
-        vlgInfo.Refresh();
+        crtInfo.Refresh();
         RefreshOtherElements();
     }
 

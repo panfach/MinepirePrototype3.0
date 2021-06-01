@@ -9,7 +9,7 @@ public class PopulationInfo : MonoBehaviour
 
     public void Refresh()
     {
-        population.text = VillageData.Population.ToString();
+        population.text = CreatureManager.villagerPopulation.ToString();
         homeless.text = VillageData.homeless.ToString();
         laborers.text = VillageData.workers[(int)Profession.LABORER].ToString();
         //workers.text = VillageData.workersCount.ToString();

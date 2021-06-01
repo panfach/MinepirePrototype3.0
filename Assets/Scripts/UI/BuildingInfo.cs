@@ -59,7 +59,7 @@ public class BuildingInfo : MonoBehaviour
         }
     }
 
-    public void Open(bool state)
+    public void Set(bool state)
     {
         BuildingInfoTurnedOn = state;
         StateManager.BuildingInfo = state;
@@ -91,22 +91,22 @@ public class BuildingInfo : MonoBehaviour
 
                 constructionProcessSection.SetActive(false);
 
-                if (rs.BldData.MaxPeople > 0)
+                if (rs.Appointer.MaxAppointments(AppointerType.VILLAGER) > 0)
                 {
                     peopleSection.SetActive(true);
-                    people.text = $"{rs.PeopleAppointer.People}/{rs.BldData.MaxPeople}";
+                    people.text = $"{rs.Appointer.People}/{rs.Appointer.MaxAppointments(AppointerType.VILLAGER)}";
 
                     for (int i = 0; i < peopleName.Length; i++)
                     {
-                        bool res = i < activeBuilding.BldData.MaxPeople;
+                        bool res = i < rs.Appointer.MaxAppointments(AppointerType.VILLAGER);
                         peoplePlace[i].SetActive(res);
                         if (res)
                         {
-                            if (i < rs.PeopleAppointer.People)
+                            if (i < rs.Appointer.People)
                             {
                                 peopleTrueSign[i].SetActive(true);
-                                peopleName[i].text = rs.PeopleAppointer.GetPeople(i).Name;
-                                peopleStatus[i].text = (rs.PeopleAppointer.GetPeople(i).villagerAgent.placeOfStay == rs) ? "внутри" : "на улице";
+                                peopleName[i].text = rs.Appointer.GetPeople(i).entity.CrtProp.Name;
+                                peopleStatus[i].text = (rs.Appointer.GetPeople(i).entity.CrtProp.PlaceOfStay == rs) ? "внутри" : "на улице";
                             }
                             else
                             {

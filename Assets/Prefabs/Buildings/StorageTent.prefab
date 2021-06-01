@@ -118,7 +118,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff31fdaecc90ad04aad0ad51eadda6b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  building: {fileID: 3370807516507604620}
 --- !u!54 &636958818131197752
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -554,8 +553,8 @@ MonoBehaviour:
   buildSet: {fileID: 523908746005297464}
   displayedItems: {fileID: 7612402606107877283}
   uiController: {fileID: 1974360765898451302}
-  peopleContainer: {fileID: 3425091293824335065}
-  peopleAppointer: {fileID: 6499119476282192408}
+  creatureContainer: {fileID: 3425091293824335065}
+  appointer: {fileID: 6499119476282192408}
 --- !u!114 &7186443082937441811
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -618,6 +617,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   entity: {fileID: 3370807516507604620}
   hasSelectionPlane: 1
+  hasSilhouette: 0
   hasDisplayedInventory: 1
   itemSpot:
   - {fileID: 139591335463796046}
@@ -629,6 +629,7 @@ MonoBehaviour:
   - {fileID: 4722404850497118252}
   - {fileID: 288604570214085631}
   selectionPlane: {fileID: 4786666781818415794}
+  silhouette: {fileID: 0}
 --- !u!114 &4204575612228552119
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -662,8 +663,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   entity: {fileID: 3370807516507604620}
-  people: 0
-  maxPeople: 0
+  type: 0
+  maxAppointments: 00000000000000000000000000000000
 --- !u!114 &3425091293824335065
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -678,10 +679,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   entity: {fileID: 3370807516507604620}
   enter:
-  - {fileID: 5299274814558899444}
-  hasPeopleLimit: 0
-  peopleLimit: 0
-  people: 0
+  - {fileID: 0}
+  hasCreatureLimit: 0
+  creatureLimit: 0
+  creatures: 0
+  creatureList: []
 --- !u!114 &6187059977835806037
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -699,7 +701,9 @@ MonoBehaviour:
   reactToMouseDrag: 0
   reactToZeroAppointedPeople: 0
   reactToResourceDepositStatus: 0
+  reactToHomeAbsence: 0
   height: 0
+  smallInfo: {fileID: 0}
 --- !u!114 &1974360765898451302
 MonoBehaviour:
   m_ObjectHideFlags: 0

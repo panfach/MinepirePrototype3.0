@@ -77,10 +77,9 @@ public class SaveLoader : MonoBehaviour
 	public void ClearGame()
     {
 		Connector.natureManager.ClearEnvironment();
-		Connector.villagerManager.Clear();
+		Connector.creatureManager.Clear();
 		Connector.generalBuilder.Clear();
 		Connector.creatureManager.Clear();
-		VillageData.CleanDeletedObjects();
 		VillageData.Clear();
 	}
 

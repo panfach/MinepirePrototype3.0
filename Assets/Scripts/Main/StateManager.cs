@@ -28,8 +28,8 @@ public static class StateManager
         set { if (value) BuildingInfo = false; resourceSourceInfo = value; } 
     }
     public static bool GodMode { get; set; } = false;
-    public static bool VillagerInfo { get; set; } = false;
-    public static bool VillagerDragging { get; set; } = false;
+    public static bool CreatureInfo { get; set; } = false;
+    public static bool VillagerDragging { get; set; } = false;                                                          // ??
     public static bool TimeIsFreezed { get; set; } = false;
     public static bool CameraIsFreezed { get; set; } = false;
 

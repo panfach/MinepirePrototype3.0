@@ -8,9 +8,9 @@ public class TurnManager : MonoBehaviour
     // Эта функция должна активироваться кнопкой "следующий ход"
     public void TurnProcess()
     {
-        foreach (VillagerData item in VillageData.Villagers)
+        foreach (Creature item in CreatureManager.Villagers)
         {
-            if (!item.villagerAgent.deletionFlag && item.home != null && item.villagerAgent.placeOfStay != item.home)
+            if (item.Appointer.Home != null && item.CrtProp.PlaceOfStay != item.Appointer.Home)
             {
                 Notification.Invoke(NotifType.EMPTYHOME);
                 return;
@@ -33,14 +33,14 @@ public class TurnManager : MonoBehaviour
         //RandomEvents();
 
         //
-        VillageData.CleanDeletedObjects();
+        //VillageData.CleanDeletedObjects();
 
         // 
-        if (!VillagerManager.villagersWereSpawned)
-        {
-            //Debug.Log("TurnManager 27 :: spawning villagers...");
-            Connector.villagerManager.SpawnAllVillagers();
-        }
+        //if (!VillagerManager.villagersWereSpawned)
+        //{
+        //    //Debug.Log("TurnManager 27 :: spawning villagers...");
+        //    Connector.villagerManager.SpawnAllVillagers();
+        //}
 
         // Recover resource deposits
         foreach (Nature item in NatureManager.natures)
@@ -66,7 +66,7 @@ public class TurnManager : MonoBehaviour
         //
         Connector.panelInvoker.CloseBuildingInfo();
         Connector.panelInvoker.CloseNatureInfo();
-        Connector.panelInvoker.CloseVillagerInfo();
+        Connector.panelInvoker.CloseCreatureInfo();
         InfoDisplay.Refresh();
     }
 
@@ -80,8 +80,7 @@ public class TurnManager : MonoBehaviour
         {
             for (int i = 0; i < 2; i++)
             {
-                VillagerData newVillager = VillageData.NewRandomVillager();
-                Connector.villagerManager.SpawnVillager(newVillager);
+                Connector.creatureManager.SpawnRandomVillager();
             }
         }
     }
@@ -92,7 +91,7 @@ public class TurnManager : MonoBehaviour
         float y;
         Vector3 spawnPos;
 
-        for (int i = 0; i < VillageData.Population / 3; i++)
+        for (int i = 0; i < CreatureManager.villagerPopulation / 3; i++)
         {
             x = Random.Range(1, 40);
             z = Random.Range(5, 60);
@@ -105,21 +104,21 @@ public class TurnManager : MonoBehaviour
 
             y = SCCoord.GetHeight(new SCCoord(x, z));
             spawnPos = SCCoord.GetCenter(new SCCoord(x, z), y);
-            Connector.creatureManager.SpawnAnimal(spawnPos, CreatureIndex.DEER);
+            Connector.creatureManager.SpawnRandomAnimal(spawnPos);
         }
     }
 
     void SatietyRefresh()
     {
-        foreach (VillagerData item in VillageData.Villagers)
+        foreach (Creature item in CreatureManager.Villagers)
         {
-            item.satiety -= 0.5f;  // -= 0.5f;
+            item.Satiety.Value -= 0.5f; 
         }
     }
 
     void SetHappiness()
     {
-        float foodRatio = VillageData.foodAmount / VillageData.Population;
+        float foodRatio = VillageData.foodAmount / CreatureManager.villagerPopulation;
         VillageData.foodRatio = foodRatio;
 
         if (foodRatio < 0.5f)

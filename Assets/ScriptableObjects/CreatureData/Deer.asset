@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _name: "\u041E\u043B\u0435\u043D\u044C"
   index: 2
+  type: 2
   maxHealth: 4
   drop:
   - resourceIndex: 6
@@ -24,3 +25,16 @@ MonoBehaviour:
     minAmount: 0.5
     maxAmount: 1.5
     chance: 1
+  minRandomAge: 1
+  maxRandomAge: 10
+  timeOfBuildingEntering: 1
+  angleControlDelay: 0.18
+  checkEventsDelay: 0.11
+  defaultAttackDistance: 0.2
+  attackDelay: 0.9
+  constructionDistance: 1
+  constructionDelay: 1
+  defaultActionDistance: 0.2
+  takingDelay: 0.98
+  maxDistFromHome: 5
+  maxRandomWalkDelay: 5

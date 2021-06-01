@@ -1,0 +1,66 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
+
+public class CreatureInfo : MonoBehaviour
+{
+    public static Creature activeCreature;
+    public static GameObject smallInfoPrefab;
+
+    static bool creatureInfoTurnedOn = false;
+
+    [Header("Managed object")]
+    public GameObject creatureInfoWindow;
+
+    [Header("Components")]
+    public TextMeshProUGUI creatureName, gender, age, profession;
+    public Slider healthSlider;
+    public Slider satietySlider;
+    public Slider[] warehouseSlider;
+    public TextMeshProUGUI[] warehouseResName;
+    public TextMeshProUGUI[] warehouseValue;
+
+    //public bool TurnedOn { get => villagerInfoTurnedOn; }                              // old: VillagerInfoTurnedOn
+
+    public void Set(bool state)
+    {
+        creatureInfoTurnedOn = state;
+        StateManager.CreatureInfo = state;
+        if (state)
+        {
+            Refresh();
+        }
+    }
+
+    public void Refresh(Creature creature)
+    {
+        if (activeCreature == creature) Refresh();
+    }
+        
+    public void Refresh()
+    {
+        if (creatureInfoTurnedOn)
+        {
+            creatureName.text = activeCreature.CrtData.Name;
+            healthSlider.value = activeCreature.Health.Value;
+            satietySlider.value = activeCreature.Satiety.Value;
+            gender.text = activeCreature.CrtProp.Gender ? "мужчина" : "женщина";
+            age.text = activeCreature.CrtProp.Age.ToString();
+            profession.text = DataList.profNameDict_rus[activeCreature.Appointer.Profession];
+
+            for (int i = 0; i < activeCreature.Inventory.PacksAmount; i++)
+            {
+                activeCreature.Inventory.Look(i, out ResourceIndex resInd, out float resVal);
+                warehouseSlider[i].maxValue = activeCreature.Inventory.PackSize;
+                warehouseSlider[i].value = resVal;
+                if (resInd == ResourceIndex.NONE)
+                    warehouseResName[i].text = "";
+                else
+                    warehouseResName[i].text = DataList.GetResource(resInd).Name_rus;
+                warehouseValue[i].text = resVal.ToString("F1");
+            }
+        }
+    }
+}

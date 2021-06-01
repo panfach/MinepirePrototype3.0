@@ -4,6 +4,6 @@ using UnityEngine;
 
 public interface IIndicator
 {
-    public event SimpleEventHandler changedValueEvent;
-    public float Value { get; set; }
+    event SimpleEventHandler changedValueEvent;
+    float Value { get; set; }
 }

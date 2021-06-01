@@ -15,7 +15,6 @@ public class ConnectorInit : MonoBehaviour
     public TurnManager turnManager;
     public NavMeshSurface navMeshSurface;
     public Names names;
-    public VillagerManager villagerManager;
     public NatureManager natureManager;
     public ItemManager itemManager;
     public PanelInvoker panelInvoker;
@@ -43,7 +42,6 @@ public class ConnectorInit : MonoBehaviour
         Connector.turnManager = turnManager;
         Connector.navMeshSurface = navMeshSurface;
         Connector.names = names;
-        Connector.villagerManager = villagerManager;
         Connector.natureManager = natureManager;
         Connector.itemManager = itemManager;
         Connector.panelInvoker = panelInvoker;
@@ -54,8 +52,8 @@ public class ConnectorInit : MonoBehaviour
         Connector.notification = notification;
         Connector.effectSoundManager = effectSoundManager;
 
-        Villager.selectionPlanePrefab = villagerSelectionPlane;
-        Villager.silhouettePrefab = villagerSilhouette;
+        //Villager.selectionPlanePrefab = villagerSelectionPlane;
+        //Villager.silhouettePrefab = villagerSilhouette;
         //BuildingInfo.smallBuildingInfoPrefab = smallBuildingInfo;
         //ResourceSourceInstance.selectionPlanePrefab = resourceSourceSelectionPlane;
         //ResourceInstance.selectionPlanePrefab = resourceSourceSelectionPlane;
@@ -77,7 +75,6 @@ public static class Connector
     public static TurnManager turnManager;
     public static NavMeshSurface navMeshSurface;
     public static Names names;
-    public static VillagerManager villagerManager;
     public static NatureManager natureManager;
     public static ItemManager itemManager;
     public static PanelInvoker panelInvoker;

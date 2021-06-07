@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+[DefaultExecutionOrder(50)]
 public class UIController : MonoBehaviour
 {
     [Header("Entity")]
@@ -7,11 +8,17 @@ public class UIController : MonoBehaviour
 
     [Header("Settings")]
     [SerializeField] bool openInfoOnClick;
+    [SerializeField] bool reactToInventoryChanges;
+    [SerializeField] bool reactToHealthChanges;
+    [SerializeField] bool reactToSatietyChanges;
 
 
     private void OnEnable()
     {
         if (openInfoOnClick && entity.ColliderHandler != null) entity.ColliderHandler.mouseDownEvent += OpenInfo;
+        if (reactToInventoryChanges && entity.Inventory != null) entity.Inventory.invChangedEvent += RefreshInfo;
+        if (reactToHealthChanges && entity.Health != null) entity.Health.changedValueEvent += RefreshInfo;
+        if (reactToSatietyChanges && entity.Satiety != null) entity.Satiety.changedValueEvent += RefreshInfo;
         if (entity.Appointer != null) entity.Appointer.appointmentChangedEvent += RefreshInfo;
         if (entity.ResourceDeposit != null) entity.ResourceDeposit.resourceChangedEvent += RefreshInfo;
     }
@@ -37,6 +44,9 @@ public class UIController : MonoBehaviour
     {
         CloseInfo();
         if (openInfoOnClick && entity.ColliderHandler != null) entity.ColliderHandler.mouseDownEvent -= OpenInfo;
+        if (reactToInventoryChanges && entity.Inventory != null) entity.Inventory.invChangedEvent -= RefreshInfo;
+        if (reactToHealthChanges && entity.Health != null) entity.Health.changedValueEvent -= RefreshInfo;
+        if (reactToSatietyChanges && entity.Satiety != null) entity.Satiety.changedValueEvent -= RefreshInfo;
         if (entity.Appointer != null) entity.Appointer.appointmentChangedEvent -= RefreshInfo;
         if (entity.ResourceDeposit != null) entity.ResourceDeposit.resourceChangedEvent -= RefreshInfo;
     }

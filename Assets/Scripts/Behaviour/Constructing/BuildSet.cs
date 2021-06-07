@@ -175,6 +175,7 @@ public class BuildSet : MonoBehaviour
         if (entity.Inventory != null) entity.Inventory.enabled = true;
         if (entity.Appointer != null) entity.Appointer.enabled = true;
         if (entity.CreatureContainer != null) entity.CreatureContainer.enabled = true;
+        if (entity.Interactive != null) entity.Interactive.enabled = true;
 
         // Handling selecton plane
         if (entity.DisplayedItems != null && entity.DisplayedItems.HasSelectionPlane) entity.DisplayedItems.SetParentOfSelectionPlane(readyModel.transform);

@@ -14,11 +14,30 @@ public enum ActionType
     NONE,
     START,
     RNDWALK,
-    GOTOBUILDING,
+    GOTOBUILDING,                             // Add modes: EnterPoint, InteractionPoint, Near
     ENTERBUILDING,
     ISENDOFDAY,
-    SWITCHSEQ
+    SWITCHSEQ,
+    GETBUILDING,                       
+    EQUALITY,
+    EXITBUILDING,
+    REST,
+    CHECKINDICATOR,
+    GETEATQUERY,
+    FINDBUILDING,
+    TAKE,
+    WAIT,
+    GOTOINTERACTION,
+    INTERACT,
+    CHECK,
+    MATHCOMPARING,
+    GETAMOUNT,
+    RANDOMGENERATOR
 }
+
+
+
+
 
 public enum ActionType_old
 {

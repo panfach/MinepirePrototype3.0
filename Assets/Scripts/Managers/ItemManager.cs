@@ -21,7 +21,7 @@ public class ItemManager : MonoBehaviour
         }
 
         //creature.CrtProp.droppedItems = dropItems.ToArray();
-        creature.Health.LastAttacker.AssignDrop(dropItems.ToArray());
+        if (creature.Health.LastAttacker != null) creature.Health.LastAttacker.AssignDrop(dropItems.ToArray());
     }
 
     public void ExecuteExtracting(ResourceDeposit resourceDeposit, int ind, float amount)

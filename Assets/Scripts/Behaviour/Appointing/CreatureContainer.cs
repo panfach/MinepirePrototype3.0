@@ -26,18 +26,29 @@ public class CreatureContainer : MonoBehaviour
     }
 
 
-    public void Add(Creature creature)
+    public bool Add(Creature creature)
     {
+        if (hasCreatureLimit && CreatureCount >= creatureLimit) return false;
+
         creatureList.Add(creature);
         creatures++;
+        creature.CrtProp.PlaceOfStay = this;
+
         // ChangeEvent
+
+        return true;
     }
 
-    public void Remove(Creature creature)
+    public bool Remove(Creature creature)
     {
-        if (creatureList.Remove(creature))
-            creatures--;
+        if (!creatureList.Remove(creature))
+            return false;
+        creatures--;
+        creature.CrtProp.PlaceOfStay = null;
+
         // ChangeEvent
+
+        return true;
     }
 
 

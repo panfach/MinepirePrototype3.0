@@ -16,7 +16,7 @@ public class Satiety : MonoBehaviour, IIndicator
 
     private void OnEnable()
     {
-        Value = 2.0f;
+        Value = 1.0f;
     }
 
 
@@ -26,7 +26,7 @@ public class Satiety : MonoBehaviour, IIndicator
         set
         {
             satiety = value;
-            satiety = Mathf.Clamp(satiety, 0f, 999f);
+            satiety = Mathf.Clamp(satiety, 0f, 1f);
             changedValueEvent?.Invoke();
             //if (smallInfo != null && smallInfo.enabled) smallInfo.Refresh();                     // Implement this in future
 

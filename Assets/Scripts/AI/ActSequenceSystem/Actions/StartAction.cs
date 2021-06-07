@@ -10,7 +10,6 @@ namespace ActSequenceSystem
     {
         [NonSerialized] public ActionType type = ActionType.START;
         [NonSerialized] public int priority = 100;
-
         public ActSequenceIndex Index;
 
         [Output] public Connection trueConnection;

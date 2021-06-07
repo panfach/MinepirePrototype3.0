@@ -20,6 +20,7 @@ GameObject:
   - component: {fileID: 3666596505451067972}
   - component: {fileID: 4148754911773210568}
   - component: {fileID: 3939281289569579912}
+  - component: {fileID: 6397602504106775663}
   m_Layer: 11
   m_Name: Deer
   m_TagString: Animal
@@ -67,6 +68,8 @@ MonoBehaviour:
   navMeshAgent: {fileID: 1066544336706940258}
   appointer: {fileID: 0}
   attackController: {fileID: 0}
+  inventory: {fileID: 0}
+  uiController: {fileID: 6397602504106775663}
 --- !u!65 &1066544336706940262
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -173,7 +176,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   entity: {fileID: 3591495974343621970}
   maxRandomWalkDelay: 8
-  generalActSequence: 0
+  generalActSequence: 2
   actionType: 0
 --- !u!114 &2510483437292284732
 MonoBehaviour:
@@ -234,6 +237,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 80
   m_CollisionDetection: 0
+--- !u!114 &6397602504106775663
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1066544336706940263}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4578b941d57b714088684829b5460d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  entity: {fileID: 3591495974343621970}
+  openInfoOnClick: 1
 --- !u!1 &5852074216987475913
 GameObject:
   m_ObjectHideFlags: 0

@@ -25,6 +25,8 @@ public abstract class Entity : MonoBehaviour
     public virtual Rigidbody Rigidbody { get => null; }
     public virtual NavMeshAgent Agent { get => null; }
     public virtual AttackController AttackController { get => null; }
+    public virtual Interactive Interactive { get => null; }
+    public virtual IndicatorInteraction IndicatorInteraction { get => null; }
 
     public abstract void Die();
 }

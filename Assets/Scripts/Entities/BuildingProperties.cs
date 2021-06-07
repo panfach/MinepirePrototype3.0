@@ -22,6 +22,7 @@ public class BuildingProperties : MonoBehaviour
     public void AssignUniqueIndex(int index = 0)                                     // Maybe create separate class "UniqueIndex" with methods "Get", "Assign"
     {
         uniqueIndex = (index == 0) ? ++maxUniqueIndex : index;
+        VillageData.uniqIndexDict.Add(uniqueIndex, entity as Building);
     }
 
     public override string ToString()

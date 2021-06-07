@@ -49,7 +49,7 @@ public static class VillageData
 
     public static List<Building> Constructions { get; private set; } = new List<Building>();                                         // Maybe GeneralBuilder (or BuildingManager) must contain it
     public static List<Building> Buildings { get; private set; } = new List<Building>();
-    public static Dictionary<int, GameObject> uniqIndexDict = new Dictionary<int, GameObject>();
+    public static Dictionary<int, Building> uniqIndexDict = new Dictionary<int, Building>();
     public static Building townhall = null;
     public static BuildingIndex townhallIndex = BuildingIndex.TRIBLEADER;
     public static List<ExtractedResourceLink> extractionQueue = new List<ExtractedResourceLink>();
@@ -126,6 +126,24 @@ public static class VillageData
                   where item.BuildSet.ConstrStatus == ConstructionStatus.READY
                   select item;
         return seq.Count();
+    }
+
+    public static Building GetNearestBuilding(List<Building> buildings, Vector3 point)
+    {
+        if (buildings.Count == 0) return null;
+
+        Building nearestBuilding = null;
+        float distance, minDistance = float.MaxValue;
+        foreach (Building building in buildings)
+        {
+            if ((distance = Vector3.SqrMagnitude(point - building.transform.position)) < minDistance)
+            {
+                nearestBuilding = building;
+                minDistance = distance;
+            }
+        }
+
+        return nearestBuilding;
     }
 
 /*    public static void VillagerPlacesReassigning()
@@ -463,7 +481,7 @@ public static class VillageData
             reader.ReadByte();
             animIndex = CreatureIndex.DEER;
 
-            animIndex = (CreatureIndex)reader.ReadByte();
+            //animIndex = (CreatureIndex)reader.ReadByte();
             scc = new SCCoord(reader.ReadInt16(), reader.ReadInt16());
             Connector.creatureManager.Spawn
                 (SCCoord.GetCenter(scc), 
@@ -471,7 +489,7 @@ public static class VillageData
                 healthPoints: reader.ReadSingle());
         }
 
-        for (int i = 0; i < resources.Length; i++)
+        for (int i = 0; i < resources.Length - 1; i++)
         {
             resources[i] = reader.ReadSingle();
         }
@@ -517,7 +535,7 @@ public static class VillageData
         resources = new float[Enum.GetNames(typeof(ResourceIndex)).Length];
 
         Buildings = new List<Building>();
-        uniqIndexDict = new Dictionary<int, GameObject>();
+        uniqIndexDict = new Dictionary<int, Building>();
         townhall = null;
         extractionQueue.Clear();
         staticBatchingObjects.Clear();

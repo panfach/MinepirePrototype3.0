@@ -48,13 +48,14 @@ public class Inventory : MonoBehaviour
         storedPacksAmount = amount;
         storedRes = new ResourceIndex[storedPacksAmount];
         storedVal = new float[storedPacksAmount];
+        invChangedEvent?.Invoke();
     }
 
     public void ItemInit(ResourceIndex ind, float val)
     {
         PutResource(ind, val);
         VillageData.resources[(int)ind] += val;
-        RefreshInfo();
+        //RefreshInfo();
     }
 
     /// <summary>
@@ -63,7 +64,7 @@ public class Inventory : MonoBehaviour
     /// <returns>Return amount of resource, that was not moved</returns>
     public float Give(Inventory targetInventory, int packIndex, float value = float.MaxValue)
     {
-        if (value < 0.001f) return 0f;
+        if (value < 0.001f || StoredRes[packIndex] == ResourceIndex.NONE) return 0f;
 
         float freeSpace, giveRemainder = 0f, takeRemainder;
         ResourceIndex resInd = storedRes[packIndex];
@@ -78,7 +79,7 @@ public class Inventory : MonoBehaviour
         Debug.Log("Value to put : " + value);
         targetInventory.PutResource(resInd, value);
 
-        RefreshInfo();
+        //RefreshInfo();
 
         return giveRemainder;
     }
@@ -102,9 +103,53 @@ public class Inventory : MonoBehaviour
         value -= takeRemainder;
         targetInventory.PutResource(index, value);
 
-        RefreshInfo();
+        //RefreshInfo();
 
         return giveRemainder;
+    }
+
+    /// <summary>
+    /// Putting a resource query from this inventory into specific inventory
+    /// </summary>
+    public void Give(Inventory targetInventory, ResourceQuery query)
+    {
+        float remainder;
+        if (query.index != null)
+        {
+            for (int i = 0; i < query.index.Length; i++)
+            {
+                remainder = Give(targetInventory, query.index[i], query.indexVal[i]);
+                if (remainder == 0f)
+                {
+                    query.indexVal[i] = 0f;
+                    query.index[i] = ResourceIndex.EXECUTEDQUERY;
+                }
+                else
+                {
+                    query.indexVal[i] = remainder;
+                }
+            }
+        }
+        if (query.type != null)
+        {
+            for (int i = 0; i < query.type.Length; i++)
+            {
+                ResourceType type = query.type[i];
+                foreach (ResourceIndex ind in DataList.GetResourceIndices(type))
+                {
+                    remainder = Give(targetInventory, ind, query.typeVal[i]);
+                    if (remainder == 0f)
+                    {
+                        query.typeVal[i] = 0f;
+                        query.type[i] = ResourceType.EXECUTEDQUERY;
+                    }
+                    else
+                    {
+                        query.typeVal[i] = remainder;
+                    }
+                }
+            }
+        }
     }
 
     public void LayOut(int packIndex, float value = float.MaxValue)
@@ -196,6 +241,76 @@ public class Inventory : MonoBehaviour
     }
 
     /// <summary>
+    /// Returns total amount of resources of specific type in inventory
+    /// </summary>
+    public float AmountOfResource(ResourceType type)
+    {
+        float result = 0f;
+
+        for (int j = 0; j < DataList.GetResourceIndices(type).Length; j++)
+        {
+            result += AmountOfResource(DataList.GetResourceIndices(type)[j]);
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// Checks the presence of any resource from resource query in this inventory
+    /// </summary>
+    public bool CheckResourceForQuery(ResourceQuery query)
+    {
+        if (query.index != null)
+        {
+            for (int i = 0; i < query.index.Length; i++)
+            {
+                if (query.index[i] == ResourceIndex.NONE) continue;
+                if (AmountOfResource(query.index[i]) > 0)
+                    return true;
+            }
+        }
+        if (query.type != null)
+        {
+            for (int i = 0; i < query.type.Length; i++)
+            {
+                ResourceType type = query.type[i];
+                foreach (ResourceIndex ind in DataList.GetResourceIndices(type))
+                {
+                    if (AmountOfResource(ind) > 0)
+                        return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// Checks the presence of specific resource in this inventory
+    /// </summary>
+    public bool CheckResource(ResourceIndex ind)
+    {
+        for (int i = 0; i < PacksAmount; i++)
+        {
+            if (storedRes[i] == ind) return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Checks the presence of any resource of specific type in this inventory
+    /// </summary>
+    public bool CheckResource(ResourceType type)
+    {
+        for (int j = 0; j < DataList.GetResourceIndices(type).Length; j++)
+        {
+            if (CheckResource(DataList.GetResourceIndices(type)[j])) return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
     /// Irrevocably deletes specific amount of resource in pack
     /// </summary>
     /// <returns>Remainder, if amount more than actual value</returns>
@@ -237,7 +352,7 @@ public class Inventory : MonoBehaviour
         return PutResource(ind, val);
     }
 
-    public void RefreshInfo()                                                                     // Turn it into events in future
+    /*public void RefreshInfo()                                                                     // Turn it into events in future
     {
         if (baseObject is Building)
         {
@@ -256,7 +371,7 @@ public class Inventory : MonoBehaviour
             //((Creature)baseObject).smallInfo.Refresh();
         }
         invChangedEvent?.Invoke();
-    }
+    }*/
 
     public bool Occupy(Creature creature)
     {
@@ -326,8 +441,9 @@ public class Inventory : MonoBehaviour
             }
         }
 
-        Debug.Log("Now in target inventory " + storedRes[0] + " : " + storedVal[0]);
+        //Debug.Log("Now in target inventory " + storedRes[0] + " : " + storedVal[0]);
 
+        invChangedEvent?.Invoke();
         return value;
     }
 
@@ -358,6 +474,7 @@ public class Inventory : MonoBehaviour
         }
 
         if (destroyOnEmpty && IsEmpty()) baseObject.GetComponent<Entity>().Die();
+        invChangedEvent?.Invoke();
         return remainder;
     }
 
@@ -382,6 +499,7 @@ public class Inventory : MonoBehaviour
         }
 
         if (destroyOnEmpty && IsEmpty()) baseObject.GetComponent<Entity>().Die();
+        invChangedEvent?.Invoke();
         return remainder;
     }
 

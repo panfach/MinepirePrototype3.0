@@ -13,6 +13,8 @@ public class Building : Entity
     [SerializeField] UIController uiController;
     [SerializeField] CreatureContainer creatureContainer;
     [SerializeField] Appointer appointer;
+    [SerializeField] Interactive interactive;
+    [SerializeField] IndicatorInteraction indicatorInteraction; 
 
     public override BuildingData BldData { get => data; }
     public override BuildingProperties BldProp { get => properties; }
@@ -25,6 +27,8 @@ public class Building : Entity
     public override UIController UIController { get => uiController; }
     public override CreatureContainer CreatureContainer { get => creatureContainer; }
     public override Appointer Appointer { get => appointer; }
+    public override Interactive Interactive { get => interactive; }
+    public override IndicatorInteraction IndicatorInteraction { get => indicatorInteraction; }
 
 
     public override void Die()

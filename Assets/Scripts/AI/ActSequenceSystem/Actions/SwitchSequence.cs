@@ -14,7 +14,8 @@ namespace ActSequenceSystem
 
         [NonSerialized] public int priority = 100;
 
-        [Output] public Connection trueConnection;
+
+        public ActSequenceIndex Sequence { get => GetInputValue("sequence", sequence); }
 
 
         public override ActionType Type { get => type; }

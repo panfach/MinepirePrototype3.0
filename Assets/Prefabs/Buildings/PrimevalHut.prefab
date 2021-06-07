@@ -433,8 +433,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   entity: {fileID: 2709232034898972277}
-  type: 0
-  maxAppointments: 00000000000000000000000000000000
+  appointByDragging: 0
+  type: 1
+  maxAppointments: 02000000000000000000000000000000
 --- !u!114 &4677889394720206769
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -449,7 +450,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   entity: {fileID: 2709232034898972277}
   enter:
-  - {fileID: 0}
+  - {fileID: 7982391186711729274}
   hasCreatureLimit: 0
   creatureLimit: 0
   creatures: 0
@@ -472,7 +473,7 @@ MonoBehaviour:
   reactToZeroAppointedPeople: 1
   reactToResourceDepositStatus: 0
   reactToHomeAbsence: 0
-  height: 0
+  height: 1
   smallInfo: {fileID: 0}
 --- !u!114 &5646646923036308968
 MonoBehaviour:

@@ -28,6 +28,7 @@ public class CreatureInfo : MonoBehaviour
     {
         creatureInfoTurnedOn = state;
         StateManager.CreatureInfo = state;
+        creatureInfoWindow.SetActive(state);
         if (state)
         {
             Refresh();
@@ -48,7 +49,10 @@ public class CreatureInfo : MonoBehaviour
             satietySlider.value = activeCreature.Satiety.Value;
             gender.text = activeCreature.CrtProp.Gender ? "мужчина" : "женщина";
             age.text = activeCreature.CrtProp.Age.ToString();
-            profession.text = DataList.profNameDict_rus[activeCreature.Appointer.Profession];
+            if (activeCreature.Appointer != null)
+                profession.text = DataList.profNameDict_rus[activeCreature.Appointer.Profession];
+            else
+                profession.text = DataList.profNameDict_rus[Profession.NONE];
 
             for (int i = 0; i < activeCreature.Inventory.PacksAmount; i++)
             {

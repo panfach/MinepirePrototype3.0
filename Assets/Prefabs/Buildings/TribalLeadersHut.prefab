@@ -263,7 +263,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   entity: {fileID: 5409398672473944483}
-  type: 0
+  appointByDragging: 0
+  type: 2
   maxAppointments: 00000000000000000000000000000000
 --- !u!114 &4066742001156336195
 MonoBehaviour:
@@ -302,7 +303,7 @@ MonoBehaviour:
   reactToZeroAppointedPeople: 0
   reactToResourceDepositStatus: 0
   reactToHomeAbsence: 0
-  height: 0
+  height: 2
   smallInfo: {fileID: 0}
 --- !u!114 &1663496580508617280
 MonoBehaviour:

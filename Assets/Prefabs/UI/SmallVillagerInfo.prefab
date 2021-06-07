@@ -565,15 +565,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f149b35ecc9852d4eadd7b51992a4aa4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  instance: {fileID: 0}
   _transform: {fileID: 0}
   objectTransform: {fileID: 0}
   deletionFlag: 0
-  villager: {fileID: 0}
-  infoBox: {fileID: 1739858243194183255}
-  iconBox: {fileID: 4679070541829563492}
-  villagerName: {fileID: 4070273382228518665}
-  age: {fileID: 7503027708635502759}
-  iconImage: {fileID: 5949473763850647881}
 --- !u!114 &1394580383547412581
 MonoBehaviour:
   m_ObjectHideFlags: 0

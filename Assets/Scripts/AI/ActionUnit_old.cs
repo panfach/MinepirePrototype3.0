@@ -4,7 +4,7 @@ using UnityEngine;
 using System;
 
 // ------------------------------------------- // MINEPIRE // ------------------------------------------- //
-[System.Serializable]
+/*[System.Serializable]
 public class ActionUnit
 {
     //[Space(50)]
@@ -16,9 +16,9 @@ public class ActionUnit
     public int[] actVar;
     [Range(0.0f, 5.0f)] public float afterDelay;
 
-}
+}*/
 
-public enum SequenceAction
+/*public enum SequenceAction
 {
     NONE,
     NEXT,
@@ -37,4 +37,4 @@ public enum ActionMode
     TARGETINVISEMPTY,
     PUT,
     TAKE
-}
+}*/

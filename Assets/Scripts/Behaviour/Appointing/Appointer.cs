@@ -3,18 +3,20 @@ using UnityEngine;
 using System;
 using System.Collections;
 
+[DefaultExecutionOrder(0)]
 public class Appointer : MonoBehaviour
 {
     [Header("Entity")]
     public Entity entity;
 
     [Header("Settings")]
+    [SerializeField] bool appointByDragging;
     [SerializeField] AppointerType type;
-    [Tooltip("00: Villager \n01: Workplace \n02: Livingplace \n03: Warehouse")]
+    [Tooltip("Element 0: Villager \nElement 1: Workplace \nElement 2: Livingplace \nElement 3: Warehouse")]
     [SerializeField] int[] maxAppointments = new int[AppointerTypeSize];
 
     [Header("Info")]
-    [Tooltip("00: Villager \n01: Workplace \n02: Livingplace \n03: Warehouse")]
+    [Tooltip("Element 0: Villager \nElement 1: Workplace \nElement 2: Livingplace \nElement 3: Warehouse")]
     [SerializeField] List<Appointer>[] appointment;
 
     public event SimpleEventHandler appointmentChangedEvent;                                                                     // does it work? -> InfoDisplay.Refresh();
@@ -45,6 +47,11 @@ public class Appointer : MonoBehaviour
     private void OnEnable()
     {                                                                   
         appointment = new List<Appointer>[AppointerTypeSize];
+        for (int i = 0; i < AppointerTypeSize; i++)
+        {
+            appointment[i] = new List<Appointer>();
+        }
+        if (appointByDragging) entity.ColliderHandler.mouseUpEvent += AppointByDragging;
     }
 
 
@@ -54,7 +61,11 @@ public class Appointer : MonoBehaviour
     /// <returns>Successful</returns>
     public bool Appoint(Appointer target)
     {
-        if (!CheckAppointConditions(target)) return false;
+        if (!CheckAppointConditions(target))
+        {
+            Connector.effectSoundManager.PlayCancelSound();
+            return false;
+        }
 
         AddAppointment(target);
         target.AddAppointment(this);
@@ -70,7 +81,7 @@ public class Appointer : MonoBehaviour
     /// Performs appointing to this appointer with all table changes (Appointment is selected by mouse)
     /// </summary>
     /// <returns>Successful</returns>
-    public bool AppointByDragging()
+    public void AppointByDragging()
     {
         Ray ray = Connector.mainCamera.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
@@ -80,9 +91,11 @@ public class Appointer : MonoBehaviour
            ((target = hit.collider.GetComponent<CollideListener>()?.colliderHandler.GetComponent<Appointer>()) != null) ||                                  // Bad . Maybe create class (RayCaster)
            (target = hit.collider.GetComponent<Appointer>()) != null)
         {
-            return Appoint(target);
+            //return Appoint(target);
+            Appoint(target);
+            return;
         }
-        return false;
+        //return false;
     }
 
     /// <summary>
@@ -127,6 +140,7 @@ public class Appointer : MonoBehaviour
 
     bool CheckAppointConditions(Appointer target)
     {
+        //Debug.Log("target : " + target != null);
         if (target == null) return false;
         if (maxAppointments[(int)target.type] != 1 && appointment[(int)target.type].Count >= maxAppointments[(int)target.type]) return false;
         if (target.maxAppointments[(int)type] != 1 && target.appointment[(int)type].Count >= target.maxAppointments[(int)type]) return false;
@@ -147,10 +161,10 @@ public class Appointer : MonoBehaviour
     /// </summary>
     void AddAppointment(Appointer target)
     {
-        if (maxAppointments[(int)target.type] == 1)
+        if (maxAppointments[(int)target.type] == 1 && appointment[(int)target.type].Count == 1)
         {
             Remove(target.type, 0);                                                                
-            appointment[(int)target.type][0] = target;
+            appointment[(int)target.type].Add(target);
         }
         else appointment[(int)target.type].Add(target);
         appointmentChangedEvent?.Invoke();                                                                      // Add special conditions
@@ -173,7 +187,11 @@ public class Appointer : MonoBehaviour
                 VillageData.workers[(int)Profession.LABORER]--;                            
                 VillageData.workers[(int)Profession]++;
                 VillageData.workersCount++;                                                   // ? Add property in VillageData 
-                if (Home == null) Remove(AppointerType.WORKPLACE, 0);
+                if (Home == null)
+                {
+                    Connector.effectSoundManager.PlayCancelSound();
+                    Remove(AppointerType.WORKPLACE, 0);
+                }
                 break;
             case AppointerType.LIVINGPLACE:
                 VillageData.homeless--;
@@ -254,6 +272,7 @@ public class Appointer : MonoBehaviour
             }
             appointment[i].Clear();
         }
+        if (appointByDragging) entity.ColliderHandler.mouseUpEvent -= AppointByDragging;
     }
 }
 

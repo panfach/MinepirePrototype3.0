@@ -20,6 +20,9 @@ namespace ActSequenceSystem
         [Output] public Connection falseConnection;
 
 
+        public Building Building { get => GetInputValue<Building>("building", null); }
+
+
         public override ActionType Type { get => type; }
 
         public override IEnumerator Algorithm(Creature creature)

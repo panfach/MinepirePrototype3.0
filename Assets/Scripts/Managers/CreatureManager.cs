@@ -39,7 +39,7 @@ public class CreatureManager : MonoBehaviour
 
     public Creature Spawn
         (Vector3 position,
-        CreatureIndex index = CreatureIndex.NONE,
+        CreatureIndex index = CreatureIndex.DEER,
         bool gender = false,
         string _name = "Potato",
         int age = 0,
@@ -51,7 +51,7 @@ public class CreatureManager : MonoBehaviour
         GameObject creature = Instantiate(DataList.GetCreatureObj(index), new Vector3(position.x, SCCoord.GetHeight(position) + 0.5f, position.z), Quaternion.identity);
         Creature entity = creature.GetComponent<Creature>();
         Add(entity);
-        entity.CrtProp.Init(gender, _name, age, home, work, satiety);
+        entity.CrtProp.Init(gender, _name, age, home, work, satiety, healthPoints);
         entity.Health.Value = (healthPoints >= 0) ? healthPoints : entity.CrtData.MaxHealth;
 
         return entity;
@@ -59,7 +59,7 @@ public class CreatureManager : MonoBehaviour
 
     public Creature SpawnSingle
         (Vector3 _position,
-        CreatureIndex _index = CreatureIndex.NONE,
+        CreatureIndex _index = CreatureIndex.DEER,
         bool _gender = false,
         string _name = "Potato",
         int _age = 0,
@@ -80,7 +80,7 @@ public class CreatureManager : MonoBehaviour
     {
         CreatureIndex _index = CreatureIndex.DEER;
         bool _gender = (Random.Range(0, 2) == 0) ? true : false;
-        CreatureData data = DataList.GetCreatureObj(CreatureIndex.DEER).GetComponent<CreatureData>();
+        CreatureData data = DataList.GetCreatureObj(CreatureIndex.DEER).GetComponent<Creature>().CrtData;
         int _age = Random.Range(data.MinRandomAge, data.MaxRandomAge);
 
         return Spawn(pos, _index, _gender, age: _age);
@@ -179,7 +179,7 @@ public class CreatureManager : MonoBehaviour
     {
         foreach (Creature item in Villagers)
         {
-            if (item.Appointer.Profession == Profession.LABORER && item.GeneralAI.GetActionType == ActionType.RNDWALK)
+            if (item.Appointer.Profession == Profession.LABORER && item.GeneralAI.ActionType == ActionType.RNDWALK)
             {
                 item.GeneralAI.DefineBehaviour();
             }

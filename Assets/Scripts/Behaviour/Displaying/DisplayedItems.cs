@@ -35,6 +35,7 @@ public class DisplayedItems : MonoBehaviour
         if (hasSilhouette && entity.ColliderHandler != null)
         {
             entity.ColliderHandler.mouseDragEvent += DisplaySilhouette;
+            entity.ColliderHandler.mouseUpEvent += HideSilhouette;
         }
     }
 
@@ -47,7 +48,9 @@ public class DisplayedItems : MonoBehaviour
 
     public void DisplaySilhouette()
     {
-        silhouette.SetActive(true);                                                              // Silhouette must be moved by some input controller (in update)
+        silhouette.SetActive(true);
+        silhouette.transform.parent = null;
+        InputController.objectsFollowingMouse.Add(silhouette);
     }
 
     public void HideSelectionPlane()
@@ -58,6 +61,7 @@ public class DisplayedItems : MonoBehaviour
     public void HideSilhouette()
     {
         silhouette.SetActive(false);
+        InputController.objectsFollowingMouse.Remove(silhouette);
     }
 
     public void DisplayInventory() // This function is shit                      // Rewrite this function after "Inventory" rewriting

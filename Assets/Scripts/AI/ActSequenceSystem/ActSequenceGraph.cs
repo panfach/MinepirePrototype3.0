@@ -29,7 +29,8 @@ namespace ActSequenceSystem
 public enum ActSequenceIndex
 {
 	NONE,
-	EAT,
 	VILLAGER_GENERAL,
-	EVENING
+	ANIMAL_GENERAL,
+	VILLAGER_EAT,
+	VILLAGER_EVENING
 }

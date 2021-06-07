@@ -10,10 +10,7 @@ namespace ActSequenceSystem
         [Input] public Connection enter;
 
         [NonSerialized] ActionType type = ActionType.ISENDOFDAY;
-
-        [Range(0.0f, 5.0f)] public float initialDelay;
-        [Range(0, 100)] public int priority;
-        [Range(0.0f, 5.0f)] public float finalDelay;
+        [NonSerialized] public int priority = 0;
 
         [Output] public Connection trueConnection;
         [Output] public Connection falseConnection;

@@ -10,7 +10,7 @@ public class TurnManager : MonoBehaviour
     {
         foreach (Creature item in CreatureManager.Villagers)
         {
-            if (item.Appointer.Home != null && item.CrtProp.PlaceOfStay != item.Appointer.Home)
+            if (item.Appointer.Home != null && item.CrtProp.PlaceOfStay.entity != item.Appointer.Home.entity)
             {
                 Notification.Invoke(NotifType.EMPTYHOME);
                 return;
@@ -112,7 +112,7 @@ public class TurnManager : MonoBehaviour
     {
         foreach (Creature item in CreatureManager.Villagers)
         {
-            item.Satiety.Value -= 0.5f; 
+            item.Satiety.Value -= 0.25f; 
         }
     }
 

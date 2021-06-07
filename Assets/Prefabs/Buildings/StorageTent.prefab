@@ -555,6 +555,8 @@ MonoBehaviour:
   uiController: {fileID: 1974360765898451302}
   creatureContainer: {fileID: 3425091293824335065}
   appointer: {fileID: 6499119476282192408}
+  interactive: {fileID: 0}
+  indicatorInteraction: {fileID: 0}
 --- !u!114 &7186443082937441811
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -663,7 +665,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   entity: {fileID: 3370807516507604620}
-  type: 0
+  appointByDragging: 0
+  type: 3
   maxAppointments: 00000000000000000000000000000000
 --- !u!114 &3425091293824335065
 MonoBehaviour:
@@ -679,7 +682,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   entity: {fileID: 3370807516507604620}
   enter:
-  - {fileID: 0}
+  - {fileID: 1367188969009376669}
   hasCreatureLimit: 0
   creatureLimit: 0
   creatures: 0
@@ -702,7 +705,7 @@ MonoBehaviour:
   reactToZeroAppointedPeople: 0
   reactToResourceDepositStatus: 0
   reactToHomeAbsence: 0
-  height: 0
+  height: 1
   smallInfo: {fileID: 0}
 --- !u!114 &1974360765898451302
 MonoBehaviour:
@@ -718,6 +721,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   entity: {fileID: 3370807516507604620}
   openInfoOnClick: 1
+  reactToInventoryChanges: 1
+  reactToHealthChanges: 0
+  reactToSatietyChanges: 0
 --- !u!114 &6838012774800053311
 MonoBehaviour:
   m_ObjectHideFlags: 0

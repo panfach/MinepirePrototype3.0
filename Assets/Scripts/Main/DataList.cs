@@ -146,7 +146,8 @@ public enum ResourceIndex
     APPLE,
     RAWVENISON,
     RAWDEERSKIN,
-    DEERSKIN
+    DEERSKIN,
+    EXECUTEDQUERY
 }
 
 public enum ResourceType
@@ -154,7 +155,8 @@ public enum ResourceType
     NONE,
     FOOD,
     ANIMALDROP,
-    BUILDMAT
+    BUILDMAT,
+    EXECUTEDQUERY
 }
 
 public enum NatureIndex

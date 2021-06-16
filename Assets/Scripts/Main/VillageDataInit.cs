@@ -49,6 +49,7 @@ public static class VillageData
 
     public static List<Building> Constructions { get; private set; } = new List<Building>();                                         // Maybe GeneralBuilder (or BuildingManager) must contain it
     public static List<Building> Buildings { get; private set; } = new List<Building>();
+    public static List<Production> Productions { get; private set; } = new List<Production>();
     public static Dictionary<int, Building> uniqIndexDict = new Dictionary<int, Building>();
     public static Building townhall = null;
     public static BuildingIndex townhallIndex = BuildingIndex.TRIBLEADER;

@@ -23,7 +23,6 @@ public class Creature : Entity
     [SerializeField] AttackController attackController;
     [SerializeField] Inventory inventory;
     [SerializeField] UIController uiController;
-    [SerializeField] IndicatorInteraction indicatorInteraction;
 
     public override CreatureData CrtData { get => creatureData; }
     public override CreatureProperties CrtProp { get => creatureProperties; }
@@ -39,7 +38,6 @@ public class Creature : Entity
     public override AttackController AttackController { get => attackController; }
     public override Inventory Inventory { get => inventory; }
     public override UIController UIController { get => uiController; }
-    public override IndicatorInteraction IndicatorInteraction { get => indicatorInteraction; }
 
 
     public override void Die()

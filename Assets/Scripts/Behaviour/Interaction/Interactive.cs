@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,8 +11,21 @@ public class Interactive : MonoBehaviour
     [Header("Settings")]
     [SerializeField] InteractionSpot[] interactionSpots;
 
-    public Transform Spot() { return interactionSpots[0].Spot; }
-    public Transform Spot(int i) { return interactionSpots[i].Spot; }
+    public InteractionSpot Spot() { return interactionSpots[0]; }
+    public InteractionSpot Spot(int i) { return interactionSpots[i]; }
+    public Transform SpotPos() { return interactionSpots[0].Spot; }
+    public Transform SpotPos(int i) { return interactionSpots[i].Spot; }
+    public bool IsOccupied
+    {
+        get
+        {
+            foreach (InteractionSpot spot in interactionSpots)
+            {
+                if (!spot.IsOccupied) return false;
+            }
+            return true;
+        }
+    }
 
 
     private void OnEnable()
@@ -34,6 +48,35 @@ public class Interactive : MonoBehaviour
 
         if (spots.Count == 0) return false;
 
+        // Choosing the closest                                                                                // Make separate function for this
+        Vector3 actorPos = actor.transform.position;
+        InteractionSpot nearestSpot = null;
+        float distance, minDistance = float.MaxValue;
+        foreach (InteractionSpot spot in spots)
+        {
+            if ((distance = Vector3.SqrMagnitude(actorPos - spot.Spot.position)) < minDistance)
+            {
+                nearestSpot = spot;
+                minDistance = distance;
+            }
+        }
+
+        nearestSpot.Occupy(actor);
+
+        return true;
+    }
+
+    public bool OccupyNearestRecipe(GeneralAI actor)
+    {
+        List<InteractionSpot> spots = new List<InteractionSpot>();
+
+        foreach (int ind in actor.DestRecipe.interactionSpotIndex)
+        {
+            if (!interactionSpots[ind].IsOccupied) spots.Add(interactionSpots[ind]);
+        }
+
+        if (spots.Count == 0) return false;
+
         // Choosing the closest
         Vector3 actorPos = actor.transform.position;
         InteractionSpot nearestSpot = null;
@@ -47,38 +90,58 @@ public class Interactive : MonoBehaviour
             }
         }
 
-        if (actor.DestInteractionSpot != null && actor.DestInteractionSpot.Actor != null) actor.DestInteractionSpot.RemoveOccupation();
-        actor.DestInteractionSpot = nearestSpot;
-        nearestSpot.Actor = actor;
+        nearestSpot.Occupy(actor);
 
         return true;
     }
 
-    public void Interact(Creature creature, InteractionSpot spot)
+
+    public void StartEatInteraction(Creature creature, InteractionSpot spot)
     {
-        if (spot.IndicatorInteraction) StartCoroutine(entity.IndicatorInteraction.Interact(creature, spot));
+        StartCoroutine(EatAlgorithm(creature, spot));
     }
 
-    public void StopInteract(Creature creature, InteractionSpot spot)
+/*    public void StopIndicatorInteraction(Creature creature, InteractionSpot spot)
     {
-        if (spot.IndicatorInteraction) StopCoroutine(entity.IndicatorInteraction.Interact(creature, spot));
+        StopCoroutine(entity.IndicatorInteraction.Interact(creature, spot));
+    }*/
+
+    public void StartProduceInteraction(Creature creature, InteractionSpot spot)
+    {
+        StartCoroutine(ProduceAlgorithm(creature, spot));
+    }
+
+
+    public IEnumerator EatAlgorithm(Creature creature, InteractionSpot spot)
+    {
+        float amount, amountPerSecond;
+
+        spot.InteractionProcess = true;
+        LeanTween.move(creature.gameObject, spot.Spot.position, creature.CrtData.checkEventsDelay);
+        LeanTween.rotate(creature.gameObject, new Vector3(0f, GeneralAI.GetViewAngle(spot.InteractionTarget.position), 0f), creature.CrtData.checkEventsDelay);
+        yield return new WaitForSeconds(creature.CrtData.checkEventsDelay);
+
+        amount = (creature.Inventory.StoredVal[0] + creature.Inventory.StoredVal[1]) / 2f;
+        amountPerSecond = amount / spot.Duration;
+
+        for (int i = 0; i < (int)spot.Duration; i++)
+        {
+            creature.Satiety.Value += amountPerSecond;
+            yield return new WaitForSeconds(1f);
+        }
+        creature.Satiety.Value += amountPerSecond * (spot.Duration % 1f);
+        creature.Inventory.ClearInventory();
+
         spot.RemoveOccupation();
     }
 
-    public void RemoveOccupation(InteractionSpot spot)
+    public IEnumerator ProduceAlgorithm(Creature creature, InteractionSpot spot)
     {
-        if (spot.Interactive != this) return;
-        spot.Actor = null;
-        spot.InteractionProcess = false;
-    }
+        creature.Inventory.Give(entity.Inventory, spot.Recipe.requiredRes);
+        yield return new WaitForSeconds(spot.Duration);
 
-    public bool IsOccupied()
-    {
-        foreach (InteractionSpot spot in interactionSpots)
-        {
-            if (!spot.IsOccupied) return false;
-        }
-        return true;
+        spot.Recipe.RemoveOccupation();
+        spot.RemoveOccupation();
     }
 
 
@@ -88,36 +151,9 @@ public class Interactive : MonoBehaviour
     }
 }
 
-[System.Serializable]
-public class InteractionSpot
+public enum InteractionType
 {
-    Interactive interactive;
-    [SerializeField] Transform spot;
-    [SerializeField] Transform interactionTarget;
-    [SerializeField] bool indicatorInteraction;
-
-    GeneralAI actor;
-    bool interactionProcess;
-
-    public Interactive Interactive { get => interactive; }
-    public Transform Spot { get => spot; }
-    public Transform InteractionTarget { get => interactionTarget; }
-    public GeneralAI Actor { get => actor; set { actor = value; } }
-    public bool InteractionProcess { get => interactionProcess; set { interactionProcess = value; } }
-    public bool IndicatorInteraction { get => indicatorInteraction; }
-    public bool IsOccupied { get => (actor != null); }
-
-
-    public void Init(Interactive _interactive) 
-    { 
-        interactive = _interactive; 
-    }
-
-    public void Interact(Creature creature) { interactive.Interact(creature, this); }
-    public void StopInteract(Creature creature) { interactive.StopInteract(creature, this); }
-
-    public void RemoveOccupation()
-    {
-        interactive.RemoveOccupation(this);
-    }
+    EAT,
+    PRODUCE,
+    REAP
 }

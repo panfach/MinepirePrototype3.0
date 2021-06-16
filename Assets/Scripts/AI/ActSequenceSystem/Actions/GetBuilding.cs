@@ -36,6 +36,7 @@ namespace ActSequenceSystem
     {
         PLACEOFSTAY,
         HOME,
-        WORK
+        WORK,
+        DESTBUILDING
     }
 }

@@ -9,6 +9,7 @@ namespace ActSequenceSystem
     {
         [Input] public Connection enter;
         [Input] public InteractionSpot spot;
+        [Input] public InteractionType interactionType;
 
         [NonSerialized] ActionType type = ActionType.INTERACT;
 
@@ -20,7 +21,8 @@ namespace ActSequenceSystem
         [Output] public Connection falseConnection;
 
 
-        public InteractionSpot Spot { get => GetInputValue<InteractionSpot>("spot", null); }
+        public InteractionSpot Spot { get => GetInputValue("spot", spot); }
+        public InteractionType InteractionType { get => GetInputValue("interactionType", interactionType); }
 
 
         public override ActionType Type { get => type; }

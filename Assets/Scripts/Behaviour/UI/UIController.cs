@@ -11,6 +11,7 @@ public class UIController : MonoBehaviour
     [SerializeField] bool reactToInventoryChanges;
     [SerializeField] bool reactToHealthChanges;
     [SerializeField] bool reactToSatietyChanges;
+    [SerializeField] bool reactToProductionChanges;
 
 
     private void OnEnable()
@@ -21,6 +22,7 @@ public class UIController : MonoBehaviour
         if (reactToSatietyChanges && entity.Satiety != null) entity.Satiety.changedValueEvent += RefreshInfo;
         if (entity.Appointer != null) entity.Appointer.appointmentChangedEvent += RefreshInfo;
         if (entity.ResourceDeposit != null) entity.ResourceDeposit.resourceChangedEvent += RefreshInfo;
+        if (reactToProductionChanges && entity.Production != null) entity.Production.changedEvent += RefreshInfo;
     }
 
 
@@ -49,5 +51,6 @@ public class UIController : MonoBehaviour
         if (reactToSatietyChanges && entity.Satiety != null) entity.Satiety.changedValueEvent -= RefreshInfo;
         if (entity.Appointer != null) entity.Appointer.appointmentChangedEvent -= RefreshInfo;
         if (entity.ResourceDeposit != null) entity.ResourceDeposit.resourceChangedEvent -= RefreshInfo;
+        if (reactToProductionChanges && entity.Production != null) entity.Production.changedEvent -= RefreshInfo;
     }
 }

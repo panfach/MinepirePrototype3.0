@@ -1,32 +1,33 @@
 ﻿using System;
-using System.Collections;
 using UnityEngine;
+using System.Collections;
 using XNode;
 
 namespace ActSequenceSystem
 {
-    public class GetEatQuery : ActionNode
+    public class FindLaborerWork : ActionNode
     {
         [Input] public Connection enter;
 
-        [NonSerialized] ActionType type = ActionType.GETEATQUERY;
+        [NonSerialized] public ActionType type = ActionType.FINDLABORERWORK;
         [NonSerialized] public int priority = 0;
 
         [Output] public Connection trueConnection;
-        [Output] public ResourceQuery query;
+        [Output] public ActSequenceIndex sequence;
+        [Output] public Connection falseConnection;
 
 
         public override ActionType Type { get => type; }
 
         public override IEnumerator Algorithm(Creature creature)
         {
-            return ActionAlgorithms.GetEatQuery(creature, this);
+            return ActionAlgorithms.FindLaborerWork(creature, this);
         }
 
         public override object GetValue(NodePort port)
         {
-            if (port.fieldName == "query") return query;
-            return null;
+            if (port.fieldName == "sequence") return sequence;
+            else return null;
         }
     }
 }

@@ -6,7 +6,7 @@ using UnityEngine;
 public class Inventory : MonoBehaviour
 {
     [Header("Entity")]
-    [SerializeField] MonoBehaviour baseObject;                                                                                        // Fix to Entity
+    [SerializeField] Entity entity;                                                                                        // Fix to Entity
 
     [Header("Settings")]
     [SerializeField] bool hasOccupiedProperty;
@@ -27,9 +27,12 @@ public class Inventory : MonoBehaviour
     public ResourceIndex[] StoredRes { get => storedRes; }
     public float[] StoredVal { get => storedVal; }
 
+    //bool deferredEventInvoking;
+    //WaitForSeconds eventInvokingDelay = new WaitForSeconds(0.134f);                                                          // But what if to do the delay inside script DisplayedItem? Not here
+
     // -------------------------------------------------------------------------------------------------- //
 
-    private void OnEnable()                                                                                     // Add OnDisable also
+    private void OnEnable()                                                                         
     {
         Init();
     }
@@ -90,7 +93,7 @@ public class Inventory : MonoBehaviour
     /// <returns>Return amount of resource, that was not moved</returns>
     public float Give(Inventory targetInventory, ResourceIndex index, float value = float.MaxValue)
     {
-        if (value < 0.001f || index == ResourceIndex.NONE || index == ResourceIndex.LOG || index == ResourceIndex.DEERSKIN) return 0f;               // These resources are not in the game yet
+        if (value < 0.001f || index == ResourceIndex.NONE || index == ResourceIndex.LOG) return 0f;               // These resources are not in the game yet
 
         float freeSpace, giveRemainder = 0f, takeRemainder;
         if (value > (freeSpace = targetInventory.FreeSpaceForResource(index)))
@@ -119,7 +122,7 @@ public class Inventory : MonoBehaviour
             for (int i = 0; i < query.index.Length; i++)
             {
                 remainder = Give(targetInventory, query.index[i], query.indexVal[i]);
-                if (remainder == 0f)
+                if (remainder < 0.001f)
                 {
                     query.indexVal[i] = 0f;
                     query.index[i] = ResourceIndex.EXECUTEDQUERY;
@@ -150,6 +153,12 @@ public class Inventory : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void ExecuteRecipe(Recipe recipe)
+    {
+        ClearResource(recipe.requiredRes);
+        CreateResource(recipe.receivedRes);
     }
 
     public void LayOut(int packIndex, float value = float.MaxValue)
@@ -285,6 +294,37 @@ public class Inventory : MonoBehaviour
     }
 
     /// <summary>
+    /// Checks the presence of all required resources from resource query in this inventory
+    /// </summary>
+    public bool CheckAllResourceForQuery(ResourceQuery query)
+    {
+        float amount = 0f;
+        if (query.index != null)
+        {
+            for (int i = 0; i < query.index.Length; i++)
+            {
+                if (query.index[i] == ResourceIndex.NONE) continue;
+                if (AmountOfResource(query.index[i]) < query.indexVal[i])
+                    return false;
+            }
+        }
+        if (query.type != null)
+        {
+            for (int i = 0; i < query.type.Length; i++)
+            {
+                ResourceType type = query.type[i];
+                foreach (ResourceIndex ind in DataList.GetResourceIndices(type))
+                {
+                    amount += AmountOfResource(ind);
+                }
+                if (amount < query.typeVal[i])
+                    return false;
+            }
+        }
+        return true;
+    }
+
+    /// <summary>
     /// Checks the presence of specific resource in this inventory
     /// </summary>
     public bool CheckResource(ResourceIndex ind)
@@ -330,6 +370,67 @@ public class Inventory : MonoBehaviour
         return remainder;
     }
 
+    /// <summary>
+    /// Irrevocably deletes specific amount of specific resource
+    /// </summary>
+    /// <returns>Remainder, if amount more than actual value</returns>
+    public float ClearResource(ResourceIndex index, float amount = float.MaxValue)
+    {
+        float remainder = TakeResource(index, amount);
+        InfoDisplay.Refresh();
+
+        return remainder;
+    }
+
+    /// <summary>
+    /// Irrevocably deletes specific amount of any resource of specific type
+    /// </summary>
+    /// <returns>Remainder, if amount more than actual value</returns>
+    public float ClearResource(ResourceType type, float amount = float.MaxValue)
+    {
+        float remainder = 0f;
+        for (int i = 0; i < DataList.GetResourceIndices(type).Length; i++)
+        {
+            remainder += TakeResource(DataList.GetResourceIndices(type)[i], amount);
+        }
+        InfoDisplay.Refresh();
+
+        return remainder;
+    }
+
+    /// <summary>
+    /// Irrevocably deletes resources from specific resource query
+    /// </summary>
+    /// <returns>Remainder, if amount more than actual value</returns>
+    public float ClearResource(ResourceQuery query)
+    {
+        ResourceType type;
+        float remainder = 0f, amount, sumRemainder = 0f;
+
+        if (query.index != null)
+        {
+            for (int i = 0; i < query.index.Length; i++)
+                sumRemainder += ClearResource(query.index[i], query.indexVal[i]);
+        }
+        if (query.type != null)
+        {
+            for (int j = 0; j < query.type.Length; j++)
+            {
+                type = query.type[j];
+                amount = query.typeVal[j];
+                for (int i = 0; i < DataList.GetResourceIndices(type).Length; i++)
+                {
+                    remainder = ClearResource(DataList.GetResourceIndices(type)[i], amount);
+                    if (remainder < 0.001f) break;
+                    amount = remainder;
+                }
+                sumRemainder += remainder;
+            }
+        }
+
+        return sumRemainder;
+    }
+
     public bool IsEmpty()
     {
         for (int i = 0; i < PacksAmount; i++)
@@ -350,6 +451,15 @@ public class Inventory : MonoBehaviour
     public float CreateResource(ResourceIndex ind, float val)
     {
         return PutResource(ind, val);
+    }
+
+    public void CreateResource(ResourceQuery query)                                                // This method doesn't consider type component of query
+    {
+        if (query.index != null)
+        {
+            for (int i = 0; i < query.index.Length; i++)
+                CreateResource(query.index[i], query.indexVal[i]);
+        }
     }
 
     /*public void RefreshInfo()                                                                     // Turn it into events in future
@@ -404,7 +514,7 @@ public class Inventory : MonoBehaviour
     private float PutResource(ResourceIndex index, float value)
     {
         if (value < 0.001f) return 0f;
-        if (index == ResourceIndex.NONE || index == ResourceIndex.LOG || index == ResourceIndex.DEERSKIN) return 0f;
+        if (index == ResourceIndex.NONE || index == ResourceIndex.LOG) return 0f;
 
         for (int i = 0; i < storedPacksAmount; i++)
         {
@@ -460,7 +570,7 @@ public class Inventory : MonoBehaviour
             if (storedRes[i] == index)
             {
                 remainder -= storedVal[i];
-                if (remainder <= 0)
+                if (remainder < -0.001f)
                 {
                     storedVal[i] = -remainder;
                     remainder = 0;
@@ -468,12 +578,13 @@ public class Inventory : MonoBehaviour
                 }
                 else
                 {
+                    storedRes[i] = ResourceIndex.NONE;
                     storedVal[i] = 0;
                 }
             }
         }
 
-        if (destroyOnEmpty && IsEmpty()) baseObject.GetComponent<Entity>().Die();
+        if (destroyOnEmpty && IsEmpty()) entity.Die();
         invChangedEvent?.Invoke();
         return remainder;
     }
@@ -487,7 +598,7 @@ public class Inventory : MonoBehaviour
 
         float remainder = 0;
 
-        if (amount >= storedVal[packIndex])
+        if ((amount - storedVal[packIndex]) > -0.001f)
         {
             remainder = amount - storedVal[packIndex];
             storedRes[packIndex] = ResourceIndex.NONE;
@@ -498,53 +609,27 @@ public class Inventory : MonoBehaviour
             storedVal[packIndex] -= amount;
         }
 
-        if (destroyOnEmpty && IsEmpty()) baseObject.GetComponent<Entity>().Die();
+        if (destroyOnEmpty && IsEmpty()) entity.Die();
         invChangedEvent?.Invoke();
         return remainder;
     }
 
-
-    /// <summary>
-    /// Deletes specific amount of resource in the inventory
-    /// </summary>
-    /// <returns></returns>
-    /*private float TakeResource(int packIndex, float amount, out ResourceIndex index, out float value)
-    {
-        index = 0; value = 0f;
-        if (packIndex >= storedPacksAmount) return false;
-
-        index = storedRes[packIndex];
-        if (amount >= storedVal[packIndex])
-        {
-            value = storedVal[packIndex];
-            storedRes[packIndex] = ResourceIndex.NONE;
-            storedVal[packIndex] = 0f;
-        }
-        else
-        {
-            value = amount;
-            storedVal[packIndex] -= amount;
-        }
-
-        RefreshInfo();
-        return true;
-    }*/
-
-    /// <summary>
-    /// Checks presence the empty space for required resource
-    /// </summary>
-    //public bool CheckPlaceFor(ResourceIndex index)
-    //{
-    //    bool result = false;
-
-    //    for (int i = 0; i < storedPacksAmount; i++)
-    //    {
-    //        if (storedRes[i] == ResourceIndex.NONE || (storedRes[i] == index && storedVal[i] < storedPackSize)) result = true;
-    //    }
-    //    return result;
-    //}
-
     // -------------------------------------------------------------------------------------------------- //
+
+
+    /*void InvChangedEventDeferredInvoke()
+    {
+        if (deferredEventInvoking) return;
+        StartCoroutine(DeferredEventInvoking());
+    }
+
+    IEnumerator DeferredEventInvoking()
+    {
+        deferredEventInvoking = true;
+        yield return eventInvokingDelay;
+        invChangedEvent?.Invoke();
+        deferredEventInvoking = false;
+    }*/
 
     private void OnDisable()
     {

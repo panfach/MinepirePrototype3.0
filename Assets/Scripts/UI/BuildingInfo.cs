@@ -12,6 +12,7 @@ public class BuildingInfo : MonoBehaviour
     [Header("Managed object")]
     public GameObject buildingInfoWindow;
     public GameObject peopleSection;
+    public GameObject productionSection;
     public GameObject constructionProcessSection;
     public GameObject warehouseSection;
 
@@ -21,7 +22,12 @@ public class BuildingInfo : MonoBehaviour
     public TextMeshProUGUI[] peopleName;
     public TextMeshProUGUI[] peopleStatus;
     public GameObject[] peopleTrueSign;
+    public GameObject[] productionRecipe;
+    public TextMeshProUGUI[] recipeName;
+    public TextMeshProUGUI[] recipeQueue;
+    public Slider[] productionProcessSlider;
     public Slider constructionProcessSlider;
+    public GameObject[] warehousePack;
     public Slider[] warehouseSlider;
     public TextMeshProUGUI[] warehouseResName;
     public TextMeshProUGUI[] warehouseValue;
@@ -71,73 +77,104 @@ public class BuildingInfo : MonoBehaviour
 
     public void Refresh()
     {
-        if (buildingInfoTurnedOn)
+        if (!buildingInfoTurnedOn) return;
+
+        buildingName.text = activeBuilding.BldData.Name_rus;
+
+        if (activeBuilding.BuildSet.ConstrStatus == ConstructionStatus.CONSTR)
         {
-            buildingName.text = activeBuilding.BldData.Name_rus;
+            warehouseSection.SetActive(false);
 
-            if (activeBuilding.BuildSet.ConstrStatus == ConstructionStatus.CONSTR)
+            peopleSection.SetActive(false);
+
+            constructionProcessSection.SetActive(true);
+            constructionProcessSlider.maxValue = activeBuilding.BldData.ConstrCost;
+            constructionProcessSlider.value = activeBuilding.BuildSet.Process;
+        }
+        else
+        {
+            Building rs = activeBuilding;
+
+            constructionProcessSection.SetActive(false);
+
+            if (rs.Appointer.MaxAppointments(AppointerType.VILLAGER) > 0)
             {
-                warehouseSection.SetActive(false);
+                peopleSection.SetActive(true);
+                people.text = $"{rs.Appointer.People}/{rs.Appointer.MaxAppointments(AppointerType.VILLAGER)}";
 
-                peopleSection.SetActive(false);
-
-                constructionProcessSection.SetActive(true);
-                constructionProcessSlider.maxValue = activeBuilding.BldData.ConstrCost;
-                constructionProcessSlider.value = activeBuilding.BuildSet.Process;
-            }
-            else 
-            {
-                Building rs = activeBuilding;
-
-                constructionProcessSection.SetActive(false);
-
-                if (rs.Appointer.MaxAppointments(AppointerType.VILLAGER) > 0)
+                for (int i = 0; i < peopleName.Length; i++)
                 {
-                    peopleSection.SetActive(true);
-                    people.text = $"{rs.Appointer.People}/{rs.Appointer.MaxAppointments(AppointerType.VILLAGER)}";
-
-                    for (int i = 0; i < peopleName.Length; i++)
+                    bool res = i < rs.Appointer.MaxAppointments(AppointerType.VILLAGER);
+                    peoplePlace[i].SetActive(res);
+                    if (res)
                     {
-                        bool res = i < rs.Appointer.MaxAppointments(AppointerType.VILLAGER);
-                        peoplePlace[i].SetActive(res);
-                        if (res)
+                        if (i < rs.Appointer.People)
                         {
-                            if (i < rs.Appointer.People)
-                            {
-                                peopleTrueSign[i].SetActive(true);
-                                peopleName[i].text = rs.Appointer.GetPeople(i).entity.CrtProp.Name;
-                                peopleStatus[i].text = (rs.Appointer.GetPeople(i).entity.CrtProp.PlaceOfStay == rs) ? "внутри" : "на улице";
-                            }
-                            else
-                            {
-                                peopleTrueSign[i].SetActive(false);
-                                peopleName[i].text = " ";
-                                peopleStatus[i].text = "пусто";
-                            }
+                            peopleTrueSign[i].SetActive(true);
+                            peopleName[i].text = rs.Appointer.GetPeople(i).entity.CrtProp.Name;
+                            peopleStatus[i].text = (rs.Appointer.GetPeople(i).entity.CrtProp.PlaceOfStay == rs) ? "внутри" : "на улице";
+                        }
+                        else
+                        {
+                            peopleTrueSign[i].SetActive(false);
+                            peopleName[i].text = " ";
+                            peopleStatus[i].text = "пусто";
                         }
                     }
                 }
-                else peopleSection.SetActive(false);
+            }
+            else peopleSection.SetActive(false);
 
-                if (rs.BldData.BldType == BuildingType.WAREHOUSE)
+            if (rs.Production != null)
+            {
+                productionSection.SetActive(true);
+
+                for (int i = 0; i < productionRecipe.Length; i++)
                 {
-                    warehouseSection.SetActive(true);
-                    for (int i = 0; i < rs.Inventory.PacksAmount; i++)
+                    bool res = i < rs.Production.RecipeCount;
+                    productionRecipe[i].SetActive(res);
+                    if (res)
                     {
-                        rs.Inventory.Look(i, out ResourceIndex resInd, out float resVal);
-                        Debug.Log(resInd);
-                        warehouseSlider[i].maxValue = rs.Inventory.PackSize;
-                        warehouseSlider[i].value = resVal;
-                        if (resInd == ResourceIndex.NONE || resInd == ResourceIndex.DEERSKIN)
-                            warehouseResName[i].text = "";
-                        else
-                            warehouseResName[i].text = DataList.GetResource(resInd).Name_rus;
-                        warehouseValue[i].text = resVal.ToString("F1");
+                        recipeName[i].text = "Высушенная шкура оленя";
+                        recipeQueue[i].text = activeBuilding.Production.Recipe(i).Queue.ToString();
+                        productionProcessSlider[i].value = activeBuilding.Production.Recipe(i).Progress;
                     }
                 }
-                else warehouseSection.SetActive(false);
             }
+            else productionSection.SetActive(false);
+
+            if (rs.Inventory != null)
+            {
+                warehouseSection.SetActive(true);
+                for (int i = 0; i < rs.Inventory.PacksAmount; i++)
+                {
+                    bool res = i < rs.Inventory.StoredRes.Length;
+                    warehousePack[i].SetActive(res);
+                    if (!res) continue;
+
+                    rs.Inventory.Look(i, out ResourceIndex resInd, out float resVal);
+                    Debug.Log(resInd);
+                    warehouseSlider[i].maxValue = rs.Inventory.PackSize;
+                    warehouseSlider[i].value = resVal;
+                    if (resInd == ResourceIndex.NONE || resInd == ResourceIndex.DEERSKIN)
+                        warehouseResName[i].text = "";
+                    else
+                        warehouseResName[i].text = DataList.GetResource(resInd).Name_rus;
+                    warehouseValue[i].text = resVal.ToString("F1");
+                }
+            }
+            else warehouseSection.SetActive(false);
         }
+    }
+
+    public void AddItemToQueue(int recipeInd)
+    {
+        activeBuilding.Production.ChangeQueue(recipeInd, 1);
+    }
+
+    public void RemoveItemFromQueue(int recipeInd)
+    {
+        activeBuilding.Production.ChangeQueue(recipeInd, -1);
     }
 
     public void DeleteBuilding()

@@ -10,9 +10,12 @@ public class DisplayedItems : MonoBehaviour
     [SerializeField] bool hasSelectionPlane;
     [SerializeField] bool hasSilhouette;
     [SerializeField] bool hasDisplayedInventory;
+    [SerializeField] bool hasProductionDisplay;
     [SerializeField] Transform[] itemSpot;
     [SerializeField] GameObject selectionPlane;
     [SerializeField] GameObject silhouette;
+    [SerializeField] GameObject[] productionProcessItem;
+    [SerializeField] GameObject[] productionHarvestItem;
 
     GameObject[] displayedItem;
 
@@ -36,6 +39,10 @@ public class DisplayedItems : MonoBehaviour
         {
             entity.ColliderHandler.mouseDragEvent += DisplaySilhouette;
             entity.ColliderHandler.mouseUpEvent += HideSilhouette;
+        }
+        if (hasProductionDisplay && entity.Production != null)
+        {
+            entity.Production.changedEvent += SetProductionDisplay;
         }
     }
 
@@ -107,6 +114,30 @@ public class DisplayedItems : MonoBehaviour
         }
     }
 
+    public void SetProductionDisplay()
+    {
+        if (!entity.Production.enabled) return;
+
+        for (int i = 0; i < entity.Production.RecipeCount; i++)
+        {
+            if (entity.Production.Recipe(i).Process)
+            {
+                productionProcessItem[i].SetActive(true);
+                productionHarvestItem[i].SetActive(false);
+            }
+            else if (entity.Production.Recipe(i).Harvest)
+            {
+                productionProcessItem[i].SetActive(false);
+                productionHarvestItem[i].SetActive(true);
+            }
+            else
+            {
+                productionProcessItem[i].SetActive(false);
+                productionHarvestItem[i].SetActive(false);
+            }
+        }
+    }
+
     public void SetParentOfSelectionPlane(Transform newParent)
     {
         selectionPlane.transform.SetParent(newParent);
@@ -129,6 +160,10 @@ public class DisplayedItems : MonoBehaviour
         if (hasSilhouette && entity.ColliderHandler != null)
         {
             entity.ColliderHandler.mouseDragEvent -= DisplaySilhouette;
+        }
+        if (hasProductionDisplay && entity.Production != null)
+        {
+            entity.Production.changedEvent -= SetProductionDisplay;
         }
     }
 }

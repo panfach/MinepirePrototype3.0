@@ -209,7 +209,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3600872624125915764}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.039, z: 0.183}
+  m_LocalPosition: {x: 0.1721, y: -0.039, z: -0.0103}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 6849390940616415354}
@@ -717,7 +717,6 @@ MonoBehaviour:
   attackController: {fileID: 8331514601269320197}
   inventory: {fileID: 2192628037205615553}
   uiController: {fileID: 1775791905779305106}
-  indicatorInteraction: {fileID: 0}
 --- !u!65 &6849390940616415359
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -786,13 +785,30 @@ MonoBehaviour:
   entity: {fileID: 2567622910954858697}
   maxRandomWalkDelay: 7
   generalActSequence: 1
-  actionType: 0
-  currentAction: {fileID: 0}
-  currentSequence: {fileID: 0}
+  destRecipe:
+    interactionSpotIndex: 
+    laborIntensity: 1
+    requiredRes:
+      index: 
+      type: 
+      indexVal: []
+      typeVal: []
+    receivedRes:
+      index: 
+      type: 
+      indexVal: []
+      typeVal: []
   destInteractionSpot:
     spot: {fileID: 0}
     interactionTarget: {fileID: 0}
-    indicatorInteraction: 0
+    eatType: 0
+    produceType: 0
+    reapType: 0
+    duration: 0
+  destEntity: {fileID: 0}
+  actionType: 0
+  currentAction: {fileID: 0}
+  currentSequence: {fileID: 0}
 --- !u!114 &6778257627215690375
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -822,7 +838,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   entity: {fileID: 2567622910954858697}
   satiety: 0
-  lastAttacker: {fileID: 0}
 --- !u!54 &7910473436978998096
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -936,7 +951,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65c1e0b32d8192c408ca535b3dcb9ccb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseObject: {fileID: 2567622910954858697}
+  entity: {fileID: 0}
   hasOccupiedProperty: 0
   destroyOnEmpty: 0
   storedPackSize: 2
@@ -962,6 +977,7 @@ MonoBehaviour:
   reactToInventoryChanges: 1
   reactToHealthChanges: 1
   reactToSatietyChanges: 1
+  reactToProductionChanges: 0
 --- !u!1 &7539057658276171806
 GameObject:
   m_ObjectHideFlags: 0

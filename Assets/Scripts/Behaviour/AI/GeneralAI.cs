@@ -15,32 +15,39 @@ public class GeneralAI : MonoBehaviour
     [SerializeField] float maxRandomWalkDelay;
     [SerializeField] ActSequenceIndex generalActSequence;
 
+    [Header("Destinations")]
+    [SerializeField] ExtractedResourceLink destExtractedResource;
+    [SerializeField] Recipe destRecipe;
+    [SerializeField] InteractionSpot destInteractionSpot;
+    [SerializeField] Entity destEntity;
+
     [Header("Info")]
     [SerializeField] ActionType actionType;
     [SerializeField] ActionNode currentAction;
     [SerializeField] ActSequenceGraph currentSequence;
-    [SerializeField] ExtractedResourceLink destExtractedResource;
-    [SerializeField] InteractionSpot destInteractionSpot;
-    //[SerializeField] ResourceQuery resourceQuery;
 
     public ActionType ActionType { get => actionType; }
     public void ForgetExtractedResource() { destExtractedResource = null; }                // ? Remake extractedResourceLink. Merge occupation of extracted resources and interaction spots ???
-    /*public ExtractedResourceLink DestExtractedResource
+    public ExtractedResourceLink DestExtractedResource
     {
-        get => destInteractionSpot;
-        set => destInteractionSpot = value;
-    }*/
+        get => destExtractedResource;
+        set => destExtractedResource = value;
+    }
+    public Recipe DestRecipe
+    {
+        get => destRecipe;
+        set => destRecipe = value;
+    }
     public InteractionSpot DestInteractionSpot
     {
         get => destInteractionSpot;
-        set
-        {
-            // destInteractionSpot.RemoveOccupation ...
-            destInteractionSpot = value;
-        }
+        set => destInteractionSpot = value;
     }
-    //public ResourceQuery ResourceQuery { get => resourceQuery; }
-    //public void AssignResourceQuery(ResourceQuery query) { resourceQuery = query; }
+    public Entity DestEntity
+    {
+        get => destEntity;
+        set => destEntity = value;
+    }
 
 
     private void OnEnable()

@@ -23,7 +23,7 @@ public enum ActionType
     EXITBUILDING,
     REST,
     CHECKINDICATOR,
-    GETEATQUERY,
+    GETQUERY,
     FINDBUILDING,
     TAKE,
     WAIT,
@@ -32,7 +32,8 @@ public enum ActionType
     CHECK,
     MATHCOMPARING,
     GETAMOUNT,
-    RANDOMGENERATOR
+    RANDOMGENERATOR,
+    FINDLABORERWORK
 }
 
 

@@ -159,6 +159,9 @@ public static class ActionAlgorithms
             case GetBuildingMode.WORK:
                 building = (Building)creature.Appointer?.Work?.entity;
                 break;
+            case GetBuildingMode.DESTBUILDING:
+                building = (Building)creature.GeneralAI.DestEntity;
+                break;
         }
         if (building != null)
         {
@@ -281,12 +284,20 @@ public static class ActionAlgorithms
     /// <summary>
     /// 
     /// </summary>
-    public static IEnumerator GetEatQuery(Creature creature, ActSequenceSystem.GetEatQuery action)
+    public static IEnumerator GetQuery(Creature creature, ActSequenceSystem.GetQuery action)
     {
         // Body
         yield return new WaitForSeconds(creature.CrtData.checkEventsDelay);
 
-        action.query = new ResourceQuery(ResourceType.FOOD, VillageData.foodServing);
+        switch (action.mode)
+        {
+            case GetQueryMode.EAT:
+                action.query = new ResourceQuery(ResourceType.FOOD, VillageData.foodServing);
+                break;
+            case GetQueryMode.RECIPE:
+                action.query = new ResourceQuery(creature.GeneralAI.DestRecipe.requiredRes);
+                break;
+        }
         TrueReaction(creature, action);
     }
 
@@ -307,7 +318,7 @@ public static class ActionAlgorithms
                 if (action.mode == FindBuildingMode.NEARQUERY && building.Inventory != null && building.Inventory.enabled && !building.Inventory.CheckResourceForQuery(action.ResourceQuery))
                     continue;
 
-                if (action.mode == FindBuildingMode.NEARINTERACT && building.Interactive != null && building.Interactive.enabled && building.Interactive.IsOccupied())
+                if (action.mode == FindBuildingMode.NEARINTERACT && building.Interactive != null && building.Interactive.enabled && building.Interactive.IsOccupied)
                     continue;
 
                 buildings.Add(building);
@@ -381,11 +392,25 @@ public static class ActionAlgorithms
 
         // Body
         Building destBuilding = action.Building;
-        if (!destBuilding.Interactive.OccupyNearest(creature.GeneralAI))
+
+        switch (action.mode)
         {
-            FalseReaction(creature, action);
-            yield break;
+            case GoToInteractionMode.NEAR:
+                if (!destBuilding.Interactive.OccupyNearest(creature.GeneralAI))
+                {
+                    FalseReaction(creature, action);
+                    yield break;
+                }
+                break;
+            case GoToInteractionMode.NEARRECIPE:
+                if (!destBuilding.Interactive.OccupyNearestRecipe(creature.GeneralAI))
+                {
+                    FalseReaction(creature, action);
+                    yield break;
+                }
+                break;
         }
+
         InteractionSpot spot = creature.GeneralAI.DestInteractionSpot;
         Vector3 destPoint = spot.Spot.position;
         creature.Agent.SetDestination(destPoint);
@@ -429,7 +454,7 @@ public static class ActionAlgorithms
         yield return new WaitForSeconds(action.initialDelay);
 
         // Body
-        action.Spot.Interact(creature);
+        action.Spot.Interact(creature, action.InteractionType);
 
         InteractionSpot spot = action.Spot;
         while(true)
@@ -582,6 +607,75 @@ public static class ActionAlgorithms
 
         TrueReaction(creature, action);
     }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public static IEnumerator FindLaborerWork(Creature creature, ActSequenceSystem.FindLaborerWork action)
+    {
+        // Body
+        yield return new WaitForSeconds(creature.CrtData.checkEventsDelay);
+
+        Recipe recipe;
+        foreach (Production item in VillageData.Productions)                       
+        {
+            if ((recipe = item.GetProduceWork()) != null)
+            {
+                recipe.Occupy(creature.GeneralAI);
+                action.sequence = ActSequenceIndex.VILLAGER_PRODUCE;
+                TrueReaction(creature, action);
+                yield break;
+            }
+        }
+
+        FalseReaction(creature, action);
+    }
+
+
+
+
+
+    /*public void FindLaborerWork(ActionUnit action)
+    {
+        int count;
+
+        state = VillagerState.FINDING;
+
+        if ((count = VillageData.Constructions.Count) > 0)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                futureDestObj = new GameObject[1] { VillageData.Constructions[i].gameObject };
+                //Debug.Log("--- 1 --- = " + ((futureDestObj[0] == null) ? "NULL" : "OK"));
+                workInd = 1; // Building
+                Act();
+                return;
+            }
+        }
+
+        if ((count = VillageData.extractionQueue.Count) > 0)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                if (VillageData.extractionQueue[i].deposit.Occupy(VillageData.extractionQueue[i].ind, this))
+                {
+                    destExtractedResource = VillageData.extractionQueue[i];
+                    //Debug.Log("DEST RESOURCE DEPOSIT WAS ASSIGNED");
+                    futureDestObj = new GameObject[1] { destExtractedResource.deposit.gameObject };
+                    workInd = 2; // Extracting
+                    Act();
+                    return;
+                }
+            }
+        }
+
+        StartCoroutine(RandomWalk());
+    }*/
+
+
+
+
+
 
 
     static void TrueReaction(Creature creature, Node action)

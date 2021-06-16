@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class IndicatorInteraction : MonoBehaviour
+public class IndicatorInteraction_old : MonoBehaviour
 {
-    [Header("Entity")]
+/*    [Header("Entity")]
     public Entity entity;
 
     [Header("Settings")]
@@ -52,5 +52,5 @@ public class IndicatorInteraction : MonoBehaviour
 
             spot.RemoveOccupation();
         }
-    }
+    }*/
 }

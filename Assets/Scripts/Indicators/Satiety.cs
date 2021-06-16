@@ -9,7 +9,6 @@ public class Satiety : MonoBehaviour, IIndicator
 
     [Header("Info")]
     [SerializeField] float satiety;
-    public GameObject lastAttacker;                                                                  // temporal ?
 
     public event SimpleEventHandler changedValueEvent;
 

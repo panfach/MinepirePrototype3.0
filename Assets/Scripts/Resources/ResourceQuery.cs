@@ -54,4 +54,17 @@ public class ResourceQuery
         else
             typeVal = _typeVal;
     }
+
+    public ResourceQuery(ResourceQuery _query)
+    {
+        index = new ResourceIndex[_query.index.Length];
+        type = new ResourceType[_query.type.Length];
+        indexVal = new float[_query.indexVal.Length];
+        typeVal = new float[_query.typeVal.Length];
+
+        _query.index.CopyTo(index, 0);
+        _query.type.CopyTo(type, 0);
+        _query.indexVal.CopyTo(indexVal, 0);
+        _query.typeVal.CopyTo(typeVal, 0);
+    }
 }

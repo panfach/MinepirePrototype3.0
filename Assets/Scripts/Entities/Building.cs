@@ -14,7 +14,7 @@ public class Building : Entity
     [SerializeField] CreatureContainer creatureContainer;
     [SerializeField] Appointer appointer;
     [SerializeField] Interactive interactive;
-    [SerializeField] IndicatorInteraction indicatorInteraction; 
+    [SerializeField] Production production; 
 
     public override BuildingData BldData { get => data; }
     public override BuildingProperties BldProp { get => properties; }
@@ -28,7 +28,7 @@ public class Building : Entity
     public override CreatureContainer CreatureContainer { get => creatureContainer; }
     public override Appointer Appointer { get => appointer; }
     public override Interactive Interactive { get => interactive; }
-    public override IndicatorInteraction IndicatorInteraction { get => indicatorInteraction; }
+    public override Production Production { get => production; }
 
 
     public override void Die()

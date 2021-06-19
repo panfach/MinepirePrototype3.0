@@ -5,15 +5,17 @@ using XNode;
 
 namespace ActSequenceSystem
 {
-    public class FindLaborerWork : ActionNode
+    public class FindTarget : ActionNode
     {
         [Input] public Connection enter;
 
-        [NonSerialized] public ActionType type = ActionType.FINDLABORERWORK;
+        [NonSerialized] public ActionType type = ActionType.FINDTARGET;
         [NonSerialized] public int priority = 0;
+        public BuildingIndex[] indices;
+        public FindTargetMode mode;
 
         [Output] public Connection trueConnection;
-        [Output] public ActSequenceIndex sequence;
+        [Output] public Health target;
         [Output] public Connection falseConnection;
 
 
@@ -21,13 +23,19 @@ namespace ActSequenceSystem
 
         public override IEnumerator Algorithm(Creature creature)
         {
-            return ActionAlgorithms.FindLaborerWork(creature, this);
+            return ActionAlgorithms.FindTarget(creature, this);
         }
 
         public override object GetValue(NodePort port)
         {
-            if (port.fieldName == "sequence") return sequence;
+            if (port.fieldName == "target") return target;
             else return null;
         }
+    }
+
+    public enum FindTargetMode
+    {
+        NEARANIMAL,
+        DESTENTITY
     }
 }

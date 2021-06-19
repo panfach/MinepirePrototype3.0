@@ -22,8 +22,7 @@ MonoBehaviour:
     index: 01000000
     type: 
     indexVal:
-    - 999
+    - 1
     typeVal: []
-  maxPeople: 0
   type: 4
   profession: 0

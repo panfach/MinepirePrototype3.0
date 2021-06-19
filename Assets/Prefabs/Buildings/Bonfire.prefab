@@ -220,7 +220,7 @@ MonoBehaviour:
   creatureContainer: {fileID: 7520685104771697573}
   appointer: {fileID: 8497921559147476390}
   interactive: {fileID: 8170155370668783359}
-  indicatorInteraction: {fileID: 3896445884471901912}
+  production: {fileID: 0}
 --- !u!114 &1224176906205342183
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -285,9 +285,12 @@ MonoBehaviour:
   hasSelectionPlane: 1
   hasSilhouette: 0
   hasDisplayedInventory: 0
+  hasProductionDisplay: 0
   itemSpot: []
   selectionPlane: {fileID: 1271354151193961082}
   silhouette: {fileID: 0}
+  productionProcessItem: []
+  productionHarvestItem: []
 --- !u!114 &5822528088461329228
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -378,6 +381,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   entity: {fileID: 4035997816149852852}
   openInfoOnClick: 1
+  reactToInventoryChanges: 0
+  reactToHealthChanges: 0
+  reactToSatietyChanges: 0
+  reactToProductionChanges: 0
 --- !u!114 &8170155370668783359
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -394,28 +401,52 @@ MonoBehaviour:
   interactionSpots:
   - spot: {fileID: 4454012289586666588}
     interactionTarget: {fileID: 4603774882598510430}
-    indicatorInteraction: 1
+    eatType: 1
+    produceType: 0
+    reapType: 0
+    duration: 4
   - spot: {fileID: 302219896160007362}
     interactionTarget: {fileID: 4603774882598510430}
-    indicatorInteraction: 1
+    eatType: 1
+    produceType: 0
+    reapType: 0
+    duration: 4
   - spot: {fileID: 2236826000976765026}
     interactionTarget: {fileID: 4603774882598510430}
-    indicatorInteraction: 1
+    eatType: 1
+    produceType: 0
+    reapType: 0
+    duration: 4
   - spot: {fileID: 5632613649067047186}
     interactionTarget: {fileID: 4603774882598510430}
-    indicatorInteraction: 1
+    eatType: 1
+    produceType: 0
+    reapType: 0
+    duration: 4
   - spot: {fileID: 353680154860851036}
     interactionTarget: {fileID: 4603774882598510430}
-    indicatorInteraction: 1
+    eatType: 1
+    produceType: 0
+    reapType: 0
+    duration: 4
   - spot: {fileID: 691563896458116915}
     interactionTarget: {fileID: 4603774882598510430}
-    indicatorInteraction: 1
+    eatType: 1
+    produceType: 0
+    reapType: 0
+    duration: 4
   - spot: {fileID: 7729892790333953461}
     interactionTarget: {fileID: 4603774882598510430}
-    indicatorInteraction: 1
+    eatType: 1
+    produceType: 0
+    reapType: 0
+    duration: 4
   - spot: {fileID: 4926050007071663522}
     interactionTarget: {fileID: 4603774882598510430}
-    indicatorInteraction: 1
+    eatType: 1
+    produceType: 0
+    reapType: 0
+    duration: 4
 --- !u!114 &3896445884471901912
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -428,10 +459,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8bdabbac0029704e8c716f664e0fbde, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  entity: {fileID: 4035997816149852852}
-  duration: 4
-  restoreSatiety: 1
-  spendFood: 1
 --- !u!1 &2024864114490865223
 GameObject:
   m_ObjectHideFlags: 0

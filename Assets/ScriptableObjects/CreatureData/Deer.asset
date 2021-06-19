@@ -27,6 +27,8 @@ MonoBehaviour:
     chance: 1
   minRandomAge: 1
   maxRandomAge: 10
+  walkSpeed: 0.3
+  runSpeed: 1.5
   timeOfBuildingEntering: 1
   angleControlDelay: 0.18
   checkEventsDelay: 0.11

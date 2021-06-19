@@ -111,6 +111,11 @@ public class Interactive : MonoBehaviour
         StartCoroutine(ProduceAlgorithm(creature, spot));
     }
 
+    public void StartReapInteraction(Creature creature, InteractionSpot spot)
+    {
+        StartCoroutine(ReapAlgorithm(creature, spot));
+    }
+
 
     public IEnumerator EatAlgorithm(Creature creature, InteractionSpot spot)
     {
@@ -137,11 +142,17 @@ public class Interactive : MonoBehaviour
 
     public IEnumerator ProduceAlgorithm(Creature creature, InteractionSpot spot)
     {
-        creature.Inventory.Give(entity.Inventory, spot.Recipe.requiredRes);
         yield return new WaitForSeconds(spot.Duration);
-
+        creature.Inventory.Give(entity.Inventory, new ResourceQuery(spot.Recipe.requiredRes));
         spot.Recipe.RemoveOccupation();
         spot.RemoveOccupation();
+    }
+
+    public IEnumerator ReapAlgorithm(Creature creature, InteractionSpot spot)
+    {
+        yield return new WaitForSeconds(spot.Duration);
+        spot.RemoveOccupation();
+        entity.Production.Reap(spot.Recipe, creature.GeneralAI);
     }
 
 

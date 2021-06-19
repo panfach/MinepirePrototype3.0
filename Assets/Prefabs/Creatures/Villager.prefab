@@ -870,10 +870,13 @@ MonoBehaviour:
   hasSelectionPlane: 1
   hasSilhouette: 1
   hasDisplayedInventory: 1
+  hasProductionDisplay: 0
   itemSpot:
   - {fileID: 8165188065243928068}
   selectionPlane: {fileID: 683137059095778438}
   silhouette: {fileID: 8948393221833186068}
+  productionProcessItem: []
+  productionHarvestItem: []
 --- !u!114 &8039893400086714298
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -938,6 +941,7 @@ MonoBehaviour:
   entity: {fileID: 2567622910954858697}
   canAttackCreatures: 1
   attackPower: 1
+  hitDuration: 1
   attackModifier: 1
 --- !u!114 &2192628037205615553
 MonoBehaviour:

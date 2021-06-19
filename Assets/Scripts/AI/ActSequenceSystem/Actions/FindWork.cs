@@ -1,43 +1,33 @@
 ﻿using System;
-using System.Collections;
 using UnityEngine;
+using System.Collections;
 using XNode;
 
 namespace ActSequenceSystem
 {
-    public class Check : ActionNode
+    public class FindWork : ActionNode
     {
         [Input] public Connection enter;
-        [Input] public ResourceQuery query;
 
-        [NonSerialized] ActionType type = ActionType.CHECK;
+        [NonSerialized] public ActionType type = ActionType.FINDWORK;
         [NonSerialized] public int priority = 0;
-        public CheckMode mode;
 
         [Output] public Connection trueConnection;
+        [Output] public ActSequenceIndex sequence;
         [Output] public Connection falseConnection;
-
-
-        public ResourceQuery ResourceQuery { get => GetInputValue("query", query); }
 
 
         public override ActionType Type { get => type; }
 
         public override IEnumerator Algorithm(Creature creature)
         {
-            return ActionAlgorithms.Check(creature, this);
+            return ActionAlgorithms.FindWork(creature, this);
         }
 
         public override object GetValue(NodePort port)
         {
-            return null;
+            if (port.fieldName == "sequence") return sequence;
+            else return null;
         }
-    }
-
-    public enum CheckMode
-    {
-        EMPTYINV,
-        EMPTYQUERY,
-        AMILEADER
     }
 }

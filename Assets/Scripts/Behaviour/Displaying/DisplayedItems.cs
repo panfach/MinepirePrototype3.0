@@ -87,7 +87,7 @@ public class DisplayedItems : MonoBehaviour
         for (int i = 0; i < entity.Inventory.PacksAmount; i++)
         {
             entity.Inventory.Look(i, out ResourceIndex index, out float value);
-            if (index == ResourceIndex.NONE || index == ResourceIndex.DEERSKIN) continue;
+            if (index == ResourceIndex.NONE) continue;
             //Debug.Log("ReadySet RefreshDisplayedItem index = " + index.ToString());
             //if (index == ResourceIndex.NONE) { Debug.Log("ReadySet RefreshDisplayedItem CONTINUE"); continue; }
 

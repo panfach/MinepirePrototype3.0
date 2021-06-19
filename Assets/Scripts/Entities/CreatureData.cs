@@ -12,6 +12,8 @@ public class CreatureData : ScriptableObject
     [SerializeField] DroppedItem[] drop;
     [SerializeField] int minRandomAge;
     [SerializeField] int maxRandomAge;
+    [SerializeField] float walkSpeed;
+    [SerializeField] float runSpeed;
 
     [Header("Time settings")]
     public float timeOfBuildingEntering = 1f;
@@ -39,4 +41,6 @@ public class CreatureData : ScriptableObject
     public DroppedItem Drop(int index) => drop[index];
     public int MinRandomAge { get => minRandomAge; }
     public int MaxRandomAge { get => maxRandomAge; }
+    public float WalkSpeed { get => walkSpeed; }
+    public float RunSpeed { get => runSpeed; }
 }

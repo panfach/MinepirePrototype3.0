@@ -13,6 +13,8 @@ public class UIController : MonoBehaviour
     [SerializeField] bool reactToSatietyChanges;
     [SerializeField] bool reactToProductionChanges;
 
+    public bool ReactToInventoryChanges { get => reactToInventoryChanges; }
+
 
     private void OnEnable()
     {

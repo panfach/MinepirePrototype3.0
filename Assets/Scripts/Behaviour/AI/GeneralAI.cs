@@ -9,15 +9,15 @@ public class GeneralAI : MonoBehaviour
     public const float angleControlDelay = 0.1f;
 
     [Header("Entity")]
-    [SerializeField] Entity entity;
+    public Entity entity;
 
     [Header("Settings")]
     [SerializeField] float maxRandomWalkDelay;
     [SerializeField] ActSequenceIndex generalActSequence;
 
     [Header("Destinations")]
-    [SerializeField] ExtractedResourceLink destExtractedResource;
     [SerializeField] Recipe destRecipe;
+    [SerializeField] ExtractedResourceLink destExtractedResource;
     [SerializeField] InteractionSpot destInteractionSpot;
     [SerializeField] Entity destEntity;
 
@@ -48,11 +48,13 @@ public class GeneralAI : MonoBehaviour
         get => destEntity;
         set => destEntity = value;
     }
+    public ActionType CurrentAction { get => actionType; }
 
 
     private void OnEnable()
     {
         destInteractionSpot = null;
+        entity.Agent.speed = entity.CrtData.WalkSpeed;
         DefineBehaviour();
     }
 
@@ -108,6 +110,16 @@ public class GeneralAI : MonoBehaviour
         else
             currentSequence = ActSequenceList.GetSequence(sequenceIndex);
         currentAction = currentSequence.GetStart();
+    }
+
+    public void SwitchToWalk()
+    {
+        entity.Agent.speed = entity.CrtData.WalkSpeed;
+    }
+
+    public void SwitchToRun()
+    {
+        entity.Agent.speed = entity.CrtData.RunSpeed;
     }
 
 

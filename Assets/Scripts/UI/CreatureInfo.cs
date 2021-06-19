@@ -18,6 +18,7 @@ public class CreatureInfo : MonoBehaviour
     public TextMeshProUGUI creatureName, gender, age, profession;
     public Slider healthSlider;
     public Slider satietySlider;
+    public GameObject inventory;
     public Slider[] warehouseSlider;
     public TextMeshProUGUI[] warehouseResName;
     public TextMeshProUGUI[] warehouseValue;
@@ -54,17 +55,22 @@ public class CreatureInfo : MonoBehaviour
             else
                 profession.text = DataList.profNameDict_rus[Profession.NONE];
 
-            for (int i = 0; i < activeCreature.Inventory.PacksAmount; i++)
+            if (activeCreature.UIController.ReactToInventoryChanges)
             {
-                activeCreature.Inventory.Look(i, out ResourceIndex resInd, out float resVal);
-                warehouseSlider[i].maxValue = activeCreature.Inventory.PackSize;
-                warehouseSlider[i].value = resVal;
-                if (resInd == ResourceIndex.NONE)
-                    warehouseResName[i].text = "";
-                else
-                    warehouseResName[i].text = DataList.GetResource(resInd).Name_rus;
-                warehouseValue[i].text = resVal.ToString("F1");
+                inventory.SetActive(true);
+                for (int i = 0; i < activeCreature.Inventory.PacksAmount; i++)
+                {
+                    activeCreature.Inventory.Look(i, out ResourceIndex resInd, out float resVal);
+                    warehouseSlider[i].maxValue = activeCreature.Inventory.PackSize;
+                    warehouseSlider[i].value = resVal;
+                    if (resInd == ResourceIndex.NONE)
+                        warehouseResName[i].text = "";
+                    else
+                        warehouseResName[i].text = DataList.GetResource(resInd).Name_rus;
+                    warehouseValue[i].text = resVal.ToString("F1");
+                }
             }
+            else inventory.SetActive(false);
         }
     }
 }

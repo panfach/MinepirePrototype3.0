@@ -146,9 +146,9 @@ public class BuildingInfo : MonoBehaviour
             if (rs.Inventory != null)
             {
                 warehouseSection.SetActive(true);
-                for (int i = 0; i < rs.Inventory.PacksAmount; i++)
+                for (int i = 0; i < warehousePack.Length; i++)
                 {
-                    bool res = i < rs.Inventory.StoredRes.Length;
+                    bool res = i < rs.Inventory.PacksAmount;
                     warehousePack[i].SetActive(res);
                     if (!res) continue;
 
@@ -156,7 +156,7 @@ public class BuildingInfo : MonoBehaviour
                     Debug.Log(resInd);
                     warehouseSlider[i].maxValue = rs.Inventory.PackSize;
                     warehouseSlider[i].value = resVal;
-                    if (resInd == ResourceIndex.NONE || resInd == ResourceIndex.DEERSKIN)
+                    if (resInd == ResourceIndex.NONE)
                         warehouseResName[i].text = "";
                     else
                         warehouseResName[i].text = DataList.GetResource(resInd).Name_rus;

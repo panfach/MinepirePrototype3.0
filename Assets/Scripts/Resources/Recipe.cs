@@ -17,8 +17,9 @@ public class Recipe
     bool harvest;
     float progress;
     GeneralAI worker;
-
+    
     public InteractionSpot Spot() { return production.entity.Interactive.Spot(interactionSpotIndex[0]); }
+    public Production Production { get => production; }
     public InteractionSpot Spot(int i) { return production.entity.Interactive.Spot(interactionSpotIndex[i]); }
     public bool Process { get => process; set { process = value; } }
     public bool Harvest { get => harvest; set { harvest = value; } }

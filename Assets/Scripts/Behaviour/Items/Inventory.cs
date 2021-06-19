@@ -155,6 +155,17 @@ public class Inventory : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Putting all resource from this inventory into specific inventory
+    /// </summary>
+    public void Give(Inventory targetInventory)
+    {
+        for (int i = 0; i < PackSize; i++)
+        {
+            Give(targetInventory, i);
+        }
+    }
+
     public void ExecuteRecipe(Recipe recipe)
     {
         ClearResource(recipe.requiredRes);
@@ -207,6 +218,32 @@ public class Inventory : MonoBehaviour
     }
 
     /// <summary>
+    /// Checks presence the empty space for at least one resource from resource query (Without type accounting)
+    /// </summary>
+    public bool CheckPlaceFor(ResourceQuery query)
+    {
+        for (int i = 0; i < query.index.Length; i++)
+        {
+            if (FreeSpaceForResource(query.index[i]) > 0.001f) return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Checks presence the empty space for at least one resource from other inventory
+    /// </summary>
+    public bool CheckPlaceFor(Inventory inv)
+    {
+        for (int i = 0; i < inv.PackSize; i++)
+        {
+            if (FreeSpaceForResource(inv.StoredRes[i]) > 0.001f) return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
     /// Gets information about inventory pack
     /// </summary>
     public bool Look(int packIndex, out ResourceIndex index, out float value)          
@@ -250,9 +287,9 @@ public class Inventory : MonoBehaviour
     }
 
     /// <summary>
-    /// Returns total amount of resources of specific type in inventory
+    /// Returns total amount of resources of specific type in inventory 
     /// </summary>
-    public float AmountOfResource(ResourceType type)
+    public float AmountOfResource(ResourceType type)                                                   // Function doesn't work properly
     {
         float result = 0f;
 

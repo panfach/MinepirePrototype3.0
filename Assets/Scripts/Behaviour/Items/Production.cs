@@ -105,6 +105,14 @@ public class Production : MonoBehaviour
         changedEvent?.Invoke();
     } 
 
+    public void Reap(Recipe recipe, GeneralAI worker)
+    {
+        entity.Inventory.Give(worker.entity.Inventory, new ResourceQuery(recipe.receivedRes));
+        recipe.Harvest = false;
+        recipe.RemoveOccupation();
+        changedEvent?.Invoke();
+    }
+
 
     private void OnDisable()
     {

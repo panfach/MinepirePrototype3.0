@@ -5,41 +5,42 @@ using XNode;
 
 namespace ActSequenceSystem
 {
-    public class GoToBuilding: ActionNode
+    public class GoToCreature : ActionNode
     {
         [Input] public Connection enter;
-        [Input] public Building building;
+        [Input] public Health creature;                                                    // Temporal
 
-        [NonSerialized] public ActionType type = ActionType.GOTOBUILDING;
+        [NonSerialized] public ActionType type = ActionType.GOTOCREATURE;
         [Range(0.0f, 5.0f)] public float initialDelay;
         [Range(0, 100)] public int priority;
-        public GoToBuildingMode mode;
+        public GoToCreatureMode mode;
+        public float requiredDistance;
+        public float groupDistance;
         [Range(0.0f, 5.0f)] public float finalDelay;
 
         [Output] public Connection trueConnection;
         [Output] public Connection falseConnection;
 
 
-        public Building Building { get => GetInputValue<Building>("building", null); }
+        public Health Creature { get => GetInputValue("creature", creature); }
 
 
         public override ActionType Type { get => type; }
 
         public override IEnumerator Algorithm(Creature creature)
         {
-            return ActionAlgorithms.GoToBuilding(creature, this);
+            return ActionAlgorithms.GoToCreature(creature, this);
         }
 
         public override object GetValue(NodePort port)
         {
-            //GetInputValue<Building>()
             return null;
         }
     }
 
-    public enum GoToBuildingMode
+    public enum GoToCreatureMode
     {
-        ENTER,
-        CENTER
+        DEFAULT,
+        WORKGROUP
     }
 }

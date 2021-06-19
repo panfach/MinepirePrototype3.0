@@ -1,0 +1,259 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-1024129352042445831
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2fb74a7f1d3f764198b92fed59fe957, type: 3}
+  m_Name: Construct
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: 248, y: -136}
+  ports:
+    keys:
+    - enter
+    - building
+    - trueConnection
+    - falseConnection
+    values:
+    - _fieldName: enter
+      _node: {fileID: -1024129352042445831}
+      _typeQualifiedName: ActSequenceSystem.Connection, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: trueConnection
+        node: {fileID: 3287865523723088997}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: building
+      _node: {fileID: -1024129352042445831}
+      _typeQualifiedName: Building, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: building
+        node: {fileID: 3504412122520119474}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: trueConnection
+      _node: {fileID: -1024129352042445831}
+      _typeQualifiedName: ActSequenceSystem.Connection, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: falseConnection
+      _node: {fileID: -1024129352042445831}
+      _typeQualifiedName: ActSequenceSystem.Connection, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+  building: {fileID: 0}
+  initialDelay: 0
+  priority: 0
+  finalDelay: 0
+--- !u!114 &-512187034521175858
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b0def95716f1884596c35d2695ba3fb, type: 3}
+  m_Name: Start Action
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: -520, y: -136}
+  ports:
+    keys:
+    - trueConnection
+    values:
+    - _fieldName: trueConnection
+      _node: {fileID: -512187034521175858}
+      _typeQualifiedName: ActSequenceSystem.Connection, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: enter
+        node: {fileID: 3504412122520119474}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+  Index: 7
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69b07d53193fc53419a3c907111f99f7, type: 3}
+  m_Name: VillagerConstruct
+  m_EditorClassIdentifier: 
+  nodes:
+  - {fileID: -512187034521175858}
+  - {fileID: 3504412122520119474}
+  - {fileID: 3287865523723088997}
+  - {fileID: -1024129352042445831}
+--- !u!114 &3287865523723088997
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d090ece524e29024a9d69eb712a135c0, type: 3}
+  m_Name: Go To Building
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: -8, y: -24}
+  ports:
+    keys:
+    - enter
+    - building
+    - trueConnection
+    - falseConnection
+    values:
+    - _fieldName: enter
+      _node: {fileID: 3287865523723088997}
+      _typeQualifiedName: ActSequenceSystem.Connection, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: trueConnection
+        node: {fileID: 3504412122520119474}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: building
+      _node: {fileID: 3287865523723088997}
+      _typeQualifiedName: Building, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: building
+        node: {fileID: 3504412122520119474}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: trueConnection
+      _node: {fileID: 3287865523723088997}
+      _typeQualifiedName: ActSequenceSystem.Connection, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: enter
+        node: {fileID: -1024129352042445831}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: falseConnection
+      _node: {fileID: 3287865523723088997}
+      _typeQualifiedName: ActSequenceSystem.Connection, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+  building: {fileID: 0}
+  initialDelay: 0
+  priority: 0
+  mode: 1
+  finalDelay: 0
+--- !u!114 &3504412122520119474
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 796449d0e2bc3da40bbc1382008cf2dd, type: 3}
+  m_Name: Get Building
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: -264, y: -136}
+  ports:
+    keys:
+    - enter
+    - trueConnection
+    - building
+    - falseConnection
+    values:
+    - _fieldName: enter
+      _node: {fileID: 3504412122520119474}
+      _typeQualifiedName: ActSequenceSystem.Connection, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: trueConnection
+        node: {fileID: -512187034521175858}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: trueConnection
+      _node: {fileID: 3504412122520119474}
+      _typeQualifiedName: ActSequenceSystem.Connection, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: enter
+        node: {fileID: 3287865523723088997}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: building
+      _node: {fileID: 3504412122520119474}
+      _typeQualifiedName: Building, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: building
+        node: {fileID: 3287865523723088997}
+        reroutePoints: []
+      - fieldName: building
+        node: {fileID: -1024129352042445831}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: falseConnection
+      _node: {fileID: 3504412122520119474}
+      _typeQualifiedName: ActSequenceSystem.Connection, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+  target: 3
+  building: {fileID: 0}

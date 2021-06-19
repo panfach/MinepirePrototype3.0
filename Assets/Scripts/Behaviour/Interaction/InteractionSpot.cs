@@ -57,6 +57,9 @@ public class InteractionSpot
             case InteractionType.PRODUCE:
                 if (produceType) interactive.StartProduceInteraction(creature, this);
                 break;
+            case InteractionType.REAP:
+                if (reapType) interactive.StartReapInteraction(creature, this);
+                break;
         }
     }
 

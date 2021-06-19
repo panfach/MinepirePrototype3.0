@@ -5,34 +5,34 @@ using XNode;
 
 namespace ActSequenceSystem
 {
-    public class RandomWalk : ActionNode
+    public class Construct : ActionNode
     {
         [Input] public Connection enter;
+        [Input] public Building building;
 
-        [NonSerialized] ActionType type = ActionType.RNDWALK;
+        [NonSerialized] ActionType type = ActionType.CONSTRUCT;
 
+        [Range(0.0f, 5.0f)] public float initialDelay;
         [Range(0, 100)] public int priority;
-        public RandomWalkMode mode;
+        [Range(0.0f, 5.0f)] public float finalDelay;
 
         [Output] public Connection trueConnection;
+        [Output] public Connection falseConnection;
+
+
+        public Building Building { get => GetInputValue("building", building); }
 
 
         public override ActionType Type { get => type; }
 
         public override IEnumerator Algorithm(Creature creature)
         {
-            return ActionAlgorithms.RandomWalk(creature, this);
+            return ActionAlgorithms.Construct(creature, this);
         }
 
         public override object GetValue(NodePort port)
         {
             return null;
         }
-    }
-
-    public enum RandomWalkMode
-    {
-        ENDLESS,
-        ONETIME
     }
 }

@@ -9,12 +9,14 @@ public class AttackController : MonoBehaviour
     [Header("Settings")]
     [SerializeField] bool canAttackCreatures;
     [SerializeField] float attackPower;
+    [SerializeField] float hitDuration;
 
     [Header("Info")]
     [SerializeField] float attackModifier = 1f;
 
     Item[] dropItems;
 
+    public float Duration { get => hitDuration; }
     public float ImpactDamage
     {
         get => attackPower * attackModifier;

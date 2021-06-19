@@ -126,15 +126,20 @@ public class Appointer : MonoBehaviour
 
     public bool CheckAppointment(Appointer target)
     {
+        return (CheckAppointmentIndex(target) != -1);
+    }
+
+    public int CheckAppointmentIndex(Appointer target)
+    {
         for (int i = 0; i < AppointerTypeSize; i++)
         {
             for (int j = 0; j < appointment[i].Count; j++)
             {
-                if (appointment[i][j] == target) return true;
+                if (appointment[i][j] == target) { Debug.Log("CheckAppointmentIndex returns " + j); return j; }
             }
         }
 
-        return false;
+        return -1;
     }
 
 

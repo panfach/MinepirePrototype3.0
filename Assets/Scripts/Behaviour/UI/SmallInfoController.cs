@@ -12,6 +12,7 @@ public class SmallInfoController : MonoBehaviour
     [SerializeField] bool reactToZeroAppointedPeople;
     [SerializeField] bool reactToResourceDepositStatus;
     [SerializeField] bool reactToHomeAbsence;
+    [SerializeField] bool reactToHealthChanges;
     public float height;
 
     [Header("Other")]
@@ -22,6 +23,7 @@ public class SmallInfoController : MonoBehaviour
     public bool ReactToZeroAppointedPeople { get => reactToZeroAppointedPeople; }
     public bool ReactToResourceDepositStatus { get => reactToResourceDepositStatus; }
     public bool ReactToHomeAbsence { get => reactToHomeAbsence; }
+    public bool ReactToHealthChanges { get => reactToHealthChanges; }
     public SmallInfo Info { get => smallInfo; }
 
 
@@ -41,6 +43,7 @@ public class SmallInfoController : MonoBehaviour
         if (reactToZeroAppointedPeople) entity.Appointer.appointmentChangedEvent += Set;
         if (reactToResourceDepositStatus) entity.ResourceDeposit.statusChangedEvent += Set;
         if (reactToHomeAbsence) entity.Appointer.appointmentChangedEvent += Set;
+        if (reactToHealthChanges) entity.Health.changedValueEvent += Set;
         Set();
     }
 
@@ -171,5 +174,6 @@ public class SmallInfoController : MonoBehaviour
         if (reactToZeroAppointedPeople) entity.Appointer.appointmentChangedEvent -= Set;
         if (reactToResourceDepositStatus) entity.ResourceDeposit.statusChangedEvent -= Set;
         if (reactToHomeAbsence) entity.Appointer.appointmentChangedEvent -= Set;
+        if (reactToHealthChanges) entity.Health.changedValueEvent -= Set;
     }
 }

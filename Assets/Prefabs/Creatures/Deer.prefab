@@ -139,9 +139,12 @@ MonoBehaviour:
   hasSelectionPlane: 1
   hasSilhouette: 0
   hasDisplayedInventory: 0
+  hasProductionDisplay: 0
   itemSpot: []
   selectionPlane: {fileID: 7073293573120617727}
   silhouette: {fileID: 0}
+  productionProcessItem: []
+  productionHarvestItem: []
 --- !u!114 &972053296393211329
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -160,6 +163,7 @@ MonoBehaviour:
   reactToZeroAppointedPeople: 0
   reactToResourceDepositStatus: 0
   reactToHomeAbsence: 0
+  reactToHealthChanges: 1
   height: 0.6
   smallInfo: {fileID: 0}
 --- !u!114 &8271142170319578457
@@ -177,7 +181,30 @@ MonoBehaviour:
   entity: {fileID: 3591495974343621970}
   maxRandomWalkDelay: 8
   generalActSequence: 2
+  destRecipe:
+    interactionSpotIndex: 
+    laborIntensity: 1
+    requiredRes:
+      index: 
+      type: 
+      indexVal: []
+      typeVal: []
+    receivedRes:
+      index: 
+      type: 
+      indexVal: []
+      typeVal: []
+  destInteractionSpot:
+    spot: {fileID: 0}
+    interactionTarget: {fileID: 0}
+    eatType: 0
+    produceType: 0
+    reapType: 0
+    duration: 0
+  destEntity: {fileID: 0}
   actionType: 0
+  currentAction: {fileID: 0}
+  currentSequence: {fileID: 0}
 --- !u!114 &2510483437292284732
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -207,7 +234,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   entity: {fileID: 3591495974343621970}
   satiety: 0
-  lastAttacker: {fileID: 0}
 --- !u!114 &4148754911773210568
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -251,6 +277,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   entity: {fileID: 3591495974343621970}
   openInfoOnClick: 1
+  reactToInventoryChanges: 0
+  reactToHealthChanges: 0
+  reactToSatietyChanges: 0
+  reactToProductionChanges: 0
 --- !u!1 &5852074216987475913
 GameObject:
   m_ObjectHideFlags: 0

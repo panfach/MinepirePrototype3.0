@@ -41,6 +41,8 @@ namespace ActSequenceSystem
     {
         NEAR,
         NEARQUERY,
-        NEARINTERACT
+        NEARINTERACT,
+        NEARFREEPLACEFORQUERY,
+        NEARFREEPLACEFORINV
     }
 }

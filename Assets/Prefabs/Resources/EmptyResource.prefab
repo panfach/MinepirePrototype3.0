@@ -114,7 +114,10 @@ MonoBehaviour:
   reactToMouseDrag: 0
   reactToZeroAppointedPeople: 0
   reactToResourceDepositStatus: 0
+  reactToHomeAbsence: 0
+  reactToHealthChanges: 0
   height: 0.5
+  smallInfo: {fileID: 0}
 --- !u!114 &8477649300626679455
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -127,7 +130,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65c1e0b32d8192c408ca535b3dcb9ccb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseObject: {fileID: 6478443037878398353}
+  entity: {fileID: 6478443037878398353}
   hasOccupiedProperty: 1
   destroyOnEmpty: 1
   storedPackSize: 32767
@@ -163,10 +166,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   entity: {fileID: 6478443037878398353}
   hasSelectionPlane: 1
+  hasSilhouette: 0
   hasDisplayedInventory: 1
+  hasProductionDisplay: 0
   itemSpot:
   - {fileID: 5612886488274263852}
   selectionPlane: {fileID: 2570295203278127801}
+  silhouette: {fileID: 0}
+  productionProcessItem: []
+  productionHarvestItem: []
 --- !u!1001 &8364564190869278761
 PrefabInstance:
   m_ObjectHideFlags: 0

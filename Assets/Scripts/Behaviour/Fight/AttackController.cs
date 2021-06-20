@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 // ------------------------------------------- // MINEPIRE // ------------------------------------------- //
 public class AttackController : MonoBehaviour
@@ -14,9 +15,11 @@ public class AttackController : MonoBehaviour
     [Header("Info")]
     [SerializeField] float attackModifier = 1f;
 
-    Item[] dropItems;
+    List<Item> dropItems = new List<Item>();
 
     public float Duration { get => hitDuration; }
+    public List<Item> DropItems { get => dropItems; }
+    public int DropItemsCount { get => dropItems.Count; }
     public float ImpactDamage
     {
         get => attackPower * attackModifier;
@@ -31,8 +34,27 @@ public class AttackController : MonoBehaviour
         return true;
     }
 
-    public void AssignDrop(Item[] _dropItems)
+    public void AssignDrop(List<Item> _dropItems)
     {
         dropItems = _dropItems;
+    }
+
+    public Item GetFirstDropItem()
+    {
+        RemoveNullItemsFromDrop();
+        return dropItems.Count > 0 ? dropItems[0] : null;
+    }
+
+    void RemoveNullItemsFromDrop()
+    {
+        int count = dropItems.Count;
+        for (int i = 0; i < count; i++)
+        {
+            if (dropItems[i] == null)
+            {
+                dropItems.RemoveAt(i);
+                count--;
+            }
+        }
     }
 }

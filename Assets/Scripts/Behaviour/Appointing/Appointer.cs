@@ -135,7 +135,7 @@ public class Appointer : MonoBehaviour
         {
             for (int j = 0; j < appointment[i].Count; j++)
             {
-                if (appointment[i][j] == target) { Debug.Log("CheckAppointmentIndex returns " + j); return j; }
+                if (appointment[i][j] == target) { /*Debug.Log("CheckAppointmentIndex returns " + j);*/ return j; }
             }
         }
 

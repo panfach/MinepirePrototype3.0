@@ -38,7 +38,8 @@ public enum ActionType
     CONSTRUCT,
     GOTOCREATURE,
     ATTACK,
-    FINDTARGET
+    FINDTARGET,
+    FINDITEM
 }
 
 

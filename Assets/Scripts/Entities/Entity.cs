@@ -27,6 +27,7 @@ public abstract class Entity : MonoBehaviour
     public virtual AttackController AttackController { get => null; }
     public virtual Interactive Interactive { get => null; }
     public virtual Production Production { get => null; }
+    public virtual Workplace Workplace { get => null; }
 
     public abstract void Die();
 }

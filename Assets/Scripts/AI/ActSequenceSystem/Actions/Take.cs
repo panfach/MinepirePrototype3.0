@@ -22,8 +22,8 @@ namespace ActSequenceSystem
         [Output] public Connection falseConnection;
 
 
-        public ResourceQuery ResourceQuery { get => GetInputValue<ResourceQuery>("inputQuery", null); }
-        public Item Item { get => GetInputValue<Item>("item", null); }
+        public ResourceQuery ResourceQuery { get => GetInputValue("inputQuery", inputQuery); }
+        public Item Item { get => GetInputValue("item", item); }
 
 
         public override ActionType Type { get => type; }

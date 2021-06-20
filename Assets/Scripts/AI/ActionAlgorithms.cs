@@ -368,18 +368,42 @@ public static class ActionAlgorithms
         }
 
         // Initial delay
+        yield return new WaitForSeconds(0.05f);
         yield return new WaitForSeconds(action.initialDelay);
 
         // Body
         if (action.mode == TakeMode.QUERY)
         {
             creature.CrtProp.PlaceOfStay.entity.Inventory.Give(creature.Inventory, action.ResourceQuery);
+            action.outputQuery = action.ResourceQuery;
+        }
+        else if (action.mode == TakeMode.ITEM) 
+        {
+            creature.Agent.SetDestination(action.Item.transform.position);
+            if (!action.Item.Inventory.Occupy(creature))
+            {
+                yield return new WaitForSeconds(action.finalDelay);
+                FalseReaction(creature, action);
+            }
+            while (true)
+            {
+                if (action.Item == null)
+                {
+                    yield return new WaitForSeconds(action.finalDelay);
+                    FalseReaction(creature, action);
+                    yield break;
+                }
+
+                if (Vector3.SqrMagnitude(creature.transform.position - action.Item.transform.position) < creature.CrtData.defaultActionDistance)
+                {
+                    action.Item.Inventory.Give(creature.Inventory);
+                }
+            }
         }
 
         // Final delay
         yield return new WaitForSeconds(action.finalDelay);
 
-        action.outputQuery = action.ResourceQuery;
         TrueReaction(creature, action);
     }
 
@@ -830,12 +854,31 @@ public static class ActionAlgorithms
         float sqrAttackRange = Mathf.Pow(creature.CrtData.defaultAttackDistance, 2);
         while (true)
         {
+            if (action.mode == AttackMode.WORKGROUP)
+            {
+                if (creature.Appointer.Work.CheckAppointmentIndex(creature.Appointer) == 0)
+                {
+                    creature.Appointer.Work.entity.Workplace.attackPermission = true;
+                }
+                else if (!creature.Appointer.Work.entity.Workplace.attackPermission)
+                {
+                    // Final delay
+                    yield return new WaitForSeconds(action.finalDelay);
+
+                    TrueReaction(creature, action);
+                    yield break;
+                }
+            }
+
             if (action.Target == null ||action.Target.Value < 0.001f)
             {
+                if (action.mode == AttackMode.WORKGROUP && creature.AttackController.DropItemsCount > 0) 
+                    creature.Appointer.Work.entity.Workplace.AssignItems(creature.AttackController.DropItems);
+                creature.GeneralAI.SwitchToWalk();
+
                 // Final delay
                 yield return new WaitForSeconds(action.finalDelay);
 
-                creature.GeneralAI.SwitchToWalk();
                 TrueReaction(creature, action);
                 yield break;
             }
@@ -890,6 +933,44 @@ public static class ActionAlgorithms
             action.target = creature.GeneralAI.DestEntity.Health;
         }
 
+        TrueReaction(creature, action);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public static IEnumerator FindItem(Creature creature, ActSequenceSystem.FindItem action)
+    {
+        // Body
+        yield return new WaitForSeconds(creature.CrtData.checkEventsDelay);
+
+        if (action.mode == FindItemMode.WORKITEM)
+        {
+            Debug.Log("---1---");
+            Item item;
+            if ((item = creature.Appointer.Work.entity.Workplace.GetFirstItem()) == null)
+            {
+                FalseReaction(creature, action);
+                yield break;
+            }
+            Debug.Log("---2---");
+            item.Inventory.Occupy(creature);
+            Debug.Log("---3---");
+            action.item = item;
+        }
+        if (action.mode == FindItemMode.DROP)
+        {
+            Item item;
+            if ((item = creature.AttackController.GetFirstDropItem()) == null)
+            {
+                FalseReaction(creature, action);
+                yield break;
+            }
+            item.Inventory.Occupy(creature);
+            action.item = item;
+        }
+
+        Debug.Log("---4---");
         TrueReaction(creature, action);
     }
 

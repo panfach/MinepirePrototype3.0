@@ -160,7 +160,7 @@ public class Inventory : MonoBehaviour
     /// </summary>
     public void Give(Inventory targetInventory)
     {
-        for (int i = 0; i < PackSize; i++)
+        for (int i = 0; i < PacksAmount; i++)
         {
             Give(targetInventory, i);
         }
@@ -522,7 +522,7 @@ public class Inventory : MonoBehaviour
 
     public bool Occupy(Creature creature)
     {
-        Debug.Log((!occupied || creature == owner) && creature.Inventory.CheckPlaceFor(storedRes));
+        //Debug.Log((!occupied || creature == owner) && creature.Inventory.CheckPlaceFor(storedRes));
         if ((!occupied || creature == owner) && creature.Inventory.CheckPlaceFor(storedRes))
         {
             occupied = true;

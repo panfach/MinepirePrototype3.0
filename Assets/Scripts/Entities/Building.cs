@@ -15,6 +15,7 @@ public class Building : Entity
     [SerializeField] Appointer appointer;
     [SerializeField] Interactive interactive;
     [SerializeField] Production production; 
+    [SerializeField] Workplace workplace; 
 
     public override BuildingData BldData { get => data; }
     public override BuildingProperties BldProp { get => properties; }
@@ -29,6 +30,7 @@ public class Building : Entity
     public override Appointer Appointer { get => appointer; }
     public override Interactive Interactive { get => interactive; }
     public override Production Production { get => production; }
+    public override Workplace Workplace { get => workplace; }
 
 
     public override void Die()

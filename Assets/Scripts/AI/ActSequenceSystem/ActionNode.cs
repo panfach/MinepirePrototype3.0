@@ -39,7 +39,9 @@ public enum ActionType
     GOTOCREATURE,
     ATTACK,
     FINDTARGET,
-    FINDITEM
+    FINDITEM,
+    GETNATURE,
+    FINDRECIPE
 }
 
 

@@ -17,7 +17,7 @@ MonoBehaviour:
   ports:
     keys:
     - enter
-    - building
+    - entity
     - trueConnection
     - spot
     - falseConnection
@@ -34,9 +34,9 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
-    - _fieldName: building
+    - _fieldName: entity
       _node: {fileID: -4665269112814762582}
-      _typeQualifiedName: Building, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      _typeQualifiedName: Entity, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
       connections:
       - fieldName: building
@@ -79,9 +79,10 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
-  building: {fileID: 0}
+  entity: {fileID: 0}
   initialDelay: 0
   priority: 0
+  mode: 0
   finalDelay: 0
   spot:
     spot: {fileID: 0}
@@ -89,6 +90,7 @@ MonoBehaviour:
     eatType: 0
     produceType: 0
     reapType: 0
+    extractType: 0
     duration: 0
 --- !u!114 &11400000
 MonoBehaviour:
@@ -227,7 +229,7 @@ MonoBehaviour:
       _typeQualifiedName: Building, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
       connections:
-      - fieldName: building
+      - fieldName: entity
         node: {fileID: -4665269112814762582}
         reroutePoints: []
       _direction: 1
@@ -305,6 +307,7 @@ MonoBehaviour:
     - query
     - trueConnection
     - falseConnection
+    - item
     values:
     - _fieldName: enter
       _node: {fileID: 3090981808993865918}
@@ -357,11 +360,21 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
+    - _fieldName: item
+      _node: {fileID: 3090981808993865918}
+      _typeQualifiedName: Item, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
   query:
     index: 
     type: 
     indexVal: []
     typeVal: []
+  item: {fileID: 0}
   mode: 1
 --- !u!114 &3424925675747155655
 MonoBehaviour:
@@ -442,6 +455,7 @@ MonoBehaviour:
     eatType: 0
     produceType: 0
     reapType: 0
+    extractType: 0
     duration: 0
   interactionType: 0
   initialDelay: 0
@@ -647,6 +661,7 @@ MonoBehaviour:
   building: {fileID: 0}
   initialDelay: 0
   priority: 0
+  mode: 0
   finalDelay: 0
 --- !u!114 &5003463546966701786
 MonoBehaviour:

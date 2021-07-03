@@ -11,7 +11,7 @@ namespace ActSequenceSystem
 
         [NonSerialized] ActionType type = ActionType.EXITBUILDING;
         [Range(0.0f, 5.0f)] public float initialDelay;
-        [Range(0, 100)] public int priority;
+        [NonSerialized] public int priority = 80;
         [Range(0.0f, 5.0f)] public float finalDelay;
 
         [Output] public Connection trueConnection;

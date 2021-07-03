@@ -12,6 +12,7 @@ namespace ActSequenceSystem
         [NonSerialized] public ActionType type = ActionType.FINDITEM;
         [NonSerialized] public int priority = 0;
         public FindItemMode mode;
+        public float radius;
 
         [Output] public Connection trueConnection;
         [Output] public Item item;
@@ -35,6 +36,7 @@ namespace ActSequenceSystem
     public enum FindItemMode
     {
         WORKITEM,
-        DROP
+        DROP,
+        RADIUS
     }
 }

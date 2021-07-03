@@ -1,5 +1,35 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1700191264556279715
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3886490304972965561}
+  m_Layer: 0
+  m_Name: InteractionTarget
+  m_TagString: Untagged
+  m_Icon: {fileID: 4162164826716764455, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3886490304972965561
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1700191264556279715}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.3, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2836776457989319229}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2731527086091490431
 GameObject:
   m_ObjectHideFlags: 0
@@ -30,6 +60,36 @@ Transform:
   m_Father: {fileID: 4344193114971705679}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &6393298857712662525
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5918331332543289316}
+  m_Layer: 0
+  m_Name: InteractionSpot0
+  m_TagString: Untagged
+  m_Icon: {fileID: 4422084297763085224, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5918331332543289316
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6393298857712662525}
+  m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: -0.7071068}
+  m_LocalPosition: {x: 0, y: 0, z: -0.3}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2836776457989319229}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 270, z: 0}
 --- !u!1 &6416391696560646411
 GameObject:
   m_ObjectHideFlags: 0
@@ -105,6 +165,7 @@ GameObject:
   - component: {fileID: 5200589174642808093}
   - component: {fileID: 683258371168893990}
   - component: {fileID: 9147563819868628330}
+  - component: {fileID: 2061053504493710031}
   m_Layer: 0
   m_Name: BranchHeap
   m_TagString: Untagged
@@ -147,6 +208,7 @@ MonoBehaviour:
   resourceDeposit: {fileID: 8472039744686128673}
   uiController: {fileID: 5200589174642808093}
   colliderHandler: {fileID: 683258371168893990}
+  interactive: {fileID: 2061053504493710031}
   gridObject: {fileID: 9147563819868628330}
 --- !u!114 &5534085406807880845
 MonoBehaviour:
@@ -179,7 +241,10 @@ MonoBehaviour:
   reactToMouseDrag: 0
   reactToZeroAppointedPeople: 0
   reactToResourceDepositStatus: 1
+  reactToHomeAbsence: 0
+  reactToHealthChanges: 0
   height: 0.5
+  smallInfo: {fileID: 0}
 --- !u!114 &3518767242138314274
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -194,9 +259,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   entity: {fileID: 642500395760258636}
   hasSelectionPlane: 1
+  hasSilhouette: 0
   hasDisplayedInventory: 0
+  hasProductionDisplay: 0
   itemSpot: []
   selectionPlane: {fileID: 7387927643168603482}
+  silhouette: {fileID: 0}
+  productionProcessItem: []
+  productionHarvestItem: []
 --- !u!114 &8472039744686128673
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -230,6 +300,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   entity: {fileID: 642500395760258636}
   openInfoOnClick: 1
+  reactToInventoryChanges: 0
+  reactToHealthChanges: 0
+  reactToSatietyChanges: 0
+  reactToProductionChanges: 0
 --- !u!114 &683258371168893990
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -259,6 +333,27 @@ MonoBehaviour:
   useBuildSet: 0
   useCellPointers: 0
   cellPointer: []
+--- !u!114 &2061053504493710031
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7453501832349646518}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 262f618ca6693714e9842a9c3912b5ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  entity: {fileID: 642500395760258636}
+  interactionSpots:
+  - spot: {fileID: 5918331332543289316}
+    interactionTarget: {fileID: 3886490304972965561}
+    eatType: 0
+    produceType: 0
+    reapType: 0
+    extractType: 1
+    duration: 0
 --- !u!1001 &3546674877574787018
 PrefabInstance:
   m_ObjectHideFlags: 0

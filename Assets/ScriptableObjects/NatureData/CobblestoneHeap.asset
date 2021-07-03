@@ -18,7 +18,7 @@ MonoBehaviour:
   resources:
   - resource: {fileID: 11400000, guid: a598ffa8f99268148aca88eb1e14b156, type: 2}
     amount: 4
-    extractSpeed: 1
+    laborIntensity: 8
     recoverySpeed: 0
     restorable: 0
     sourceDeletionAfterExhaustion: 1

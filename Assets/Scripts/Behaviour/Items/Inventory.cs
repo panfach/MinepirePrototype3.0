@@ -9,6 +9,7 @@ public class Inventory : MonoBehaviour
     [SerializeField] Entity entity;                                                                                        // Fix to Entity
 
     [Header("Settings")]
+    [SerializeField] bool warehouseType;
     [SerializeField] bool hasOccupiedProperty;
     [SerializeField] bool destroyOnEmpty;
     [SerializeField] int storedPackSize;
@@ -34,6 +35,7 @@ public class Inventory : MonoBehaviour
 
     private void OnEnable()                                                                         
     {
+        if (warehouseType) VillageData.Warehouses.Add(this);
         Init();
     }
 
@@ -54,11 +56,11 @@ public class Inventory : MonoBehaviour
         invChangedEvent?.Invoke();
     }
 
-    public void ItemInit(ResourceIndex ind, float val)
+    public void ItemInit(ResourceIndex ind, float val)                                                                // What is the difference from CreateResource ?
     {
-        PutResource(ind, val);
-        VillageData.resources[(int)ind] += val;
-        //RefreshInfo();
+        float remainder = PutResource(ind, val);
+        Connector.statistics.ChangeReceivedResource(ind, val - remainder);
+        VillageData.resources[(int)ind] += val - remainder;
     }
 
     /// <summary>
@@ -178,6 +180,14 @@ public class Inventory : MonoBehaviour
         Give(item.Inventory, packIndex, value);
     }
 
+    public void LayOut()
+    {
+        for (int i = 0; i < PacksAmount; i++)
+        {
+            LayOut(i);
+        }
+    }
+
     /// <summary>
     /// Calculates how much specific resource can fit into this inventory
     /// </summary>
@@ -235,7 +245,7 @@ public class Inventory : MonoBehaviour
     /// </summary>
     public bool CheckPlaceFor(Inventory inv)
     {
-        for (int i = 0; i < inv.PackSize; i++)
+        for (int i = 0; i < inv.PacksAmount; i++)
         {
             if (FreeSpaceForResource(inv.StoredRes[i]) > 0.001f) return true;
         }
@@ -402,7 +412,7 @@ public class Inventory : MonoBehaviour
 
         VillageData.resources[(int)storedRes[packIndex]] -= amount;
         TakeResource(packIndex, amount);
-        InfoDisplay.Refresh();
+        InfoDisplay.Refresh();                                                                // bad
 
         return remainder;
     }
@@ -414,7 +424,7 @@ public class Inventory : MonoBehaviour
     public float ClearResource(ResourceIndex index, float amount = float.MaxValue)
     {
         float remainder = TakeResource(index, amount);
-        InfoDisplay.Refresh();
+        InfoDisplay.Refresh();                                                                // bad
 
         return remainder;
     }
@@ -430,7 +440,7 @@ public class Inventory : MonoBehaviour
         {
             remainder += TakeResource(DataList.GetResourceIndices(type)[i], amount);
         }
-        InfoDisplay.Refresh();
+        InfoDisplay.Refresh();                                                                // bad
 
         return remainder;
     }
@@ -485,9 +495,12 @@ public class Inventory : MonoBehaviour
         }
     }
 
-    public float CreateResource(ResourceIndex ind, float val)
+    public float CreateResource(ResourceIndex ind, float val, bool withoutGeneralAccounting = false)                          // What is the difference from ItemInit() ?
     {
-        return PutResource(ind, val);
+        float remainder = PutResource(ind, val);
+        Connector.statistics.ChangeReceivedResource(ind, val - remainder);
+        if (!withoutGeneralAccounting) VillageData.resources[(int)ind] += val - remainder;
+        return remainder;
     }
 
     public void CreateResource(ResourceQuery query)                                                // This method doesn't consider type component of query
@@ -527,6 +540,7 @@ public class Inventory : MonoBehaviour
         {
             occupied = true;
             owner = creature;
+            creature.GeneralAI.DestInv = this;
             return true;
         }
         else
@@ -541,6 +555,7 @@ public class Inventory : MonoBehaviour
         {
             occupied = false;
             owner = null;
+            creature.GeneralAI.ForgetDestInventory();
         }
     }
 
@@ -670,6 +685,7 @@ public class Inventory : MonoBehaviour
 
     private void OnDisable()
     {
+        if (warehouseType) VillageData.Warehouses.Remove(this);
         ClearInventory();
         invChangedEvent = null;
     }

@@ -556,7 +556,8 @@ MonoBehaviour:
   creatureContainer: {fileID: 3425091293824335065}
   appointer: {fileID: 6499119476282192408}
   interactive: {fileID: 0}
-  indicatorInteraction: {fileID: 0}
+  production: {fileID: 0}
+  workplace: {fileID: 0}
 --- !u!114 &7186443082937441811
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -621,6 +622,7 @@ MonoBehaviour:
   hasSelectionPlane: 1
   hasSilhouette: 0
   hasDisplayedInventory: 1
+  hasProductionDisplay: 0
   itemSpot:
   - {fileID: 139591335463796046}
   - {fileID: 4120516949617032947}
@@ -632,6 +634,8 @@ MonoBehaviour:
   - {fileID: 288604570214085631}
   selectionPlane: {fileID: 4786666781818415794}
   silhouette: {fileID: 0}
+  productionProcessItem: []
+  productionHarvestItem: []
 --- !u!114 &4204575612228552119
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -705,6 +709,7 @@ MonoBehaviour:
   reactToZeroAppointedPeople: 0
   reactToResourceDepositStatus: 0
   reactToHomeAbsence: 0
+  reactToHealthChanges: 0
   height: 1
   smallInfo: {fileID: 0}
 --- !u!114 &1974360765898451302
@@ -724,6 +729,7 @@ MonoBehaviour:
   reactToInventoryChanges: 1
   reactToHealthChanges: 0
   reactToSatietyChanges: 0
+  reactToProductionChanges: 0
 --- !u!114 &6838012774800053311
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -736,7 +742,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65c1e0b32d8192c408ca535b3dcb9ccb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseObject: {fileID: 3370807516507604620}
+  entity: {fileID: 3370807516507604620}
+  warehouseType: 1
   hasOccupiedProperty: 0
   destroyOnEmpty: 0
   storedPackSize: 8

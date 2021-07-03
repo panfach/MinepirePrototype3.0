@@ -8,7 +8,7 @@ namespace ActSequenceSystem
     public class GoToInteraction : ActionNode
     {
         [Input] public Connection enter;
-        [Input] public Building building;
+        [Input] public Entity entity;
 
         [NonSerialized] public ActionType type = ActionType.GOTOINTERACTION;
         [Range(0.0f, 5.0f)] public float initialDelay;
@@ -21,7 +21,7 @@ namespace ActSequenceSystem
         [Output] public Connection falseConnection;
 
 
-        public Building Building { get => GetInputValue("building", building); }
+        public Entity Entity { get => GetInputValue("entity", entity); }
 
 
         public override ActionType Type { get => type; }
@@ -41,6 +41,7 @@ namespace ActSequenceSystem
     public enum GoToInteractionMode
     {
         NEAR,
-        NEARRECIPE
+        NEARRECIPE,
+        RECIPEINDOORS
     }
 }

@@ -50,6 +50,7 @@ public static class VillageData
     public static List<Building> Constructions { get; private set; } = new List<Building>();                                         // Maybe GeneralBuilder (or BuildingManager) must contain it
     public static List<Building> Buildings { get; private set; } = new List<Building>();
     public static List<Production> Productions { get; private set; } = new List<Production>();
+    public static List<Inventory> Warehouses { get; private set; } = new List<Inventory>();
     public static Dictionary<int, Building> uniqIndexDict = new Dictionary<int, Building>();
     public static Building townhall = null;
     public static BuildingIndex townhallIndex = BuildingIndex.TRIBLEADER;
@@ -79,7 +80,6 @@ public static class VillageData
 
     public static void RemoveConstruction(Building item)
     {
-        Debug.Log("VillageData.RemoveConstruction() Construction was removed ... ");
         Constructions.Remove(item);                                         
     }
 
@@ -95,6 +95,77 @@ public static class VillageData
     public static void RemoveBuilding(Building item)
     {
         Buildings.Remove(item); // Возможно, это очень неэффективно (Можно попробовать искать по уникальному номеру постройки)
+    }
+
+    public static bool CheckResourceAvailability(ResourceQuery resQuery)
+    {
+        float value;
+
+        for (int i = 0; i < resQuery.index.Length; i++)
+        {
+            value = resQuery.indexVal[i];
+
+            foreach (Inventory item in Warehouses)
+            {
+                for (int j = 0; j < item.PacksAmount; j++)
+                {
+                    item.Look(j, out ResourceIndex outInd, out float outValue);
+                    //Debug.Log(" : : : Checking warehouse: j=" + j + " resQuery.index[i] " + resQuery.index[i] + " outInd " + outInd + " outValue " + outValue);
+                    if (outInd != resQuery.index[i]) continue;
+                    value -= outValue;
+                    if (value < 0.001) break;
+                }
+                if (value < 0.001) break;
+            }
+
+            if (value > 0.001f) { /*Debug.Log("Not enough resources! Need " + value + " " + resQuery.index[i] + " more");*/ return false; }
+            //else Debug.Log("There is necessary amount of " + resQuery.index[i]);
+        }
+
+        //if (VillageData.resources[(int)resQuery.index[i]] < resQuery.indexVal[i]) return false;
+
+        return true;
+    }
+
+    public static float CheckWarehouseResourceAmount(ResourceIndex resInd)
+    {
+        float amount = 0;
+
+        foreach (Inventory item in Warehouses)
+        {
+            for (int j = 0; j < item.PacksAmount; j++)
+            {
+                item.Look(j, out ResourceIndex outInd, out float outValue);
+                if (outInd != resInd) continue;
+                amount += outValue;
+            }
+        }
+
+        return amount;
+    }
+
+    public static void SpendResource(ResourceQuery resQuery)
+    {
+        float value;
+
+        for (int i = 0; i < resQuery.index.Length; i++)
+        {
+            value = resQuery.indexVal[i];
+            //resources[(int)resQuery.index[i]] -= value;
+
+            foreach (Inventory item in Warehouses)
+            {
+                for (int j = 0; j < item.PacksAmount; j++)
+                {
+                    if (item.StoredRes[j] != resQuery.index[i]) continue;
+                    value = item.ClearPack(j, value);
+                    if (value <= 0) break;
+                }
+                if (value <= 0) break;
+            }
+        }
+
+        InfoDisplay.Refresh();                                                                                   // Need to use UIController
     }
 
     public static void Recalculate()
@@ -192,7 +263,7 @@ public static class VillageData
 
             foreach (Building item in warehouses)
             {
-                remainder = item.Inventory.CreateResource((ResourceIndex)i, remainder);
+                remainder = item.Inventory.CreateResource((ResourceIndex)i, remainder, true);
                 if (remainder <= 0) break;
             }
         }
@@ -490,7 +561,7 @@ public static class VillageData
                 healthPoints: reader.ReadSingle());
         }
 
-        for (int i = 0; i < resources.Length - 1; i++)
+        for (int i = 0; i < resources.Length - 5; i++)
         {
             resources[i] = reader.ReadSingle();
         }

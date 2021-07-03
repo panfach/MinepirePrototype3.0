@@ -21,7 +21,7 @@ MonoBehaviour:
   maxRandomAge: 40
   walkSpeed: 0.5
   runSpeed: 1
-  timeOfBuildingEntering: 1
+  timeOfBuildingEntering: 2
   angleControlDelay: 0.18
   checkEventsDelay: 0.11
   defaultAttackDistance: 0.5

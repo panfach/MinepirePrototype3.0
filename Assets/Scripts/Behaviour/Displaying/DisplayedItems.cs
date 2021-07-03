@@ -93,7 +93,7 @@ public class DisplayedItems : MonoBehaviour
 
 
             shift = 0f;
-            for (int j = 0; j < (int)value / 2; j++)
+            for (int j = 0; j <= (int)((value - 0.001f) / 2); j++)
             {
                 Debug.Log(index);
                 displayedItem[i * entity.Inventory.PackSize + j] = Instantiate(DataList.GetResourceModel(index), itemSpot[i]);

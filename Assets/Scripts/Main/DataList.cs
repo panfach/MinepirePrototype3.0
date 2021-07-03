@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using System;
+using TechnologySystem;
 
 // ------------------------------------------- // MINEPIRE // ------------------------------------------- //
 public class DataList : MonoBehaviour
@@ -18,11 +19,14 @@ public class DataList : MonoBehaviour
     public NatureData[] natures;
 
     [Header("Array of creatures")]
-    public GameObject[] creatureObjects;                     // In future add humans here
+    public GameObject[] creatureObjects;
+
+    [Header("Array of technologies")]
+    public TechData[] technologies;
+
 
     static Dictionary<BuildingIndex, GameObject> intBuildingObjDict = new Dictionary<BuildingIndex, GameObject>();
 
-    //static Dictionary<ResourceIndex, GameObject> intItemObjDict = new Dictionary<ResourceIndex, GameObject>();
     static GameObject emptyItem;
 
     static Dictionary<ResourceIndex, ResourceData> intResourceDict = new Dictionary<ResourceIndex, ResourceData>();
@@ -36,6 +40,8 @@ public class DataList : MonoBehaviour
     static Dictionary<NatureIndex, NatureData> intNatureDict = new Dictionary<NatureIndex, NatureData>();
 
     static Dictionary<CreatureIndex, GameObject> intCreatureObjDict = new Dictionary<CreatureIndex, GameObject>();
+
+    static Dictionary<TechIndex, TechData> intTechDict = new Dictionary<TechIndex, TechData>();
 
     public static Dictionary<Profession, string> profNameDict_rus = new Dictionary<Profession, string>()          
     {
@@ -123,6 +129,12 @@ public class DataList : MonoBehaviour
             creatureObj = creatureObjects[i];
             intCreatureObjDict.Add(creatureObj.GetComponent<Creature>().CrtData.Index, creatureObj);
         }
+
+        // Making dictionary of technologies
+        for (int i = 0; i < technologies.Length; i++)
+        {
+            intTechDict.Add(technologies[i].Index, technologies[i]);
+        }
     }
 
     public static GameObject GetBuildingObj(BuildingIndex index) => intBuildingObjDict[index];
@@ -134,6 +146,7 @@ public class DataList : MonoBehaviour
     public static GameObject GetNatureObj(NatureIndex index) => intNatureObjDict[index];
     public static NatureData GetNature(NatureIndex index) => intNatureDict[index];
     public static GameObject GetCreatureObj(CreatureIndex index) => intCreatureObjDict[index];
+    public static TechData GetTech(TechIndex index) => intTechDict[index];
 }
 
 public enum ResourceIndex
@@ -147,7 +160,11 @@ public enum ResourceIndex
     RAWVENISON,
     RAWDEERSKIN,
     DEERSKIN,
-    EXECUTEDQUERY
+    EXECUTEDQUERY,
+    FISH,
+    STONESPEAR,
+    ROUGHCLOTHINGOFSKINS,
+    JERKY
 }
 
 public enum ResourceType
@@ -156,7 +173,9 @@ public enum ResourceType
     FOOD,
     ANIMALDROP,
     BUILDMAT,
-    EXECUTEDQUERY
+    EXECUTEDQUERY,
+    TOOL,
+    CLOTHING
 }
 
 public enum NatureIndex
@@ -177,7 +196,11 @@ public enum BuildingIndex
     HUNTHUT,
     BONFIRE,
     SKINDRYER,
-    TRIBLEADER
+    TRIBLEADER,
+    MEATDRYER,
+    PRIMEVALWORKSHOP,
+    FISHINGHUT,
+    TAILORHUT
 }
 
 public enum CreatureIndex

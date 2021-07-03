@@ -365,7 +365,6 @@ GameObject:
   - component: {fileID: 844360506970964564}
   - component: {fileID: 262921649861852935}
   - component: {fileID: 4787176949477674793}
-  - component: {fileID: 6752549462244044035}
   - component: {fileID: 2331168954941197749}
   - component: {fileID: 5551099824663362806}
   - component: {fileID: 5094159857424218080}
@@ -415,10 +414,11 @@ MonoBehaviour:
   buildSet: {fileID: 4963291892815633711}
   displayedItems: {fileID: 844360506970964564}
   uiController: {fileID: 5551099824663362806}
-  creatureContainer: {fileID: 6752549462244044035}
+  creatureContainer: {fileID: 0}
   appointer: {fileID: 4787176949477674793}
   interactive: {fileID: 607882354914860736}
   production: {fileID: 4896672025370186755}
+  workplace: {fileID: 0}
 --- !u!114 &8715515757493482946
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -528,25 +528,6 @@ MonoBehaviour:
   appointByDragging: 0
   type: 2
   maxAppointments: 00000000000000000000000000000000
---- !u!114 &6752549462244044035
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4408608195986941951}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 708f8eeee0b4877438fa406354a107cb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  entity: {fileID: 1039132906586807899}
-  enter:
-  - {fileID: 0}
-  hasCreatureLimit: 0
-  creatureLimit: 0
-  creatures: 0
-  creatureList: []
 --- !u!114 &2331168954941197749
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -565,6 +546,7 @@ MonoBehaviour:
   reactToZeroAppointedPeople: 0
   reactToResourceDepositStatus: 0
   reactToHomeAbsence: 0
+  reactToHealthChanges: 0
   height: 0.5
   smallInfo: {fileID: 0}
 --- !u!114 &5551099824663362806
@@ -598,6 +580,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   entity: {fileID: 1039132906586807899}
+  warehouseType: 0
   hasOccupiedProperty: 0
   destroyOnEmpty: 0
   storedPackSize: 4
@@ -625,12 +608,14 @@ MonoBehaviour:
     eatType: 0
     produceType: 1
     reapType: 1
+    extractType: 0
     duration: 0
   - spot: {fileID: 8452818320137199182}
     interactionTarget: {fileID: 8776740486648645}
     eatType: 0
     produceType: 1
     reapType: 1
+    extractType: 0
     duration: 0
 --- !u!114 &4896672025370186755
 MonoBehaviour:

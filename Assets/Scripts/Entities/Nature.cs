@@ -11,6 +11,7 @@ public class Nature : Entity
     [SerializeField] ResourceDeposit resourceDeposit;
     [SerializeField] UIController uiController;
     [SerializeField] ColliderHandler colliderHandler;
+    [SerializeField] Interactive interactive;
     [SerializeField] GridObject gridObject;                                                            // In future
 
     public override NatureData NtrData { get => natureData; }
@@ -20,6 +21,7 @@ public class Nature : Entity
     public override ResourceDeposit ResourceDeposit { get => resourceDeposit; }
     public override UIController UIController { get => uiController; }
     public override ColliderHandler ColliderHandler { get => colliderHandler; }
+    public override Interactive Interactive { get => interactive; }
     public override GridObject GridObject { get => gridObject; }
 
 

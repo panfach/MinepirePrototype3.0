@@ -57,5 +57,9 @@ public enum BuildingType
     WAREHOUSE,
     HUNT,
     SKIN,
-    PUBLIC
+    PUBLIC,
+    COOKING,
+    FISHING,
+    TOOLS,
+    CLOTHING
 }

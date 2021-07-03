@@ -41,6 +41,9 @@ public class Notification : MonoBehaviour
             case NotifType.RESSOURCE:
                 notifText.text = "Пока нельзя собрать данный ресурс";
                 break;
+            case NotifType.RESRESEARCH:
+                notifText.text = "Не выполнены условия для изучения";
+                break;
         }
     }
 
@@ -52,5 +55,6 @@ public enum NotifType
     RESBUILD,
     PLACEBUILD,
     EMPTYHOME,
-    RESSOURCE
+    RESSOURCE,
+    RESRESEARCH
 }

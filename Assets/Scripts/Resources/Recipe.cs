@@ -6,6 +6,7 @@ using UnityEngine;
 [System.Serializable]
 public class Recipe
 {
+    public bool professional;
     public int[] interactionSpotIndex;
     public float laborIntensity = 1f;
     public ResourceQuery requiredRes;

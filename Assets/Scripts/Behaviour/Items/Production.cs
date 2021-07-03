@@ -25,8 +25,8 @@ public class Production : MonoBehaviour
     private void OnEnable()
     {
         VillageData.Productions.Add(this);
-        changedEvent += Set;
-        entity.Inventory.invChangedEvent += Set;
+        changedEvent += Produce;
+        entity.Inventory.invChangedEvent += Produce;
         InitRecipes();
     }
 
@@ -43,16 +43,45 @@ public class Production : MonoBehaviour
         }
     }
 
-    public void Set()
+    public IEnumerator Produce(Recipe recipe, GeneralAI worker)
+    {
+        worker.entity.Inventory.Give(entity.Inventory, new ResourceQuery(recipe.requiredRes));
+
+        if (!requiredVillager)
+        {
+            Produce();
+            yield break;
+        }
+
+        StartCoroutine(ProduceAlgorithm(recipe));
+
+        while (true)
+        {
+            if (!recipe.Process) yield break;
+            yield return new WaitForSeconds(worker.entity.CrtData.checkEventsDelay);
+        }
+    }
+
+    public void Produce()
     {
         if (requiredVillager) return;
 
         foreach (Recipe item in recipe)
         {
             if (entity.Inventory.CheckAllResourceForQuery(item.requiredRes) && !item.Process && !item.Harvest && item.Queue > 0)
-                StartCoroutine(Produce(item));
+                StartCoroutine(ProduceAlgorithm(item));
         }
     }
+
+    public IEnumerator Reap(Recipe recipe, GeneralAI worker)
+    {
+        entity.Inventory.Give(worker.entity.Inventory, new ResourceQuery(recipe.receivedRes));
+        recipe.Harvest = false;
+        recipe.RemoveOccupation();
+        changedEvent?.Invoke();
+        yield break;
+    }
+
 
     public void ChangeQueue(int recipeInd, int amount)
     {
@@ -60,28 +89,27 @@ public class Production : MonoBehaviour
         changedEvent?.Invoke();
     }
 
-
-    public Recipe GetReapWork()
+    public Recipe GetProduceWork(bool professional = false)
     {
         foreach (Recipe item in recipe)
         {
-            if (item.NeedToReap) return item;
+            if (item.NeedToProduce && (!professional || item.professional)) return item;
         }
 
         return null;
     }
 
-    public Recipe GetProduceWork()
+    public Recipe GetReapWork(bool professional = false)
     {
         foreach (Recipe item in recipe)
         {
-            if (item.NeedToProduce) return item;
+            if (item.NeedToReap && (!professional || item.professional)) return item;
         }
 
         return null;
     }
 
-    IEnumerator Produce(Recipe recipe)
+    IEnumerator ProduceAlgorithm(Recipe recipe)
     {
         float amountPerSecond;
         float duration = recipe.laborIntensity / performance;
@@ -105,19 +133,11 @@ public class Production : MonoBehaviour
         changedEvent?.Invoke();
     } 
 
-    public void Reap(Recipe recipe, GeneralAI worker)
-    {
-        entity.Inventory.Give(worker.entity.Inventory, new ResourceQuery(recipe.receivedRes));
-        recipe.Harvest = false;
-        recipe.RemoveOccupation();
-        changedEvent?.Invoke();
-    }
-
 
     private void OnDisable()
     {
         VillageData.Productions.Remove(this);
-        changedEvent -= Set;
-        entity.Inventory.invChangedEvent -= Set;
+        changedEvent -= Produce;
+        entity.Inventory.invChangedEvent -= Produce;
     }
 }

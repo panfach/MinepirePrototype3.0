@@ -29,6 +29,12 @@ public class Workplace : MonoBehaviour
         return items.Count > 0 ? items[0] : null;
     }
 
+    public Item GetItem()
+    {
+        RemoveNullItems();
+        return items.Count > 0 ? items[Random.Range(0, items.Count)] : null;
+    }
+
 
     void RemoveNullItems()
     {

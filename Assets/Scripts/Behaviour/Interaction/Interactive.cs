@@ -37,6 +37,17 @@ public class Interactive : MonoBehaviour
     }
 
 
+
+    public bool Occupy(int ind, GeneralAI actor)
+    {
+        if (!interactionSpots[ind].IsOccupied)
+        {
+            interactionSpots[ind].Occupy(actor);
+            return true;
+        }
+        return false;
+    }
+
     public bool OccupyNearest(GeneralAI actor)
     {
         List<InteractionSpot> spots = new List<InteractionSpot>();
@@ -116,15 +127,18 @@ public class Interactive : MonoBehaviour
         StartCoroutine(ReapAlgorithm(creature, spot));
     }
 
+    public void StartExtractInteraction(Creature creature, InteractionSpot spot)
+    {
+        StartCoroutine(ExtractAlgorithm(creature, spot));
+    }
+
 
     public IEnumerator EatAlgorithm(Creature creature, InteractionSpot spot)
     {
         float amount, amountPerSecond;
 
         spot.InteractionProcess = true;
-        LeanTween.move(creature.gameObject, spot.Spot.position, creature.CrtData.checkEventsDelay);
-        LeanTween.rotate(creature.gameObject, new Vector3(0f, GeneralAI.GetViewAngle(spot.InteractionTarget.position), 0f), creature.CrtData.checkEventsDelay);
-        yield return new WaitForSeconds(creature.CrtData.checkEventsDelay);
+        yield return StartCoroutine(SetCreaturePosition(creature, spot));
 
         amount = (creature.Inventory.StoredVal[0] + creature.Inventory.StoredVal[1]) / 2f;
         amountPerSecond = amount / spot.Duration;
@@ -142,17 +156,54 @@ public class Interactive : MonoBehaviour
 
     public IEnumerator ProduceAlgorithm(Creature creature, InteractionSpot spot)
     {
+        yield return StartCoroutine(SetCreaturePosition(creature, spot));
         yield return new WaitForSeconds(spot.Duration);
-        creature.Inventory.Give(entity.Inventory, new ResourceQuery(spot.Recipe.requiredRes));
+        yield return StartCoroutine(entity.Production.Produce(spot.Recipe, creature.GeneralAI));
+
         spot.Recipe.RemoveOccupation();
         spot.RemoveOccupation();
     }
 
     public IEnumerator ReapAlgorithm(Creature creature, InteractionSpot spot)
     {
+        yield return StartCoroutine(SetCreaturePosition(creature, spot));
         yield return new WaitForSeconds(spot.Duration);
+        yield return StartCoroutine(entity.Production.Reap(spot.Recipe, creature.GeneralAI));
+
+        spot.Recipe.RemoveOccupation();
         spot.RemoveOccupation();
-        entity.Production.Reap(spot.Recipe, creature.GeneralAI);
+    }
+
+    public IEnumerator ExtractAlgorithm(Creature creature, InteractionSpot spot)
+    {
+        int resInd;
+        float processPerSecond, duration;
+
+        spot.InteractionProcess = true;
+        yield return StartCoroutine(SetCreaturePosition(creature, spot));
+
+        resInd = creature.GeneralAI.DestExtractedResource.ind;
+        duration = entity.NtrData.LaborIntensity(resInd);
+        processPerSecond = 1f / duration;
+
+        for (int i = 0; i < (int)duration; i++)
+        {
+            spot.Progress += processPerSecond;
+            yield return new WaitForSeconds(1f);
+        }
+        spot.Progress += duration % 1f;
+        entity.ResourceDeposit.Extract(resInd, 1.0f);
+
+        creature.GeneralAI.DestExtractedResource = null;
+        spot.RemoveOccupation();
+    }
+
+    public IEnumerator SetCreaturePosition(Creature creature, InteractionSpot spot)
+    {
+        LeanTween.move(creature.gameObject, spot.Spot.position + creature.CrtProp.HeightVector / 2, 1f);
+        yield return new WaitForSeconds(1f);
+        LeanTween.rotate(creature.gameObject, new Vector3(0f, GeneralAI.GetViewAngle(spot.InteractionTarget.position - creature.transform.position), 0f), creature.CrtData.checkEventsDelay);
+        yield return new WaitForSeconds(creature.CrtData.checkEventsDelay);
     }
 
 
@@ -166,5 +217,6 @@ public enum InteractionType
 {
     EAT,
     PRODUCE,
-    REAP
+    REAP,
+    EXTRACT
 }

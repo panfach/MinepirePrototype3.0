@@ -14,12 +14,14 @@ public class GeneralAI : MonoBehaviour
     [Header("Settings")]
     [SerializeField] float maxRandomWalkDelay;
     [SerializeField] ActSequenceIndex generalActSequence;
+    [SerializeField] bool debugLogActions;
 
     [Header("Destinations")]
-    [SerializeField] Recipe destRecipe;
+    [SerializeReference] Recipe destRecipe;
     [SerializeField] ExtractedResourceLink destExtractedResource;
-    [SerializeField] InteractionSpot destInteractionSpot;
+    [SerializeReference] InteractionSpot destInteractionSpot;
     [SerializeField] Entity destEntity;
+    [SerializeField] Inventory destInv;
 
     [Header("Info")]
     [SerializeField] ActionType actionType;
@@ -28,6 +30,10 @@ public class GeneralAI : MonoBehaviour
 
     public ActionType ActionType { get => actionType; }
     public void ForgetExtractedResource() { destExtractedResource = null; }                // ? Remake extractedResourceLink. Merge occupation of extracted resources and interaction spots ???
+    public void ForgetDestRecipe() { destRecipe = null; }
+    public void ForgetInteractionSpot() { destInteractionSpot = null; }
+    public void ForgetDestEntity() { destEntity = null; }
+    public void ForgetDestInventory() { destInv = null; }
     public ExtractedResourceLink DestExtractedResource
     {
         get => destExtractedResource;
@@ -48,7 +54,14 @@ public class GeneralAI : MonoBehaviour
         get => destEntity;
         set => destEntity = value;
     }
+    public Inventory DestInv
+    {
+        get => destInv;
+        set => destInv = value;
+    }
     public ActionType CurrentAction { get => actionType; }
+
+    Coroutine angleControlCoroutine;
 
 
     private void OnEnable()
@@ -62,7 +75,8 @@ public class GeneralAI : MonoBehaviour
     public void DefineBehaviour(int priority = 0)
     {
         // Deffered definebehaviour
-        // Nullify all links (destInteractionSpot, destExtractedResource ...)
+
+        FreeOccupations();
 
         StopAllCoroutines();
         // Stop Interaction Coroutines
@@ -71,7 +85,7 @@ public class GeneralAI : MonoBehaviour
 
         currentSequence = ActSequenceList.GetSequence(generalActSequence);
         currentAction = currentSequence.GetStart();
-        StartCoroutine(AngleControl());
+        angleControlCoroutine = StartCoroutine(AngleControl());
         StartCoroutine(Act());
     }
 
@@ -95,7 +109,7 @@ public class GeneralAI : MonoBehaviour
 
     public void SwitchCurrentAction(ActionNode action)
     {
-        if (action != null) Debug.Log("Switching to action : " + action.Type);
+        if (debugLogActions && action != null) Debug.Log("Switching to action : " + action.Type);
         if (action == null)
             DefineBehaviour(100);
         else
@@ -104,12 +118,21 @@ public class GeneralAI : MonoBehaviour
 
     public void SwitchCurrentSequence(ActSequenceIndex sequenceIndex)
     {
-        Debug.Log("Switching to sequemce : " + sequenceIndex);
+        if (debugLogActions) Debug.Log("Switching to sequemce : " + sequenceIndex);
         if (sequenceIndex == ActSequenceIndex.NONE)
             currentSequence = ActSequenceList.GetSequence(generalActSequence);
         else
             currentSequence = ActSequenceList.GetSequence(sequenceIndex);
         currentAction = currentSequence.GetStart();
+    }
+
+    public void FreeOccupations()
+    {
+        if (destRecipe != null) destRecipe.RemoveOccupation();
+        if (destExtractedResource != null) destExtractedResource.RemoveOccupation(this);
+        if (destInteractionSpot != null) destInteractionSpot.RemoveOccupation();
+        if (destEntity != null) ForgetDestEntity();
+        if (destInv != null) destInv.RemoveOccupation((Creature)entity);
     }
 
     public void SwitchToWalk()
@@ -132,15 +155,22 @@ public class GeneralAI : MonoBehaviour
     {
         //float angle = -180f * Mathf.Atan(entity.Agent.velocity.z / entity.Agent.velocity.x) / Mathf.PI + ((entity.Agent.velocity.x < 0f) ? 180f : 0f);
         float angle = GetViewAngle(entity.Agent.velocity);
+        //if (entity.Appointer != null && entity.Appointer.Home != null) Debug.Log(entity.Agent.velocity);
         LeanTween.rotateY(gameObject, angle, angleControlDelay);
+    }
+
+    public void StopAngleControl()
+    {
+        if (angleControlCoroutine != null) StopCoroutine(angleControlCoroutine);
     }
 
     IEnumerator AngleControl()
     {
         while (true)
         {
-            if (entity.Agent.velocity.sqrMagnitude > 0.01f) DefineAngle();
             yield return new WaitForSeconds(angleControlDelay);
+            if (entity.Agent.velocity.sqrMagnitude > 0.01f) DefineAngle();
+            //if (entity.Appointer != null && entity.Appointer.Home != null) Debug.Log("Angle Control");
         }
     }
 

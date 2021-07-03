@@ -17,7 +17,7 @@ MonoBehaviour:
   ports:
     keys:
     - enter
-    - building
+    - entity
     - trueConnection
     - spot
     - falseConnection
@@ -34,9 +34,9 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
-    - _fieldName: building
+    - _fieldName: entity
       _node: {fileID: -8839040600461406601}
-      _typeQualifiedName: Building, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      _typeQualifiedName: Entity, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
       connections:
       - fieldName: building
@@ -79,7 +79,7 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
-  building: {fileID: 0}
+  entity: {fileID: 0}
   initialDelay: 0
   priority: 5
   mode: 1
@@ -90,6 +90,7 @@ MonoBehaviour:
     eatType: 0
     produceType: 0
     reapType: 0
+    extractType: 0
     duration: 0
 --- !u!114 &-6765369481760754718
 MonoBehaviour:
@@ -160,6 +161,7 @@ MonoBehaviour:
   building: {fileID: 0}
   initialDelay: 0
   priority: 0
+  mode: 0
   finalDelay: 0
 --- !u!114 &-5481852083578358753
 MonoBehaviour:
@@ -297,6 +299,7 @@ MonoBehaviour:
     - query
     - trueConnection
     - falseConnection
+    - item
     values:
     - _fieldName: enter
       _node: {fileID: -3551938437867845705}
@@ -349,11 +352,21 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
+    - _fieldName: item
+      _node: {fileID: -3551938437867845705}
+      _typeQualifiedName: Item, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
   query:
     index: 
     type: 
     indexVal: []
     typeVal: []
+  item: {fileID: 0}
   mode: 1
 --- !u!114 &-3303675249674839391
 MonoBehaviour:
@@ -434,6 +447,7 @@ MonoBehaviour:
     eatType: 0
     produceType: 0
     reapType: 0
+    extractType: 0
     duration: 0
   interactionType: 1
   initialDelay: 0
@@ -603,7 +617,7 @@ MonoBehaviour:
       _typeQualifiedName: Building, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
       connections:
-      - fieldName: building
+      - fieldName: entity
         node: {fileID: -8839040600461406601}
         reroutePoints: []
       _direction: 1

@@ -13,11 +13,13 @@ public class InteractionSpot
     [SerializeField] bool eatType;
     [SerializeField] bool produceType;
     [SerializeField] bool reapType;
+    [SerializeField] bool extractType;
     [SerializeField] float duration;
 
     Interactive interactive;
     GeneralAI actor;
     bool interactionProcess;
+    float progress;
     int recipeIndex;
 
     public Interactive Interactive { get => interactive; }
@@ -25,6 +27,7 @@ public class InteractionSpot
     public Transform InteractionTarget { get => interactionTarget; }
     public GeneralAI Actor { get => actor; set { actor = value; } }
     public bool InteractionProcess { get => interactionProcess; set { interactionProcess = value; } }
+    public float Progress { get => progress; set { progress = value; } }
     public bool EatType { get => eatType; }
     public bool ProduceType { get => produceType; }
     public bool ReapType { get => reapType; }
@@ -42,7 +45,7 @@ public class InteractionSpot
     public void Occupy(GeneralAI _actor)
     {
         if (actor != null) return;
-        if (_actor.DestInteractionSpot != null && _actor.DestInteractionSpot.Actor != null) actor.DestInteractionSpot.RemoveOccupation();
+        if (_actor.DestInteractionSpot != null && _actor.DestInteractionSpot.Actor != null) _actor.DestInteractionSpot.RemoveOccupation();
         _actor.DestInteractionSpot = this;
         actor = _actor;
     }
@@ -60,6 +63,9 @@ public class InteractionSpot
             case InteractionType.REAP:
                 if (reapType) interactive.StartReapInteraction(creature, this);
                 break;
+            case InteractionType.EXTRACT:
+                if (extractType) interactive.StartExtractInteraction(creature, this);
+                break;
         }
     }
 
@@ -68,7 +74,8 @@ public class InteractionSpot
 
     public void RemoveOccupation()
     {
-        Actor.DestInteractionSpot = null;
+        if (Actor != null && Actor.DestInteractionSpot != null) Actor.ForgetInteractionSpot();
         Actor = null;
+        interactionProcess = false;
     }
 }

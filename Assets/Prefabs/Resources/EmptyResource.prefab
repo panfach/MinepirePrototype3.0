@@ -131,9 +131,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   entity: {fileID: 6478443037878398353}
+  warehouseType: 0
   hasOccupiedProperty: 1
   destroyOnEmpty: 1
-  storedPackSize: 32767
+  storedPackSize: 10
   storedPacksAmount: 1
   occupied: 0
   owner: {fileID: 0}

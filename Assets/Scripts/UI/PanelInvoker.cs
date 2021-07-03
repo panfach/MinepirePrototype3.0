@@ -11,8 +11,8 @@ public class PanelInvoker : MonoBehaviour
     public BuildPanelInfo buildPanelInfo;
     public NatureInfo natureInfo;
     public CreatureInfo creatureInfo;
+    public ResearchInfo researchInfo;
     public PauseMenu pauseMenu;
-    public GameObject researchWindow;                                                     // In future add research script for window
     public GameObject buildingRotationTooltip;
 
     private void Update()
@@ -208,11 +208,11 @@ public class PanelInvoker : MonoBehaviour
 
     public void OpenResearchWindow()
     {
-        researchWindow.SetActive(true);
+        researchInfo.Set(true);
     }
 
     public void CloseResearchWindow()
     {
-        researchWindow.SetActive(false);
+        researchInfo.Set(false);
     }
 }

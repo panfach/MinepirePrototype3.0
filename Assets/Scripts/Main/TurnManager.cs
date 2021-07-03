@@ -10,7 +10,7 @@ public class TurnManager : MonoBehaviour
     {
         foreach (Creature item in CreatureManager.Villagers)
         {
-            if (item.Appointer.Home != null && item.CrtProp.PlaceOfStay.entity != item.Appointer.Home.entity)
+            if (item.Appointer.Home != null && (item.CrtProp.PlaceOfStay == null || item.CrtProp.PlaceOfStay.entity != item.Appointer.Home.entity))
             {
                 Notification.Invoke(NotifType.EMPTYHOME);
                 return;

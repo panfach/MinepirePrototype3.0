@@ -69,5 +69,8 @@ public enum Profession
 {
     NONE,
     LABORER,
-    HUNTER
+    HUNTER,
+    ARTISAN,
+    FISHERMAN,
+    TAILOR
 }

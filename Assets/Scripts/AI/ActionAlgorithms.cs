@@ -6,6 +6,11 @@ using ActSequenceSystem;
 
 public static class ActionAlgorithms
 {
+    static float tickTime = 0.05f;
+    static float longTickTime = 0.1f;
+    static WaitForSeconds tick = new WaitForSeconds(tickTime);
+    static WaitForSeconds longTick = new WaitForSeconds(longTickTime);
+
     /// <summary>
     /// Each act sequence graph must contain StartAction node in the beginning
     /// </summary>
@@ -65,6 +70,11 @@ public static class ActionAlgorithms
             yield break;
         }
         creature.Agent.enabled = false;
+        //creature.GeneralAI.StopAngleControl();
+        Debug.Log("Changing enter angle");
+        LeanTween.rotateY(creature.gameObject, GeneralAI.GetViewAngle(action.Building.GridObject.GetCenter() - creature.transform.position), longTickTime);
+        yield return longTick;
+        //        creature.gameObject.transform.rotation = Quaternion.Euler(0f, GeneralAI.GetViewAngle(action.Building.GridObject.GetCenter() - creature.transform.position), 0f);
         LeanTween.move(creature.gameObject, action.Building.GridObject.GetCenter() + creature.CrtProp.HeightVector, creature.CrtData.timeOfBuildingEntering);
         yield return new WaitForSeconds(creature.CrtData.timeOfBuildingEntering);
 
@@ -213,6 +223,7 @@ public static class ActionAlgorithms
         yield return new WaitForSeconds(action.initialDelay);
 
         // Body
+        creature.gameObject.transform.rotation = Quaternion.Euler(0f, GeneralAI.GetViewAngle(creature.CrtProp.PlaceOfStay.Enter.position - creature.transform.position), 0f);
         LeanTween.move(creature.gameObject, creature.CrtProp.PlaceOfStay.Enter.position + creature.CrtProp.HeightVector, creature.CrtData.timeOfBuildingEntering);
         yield return new WaitForSeconds(creature.CrtData.timeOfBuildingEntering);
         creature.CrtProp.PlaceOfStay.Remove(creature);
@@ -368,7 +379,6 @@ public static class ActionAlgorithms
         }
 
         // Initial delay
-        yield return new WaitForSeconds(0.05f);
         yield return new WaitForSeconds(action.initialDelay);
 
         // Body
@@ -379,12 +389,14 @@ public static class ActionAlgorithms
         }
         else if (action.mode == TakeMode.ITEM) 
         {
-            creature.Agent.SetDestination(action.Item.transform.position);
             if (!action.Item.Inventory.Occupy(creature))
             {
+                action.Item.Inventory.RemoveOccupation(creature);
                 yield return new WaitForSeconds(action.finalDelay);
                 FalseReaction(creature, action);
+                yield break;
             }
+            creature.Agent.SetDestination(action.Item.transform.position);
             while (true)
             {
                 if (action.Item == null)
@@ -397,8 +409,12 @@ public static class ActionAlgorithms
                 if (Vector3.SqrMagnitude(creature.transform.position - action.Item.transform.position) < creature.CrtData.defaultActionDistance)
                 {
                     action.Item.Inventory.Give(creature.Inventory);
+                    break;
                 }
+
+                yield return longTick;
             }
+            action.Item.Inventory.RemoveOccupation(creature);
         }
 
         // Final delay
@@ -424,7 +440,7 @@ public static class ActionAlgorithms
     public static IEnumerator GoToInteraction(Creature creature, ActSequenceSystem.GoToInteraction action)
     {
         // Checking the possibility of execution
-        if (action.Building == null || creature.CrtProp.PlaceOfStay != null)
+        if (action.Entity == null || creature.CrtProp.PlaceOfStay != null)
         {
             FalseReaction(creature, action);
             yield break;
@@ -434,24 +450,45 @@ public static class ActionAlgorithms
         yield return new WaitForSeconds(action.initialDelay);
 
         // Body
-        Building destBuilding = action.Building;
+        Entity destEntity = action.Entity;
 
         switch (action.mode)
         {
             case GoToInteractionMode.NEAR:
-                if (!destBuilding.Interactive.OccupyNearest(creature.GeneralAI))
+                if (!destEntity.Interactive.OccupyNearest(creature.GeneralAI))
                 {
                     FalseReaction(creature, action);
                     yield break;
                 }
                 break;
             case GoToInteractionMode.NEARRECIPE:
-                if (!destBuilding.Interactive.OccupyNearestRecipe(creature.GeneralAI))
+                if (!destEntity.Interactive.OccupyNearestRecipe(creature.GeneralAI))
                 {
                     FalseReaction(creature, action);
                     yield break;
                 }
                 break;
+            case GoToInteractionMode.RECIPEINDOORS:
+                InteractionSpot _spot = null;
+                foreach (int ind in creature.GeneralAI.DestRecipe.interactionSpotIndex)
+                {
+                    if (creature.CrtProp.PlaceOfStay.entity.Interactive.Occupy(ind, creature.GeneralAI))
+                    {
+                        _spot = creature.CrtProp.PlaceOfStay.entity.Interactive.Spot(ind);
+                        break;
+                    }
+                }
+                action.spot = _spot;
+                if (action.spot != null)
+                {
+                    TrueReaction(creature, action);
+                    yield break;
+                }
+                else
+                {
+                    FalseReaction(creature, action);
+                    yield break;
+                }
         }
 
         InteractionSpot spot = creature.GeneralAI.DestInteractionSpot;
@@ -507,7 +544,7 @@ public static class ActionAlgorithms
                 FalseReaction(creature, action);
                 yield break;
             }
-            if (!spot.InteractionProcess) break;
+            if (creature.GeneralAI.DestInteractionSpot == null && !spot.InteractionProcess) break;
             yield return new WaitForSeconds(creature.CrtData.checkEventsDelay);
         }
 
@@ -564,6 +601,13 @@ public static class ActionAlgorithms
                 break;
             case CheckMode.AMILEADER:
                 if (creature.Appointer.Work == null || (creature.Appointer.Work.CheckAppointmentIndex(creature.Appointer) != 0))
+                {
+                    FalseReaction(creature, action);
+                    yield break;
+                }
+                break;
+            case CheckMode.PLACEFORITEM:
+                if (!creature.Inventory.CheckPlaceFor(action.Item.Inventory))
                 {
                     FalseReaction(creature, action);
                     yield break;
@@ -668,6 +712,16 @@ public static class ActionAlgorithms
 
         if (creature.Appointer.Work == null)
         {
+            foreach (ExtractedResourceLink item in VillageData.extractionQueue)
+            {
+                if (item.Occupy(creature.GeneralAI))
+                {
+                    action.sequence = ActSequenceIndex.VILLAGER_EXTRACT;
+                    TrueReaction(creature, action);
+                    yield break;
+                }
+            }
+
             Recipe recipe;
             foreach (Production item in VillageData.Productions)
             {
@@ -703,7 +757,13 @@ public static class ActionAlgorithms
             if (creature.Appointer.Profession == Profession.HUNTER)
             {
                 action.sequence = ActSequenceIndex.VILLAGER_HUNT;
-                Debug.Log("VILLAGER_HUNT was called...");
+                TrueReaction(creature, action);
+                yield break;
+            }
+            
+            if (creature.Appointer.Profession == Profession.ARTISAN)
+            {
+                action.sequence = ActSequenceIndex.VILLAGER_ARTISAN;
                 TrueReaction(creature, action);
                 yield break;
             }
@@ -724,6 +784,10 @@ public static class ActionAlgorithms
         if ((placeOfStay = (Building)creature.CrtProp.PlaceOfStay.entity) != null)
         {
             creature.Inventory.Give(placeOfStay.Inventory);
+        }
+        else
+        {
+            creature.Inventory.LayOut();
         }
 
         TrueReaction(creature, action);
@@ -872,9 +936,10 @@ public static class ActionAlgorithms
 
             if (action.Target == null ||action.Target.Value < 0.001f)
             {
-                if (action.mode == AttackMode.WORKGROUP && creature.AttackController.DropItemsCount > 0) 
-                    creature.Appointer.Work.entity.Workplace.AssignItems(creature.AttackController.DropItems);
-                creature.GeneralAI.SwitchToWalk();
+                if (creature.Appointer.Work.CheckAppointmentIndex(creature.Appointer) == 0)
+                {
+                    creature.Appointer.Work.entity.Workplace.attackPermission = false;
+                }
 
                 // Final delay
                 yield return new WaitForSeconds(action.finalDelay);
@@ -887,7 +952,26 @@ public static class ActionAlgorithms
             {
                 creature.AttackController.Attack(action.Target);
                 //animator.Play("Armature|Hit");
-                yield return new WaitForSeconds(creature.AttackController.Duration);
+
+                if (action.Target == null || action.Target.Value < 0.001f)
+                {
+                    if (action.mode == AttackMode.WORKGROUP && creature.AttackController.DropItemsCount > 0)
+                        creature.Appointer.Work.entity.Workplace.AssignItems(creature.AttackController.DropItems);
+                    creature.GeneralAI.SwitchToWalk();
+
+                    if (creature.Appointer.Work.CheckAppointmentIndex(creature.Appointer) == 0)
+                    {
+                        creature.Appointer.Work.entity.Workplace.attackPermission = false;
+                    }
+
+                    // Final delay
+                    yield return new WaitForSeconds(action.finalDelay);
+
+                    TrueReaction(creature, action);
+                    yield break;
+                }
+                else
+                    yield return new WaitForSeconds(creature.AttackController.Duration);
             }
             else creature.Agent.SetDestination(action.Target.transform.position);
 
@@ -901,7 +985,7 @@ public static class ActionAlgorithms
     public static IEnumerator FindTarget(Creature creature, ActSequenceSystem.FindTarget action)
     {
         // Body
-        yield return new WaitForSeconds(creature.CrtData.checkEventsDelay);
+        yield return tick;
 
         List<Health> targets = new List<Health>();
 
@@ -942,23 +1026,20 @@ public static class ActionAlgorithms
     public static IEnumerator FindItem(Creature creature, ActSequenceSystem.FindItem action)
     {
         // Body
-        yield return new WaitForSeconds(creature.CrtData.checkEventsDelay);
+        yield return tick;
 
         if (action.mode == FindItemMode.WORKITEM)
         {
-            Debug.Log("---1---");
             Item item;
-            if ((item = creature.Appointer.Work.entity.Workplace.GetFirstItem()) == null)
+            if ((item = creature.Appointer.Work.entity.Workplace.GetItem()) == null)
             {
                 FalseReaction(creature, action);
                 yield break;
             }
-            Debug.Log("---2---");
             item.Inventory.Occupy(creature);
-            Debug.Log("---3---");
             action.item = item;
         }
-        if (action.mode == FindItemMode.DROP)
+        else if (action.mode == FindItemMode.DROP)
         {
             Item item;
             if ((item = creature.AttackController.GetFirstDropItem()) == null)
@@ -969,8 +1050,64 @@ public static class ActionAlgorithms
             item.Inventory.Occupy(creature);
             action.item = item;
         }
+        else if (action.mode == FindItemMode.RADIUS)
+        {
+            Item item = Distance.ChooseNearestItem(ItemManager.items, creature.transform.position);
+            if (item == null || Vector3.SqrMagnitude(item.transform.position - creature.transform.position) > Mathf.Pow(action.radius, 2))
+            {
+                FalseReaction(creature, action);
+                yield break;
+            }
+            item.Inventory.Occupy(creature);
+            action.item = Distance.ChooseNearestItem(ItemManager.items, creature.transform.position);
+        }
 
-        Debug.Log("---4---");
+
+        TrueReaction(creature, action);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public static IEnumerator GetNature(Creature creature, ActSequenceSystem.GetNature action)
+    {
+        // Body
+        Nature nature = null;
+        yield return new WaitForSeconds(creature.CrtData.checkEventsDelay);
+        switch (action.target)
+        {
+            case GetNatureMode.DESTEXTRACTEDRES:
+                nature = creature.GeneralAI.DestExtractedResource.deposit.entity as Nature;
+                break;
+        }
+        if (nature != null)
+        {
+            action.nature = nature;
+            TrueReaction(creature, action);
+        }
+        else FalseReaction(creature, action);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public static IEnumerator FindRecipe(Creature creature, ActSequenceSystem.FindRecipe action)
+    {
+        // Body
+        yield return tick;
+
+        Recipe recipe;
+        if (action.mode == FindRecipeMode.PROFPRODUCEWORK)
+        {
+            if ((recipe = creature.Appointer.Work.entity.Production.GetProduceWork(true)) != null)
+                recipe.Occupy(creature.GeneralAI);
+        }
+        else if (action.mode == FindRecipeMode.PROFREAPWORK)
+        {
+            if ((recipe = creature.Appointer.Work.entity.Production.GetReapWork(true)) != null)
+                recipe.Occupy(creature.GeneralAI);
+        }
+
         TrueReaction(creature, action);
     }
 

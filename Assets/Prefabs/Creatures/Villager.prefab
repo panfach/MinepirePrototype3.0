@@ -185,6 +185,36 @@ Transform:
   m_Father: {fileID: 407035250874944341}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &3309979037232530017
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8411638654438286159}
+  m_Layer: 11
+  m_Name: ItemSpot (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8411638654438286159
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3309979037232530017}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0.1721, y: 0.0038, z: -0.0103}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 6849390940616415354}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!1 &3600872624125915764
 GameObject:
   m_ObjectHideFlags: 0
@@ -208,13 +238,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3600872624125915764}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0.1721, y: -0.039, z: -0.0103}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 6849390940616415354}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!1 &3977903301817945556
 GameObject:
   m_ObjectHideFlags: 0
@@ -590,7 +620,7 @@ Transform:
   - {fileID: 2387407137370623553}
   - {fileID: 3204766443328367429}
   m_Father: {fileID: 6849390940616415354}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!95 &824510171918320805
 Animator:
@@ -685,6 +715,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 8165188065243928068}
+  - {fileID: 8411638654438286159}
   - {fileID: 6742191516885622495}
   - {fileID: 8948393221833186064}
   - {fileID: 683137059095778490}
@@ -717,6 +748,7 @@ MonoBehaviour:
   attackController: {fileID: 8331514601269320197}
   inventory: {fileID: 2192628037205615553}
   uiController: {fileID: 1775791905779305106}
+  production: {fileID: 0}
 --- !u!65 &6849390940616415359
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -765,7 +797,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   entity: {fileID: 2567622910954858697}
-  height: 0.4
+  height: 0.55
   _name: 
   gender: 0
   age: 0
@@ -785,30 +817,20 @@ MonoBehaviour:
   entity: {fileID: 2567622910954858697}
   maxRandomWalkDelay: 7
   generalActSequence: 1
+  debugLogActions: 1
   destRecipe:
-    interactionSpotIndex: 
-    laborIntensity: 1
-    requiredRes:
-      index: 
-      type: 
-      indexVal: []
-      typeVal: []
-    receivedRes:
-      index: 
-      type: 
-      indexVal: []
-      typeVal: []
+    id: 0
   destInteractionSpot:
-    spot: {fileID: 0}
-    interactionTarget: {fileID: 0}
-    eatType: 0
-    produceType: 0
-    reapType: 0
-    duration: 0
+    id: 0
   destEntity: {fileID: 0}
+  destInv: {fileID: 0}
   actionType: 0
   currentAction: {fileID: 0}
   currentSequence: {fileID: 0}
+  references:
+    version: 1
+    00000000:
+      type: {class: , ns: , asm: }
 --- !u!114 &6778257627215690375
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -873,6 +895,7 @@ MonoBehaviour:
   hasProductionDisplay: 0
   itemSpot:
   - {fileID: 8165188065243928068}
+  - {fileID: 8411638654438286159}
   selectionPlane: {fileID: 683137059095778438}
   silhouette: {fileID: 8948393221833186068}
   productionProcessItem: []
@@ -895,6 +918,7 @@ MonoBehaviour:
   reactToZeroAppointedPeople: 0
   reactToResourceDepositStatus: 0
   reactToHomeAbsence: 1
+  reactToHealthChanges: 0
   height: 0.5
   smallInfo: {fileID: 0}
 --- !u!114 &4547315929616226011
@@ -956,9 +980,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   entity: {fileID: 0}
+  warehouseType: 0
   hasOccupiedProperty: 0
   destroyOnEmpty: 0
-  storedPackSize: 2
+  storedPackSize: 1
   storedPacksAmount: 2
   occupied: 0
   owner: {fileID: 0}
@@ -1308,7 +1333,7 @@ PrefabInstance:
     - target: {fileID: 5942197543533527581, guid: 3536633127d9c7c43bb6c7dafe9a4de2,
         type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5942197543533527581, guid: 3536633127d9c7c43bb6c7dafe9a4de2,
         type: 3}
@@ -1394,7 +1419,7 @@ PrefabInstance:
     - target: {fileID: 7496193502609584117, guid: 26c12ba4a22e5f74f8bd47bf39eeae91,
         type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 7496193502609584117, guid: 26c12ba4a22e5f74f8bd47bf39eeae91,
         type: 3}

@@ -84,7 +84,7 @@ MonoBehaviour:
   m_Name: Put
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: 2536, y: 536}
+  position: {x: 2904, y: 536}
   ports:
     keys:
     - enter
@@ -269,7 +269,7 @@ MonoBehaviour:
   m_Name: Exit Building
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: 2472, y: 776}
+  position: {x: 2840, y: 776}
   ports:
     keys:
     - enter
@@ -302,6 +302,147 @@ MonoBehaviour:
   initialDelay: 0
   priority: 80
   finalDelay: 0
+--- !u!114 &-5687266246999281657
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf4aff9b936d2834a8e1efe3041af57d, type: 3}
+  m_Name: Check
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: 2136, y: 88}
+  ports:
+    keys:
+    - enter
+    - query
+    - item
+    - trueConnection
+    - falseConnection
+    values:
+    - _fieldName: enter
+      _node: {fileID: -5687266246999281657}
+      _typeQualifiedName: ActSequenceSystem.Connection, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: falseConnection
+        node: {fileID: 2253239275864168931}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: query
+      _node: {fileID: -5687266246999281657}
+      _typeQualifiedName: ResourceQuery, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: item
+      _node: {fileID: -5687266246999281657}
+      _typeQualifiedName: Item, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections:
+      - fieldName: item
+        node: {fileID: -1078548746022674683}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: trueConnection
+      _node: {fileID: -5687266246999281657}
+      _typeQualifiedName: ActSequenceSystem.Connection, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: enter
+        node: {fileID: -4338845840762373525}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: falseConnection
+      _node: {fileID: -5687266246999281657}
+      _typeQualifiedName: ActSequenceSystem.Connection, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: enter
+        node: {fileID: 4633906933429469581}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+  query:
+    index: 
+    type: 
+    indexVal: []
+    typeVal: []
+  item: {fileID: 0}
+  mode: 3
+--- !u!114 &-4338845840762373525
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f66a86bfbc375c459c4fd4eb216bdc3, type: 3}
+  m_Name: Wait
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: 2104, y: 280}
+  ports:
+    keys:
+    - enter
+    - delay
+    - trueConnection
+    values:
+    - _fieldName: enter
+      _node: {fileID: -4338845840762373525}
+      _typeQualifiedName: ActSequenceSystem.Connection, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: trueConnection
+        node: {fileID: -5687266246999281657}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: delay
+      _node: {fileID: -4338845840762373525}
+      _typeQualifiedName: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
+        PublicKeyToken=b77a5c561934e089
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: trueConnection
+      _node: {fileID: -4338845840762373525}
+      _typeQualifiedName: ActSequenceSystem.Connection, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: enter
+        node: {fileID: -1078548746022674683}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+  delay: 0.5
+  priority: 0
 --- !u!114 &-3513881766554595751
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -361,7 +502,7 @@ MonoBehaviour:
   m_Name: Go To Building
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: 2184, y: 8}
+  position: {x: 2552, y: 8}
   ports:
     keys:
     - enter
@@ -449,10 +590,13 @@ MonoBehaviour:
         Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: trueConnection
+        node: {fileID: 2253239275864168931}
+        reroutePoints: []
+      - fieldName: trueConnection
         node: {fileID: -6781641261166120932}
         reroutePoints: []
       - fieldName: trueConnection
-        node: {fileID: 2253239275864168931}
+        node: {fileID: -4338845840762373525}
         reroutePoints: []
       _direction: 0
       _connectionType: 0
@@ -477,6 +621,9 @@ MonoBehaviour:
       connections:
       - fieldName: item
         node: {fileID: 2253239275864168931}
+        reroutePoints: []
+      - fieldName: item
+        node: {fileID: -5687266246999281657}
         reroutePoints: []
       _direction: 1
       _connectionType: 0
@@ -598,6 +745,8 @@ MonoBehaviour:
   - {fileID: -7208402258777796705}
   - {fileID: -6136810330632287900}
   - {fileID: 2010934434486638699}
+  - {fileID: -5687266246999281657}
+  - {fileID: -4338845840762373525}
 --- !u!114 &2010934434486638699
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -618,6 +767,7 @@ MonoBehaviour:
     - query
     - trueConnection
     - falseConnection
+    - item
     values:
     - _fieldName: enter
       _node: {fileID: 2010934434486638699}
@@ -667,11 +817,21 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
+    - _fieldName: item
+      _node: {fileID: 2010934434486638699}
+      _typeQualifiedName: Item, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
   query:
     index: 
     type: 
     indexVal: []
     typeVal: []
+  item: {fileID: 0}
   mode: 0
 --- !u!114 &2253239275864168931
 MonoBehaviour:
@@ -686,7 +846,7 @@ MonoBehaviour:
   m_Name: Take
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: 1816, y: 56}
+  position: {x: 1864, y: -104}
   ports:
     keys:
     - enter
@@ -756,7 +916,7 @@ MonoBehaviour:
         Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: enter
-        node: {fileID: 4633906933429469581}
+        node: {fileID: -5687266246999281657}
         reroutePoints: []
       _direction: 1
       _connectionType: 0
@@ -790,7 +950,7 @@ MonoBehaviour:
   m_Name: Find Building
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: 2136, y: 488}
+  position: {x: 2504, y: 488}
   ports:
     keys:
     - enter
@@ -805,13 +965,13 @@ MonoBehaviour:
         Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: falseConnection
-        node: {fileID: 2253239275864168931}
-        reroutePoints: []
-      - fieldName: falseConnection
         node: {fileID: -3120799970944685825}
         reroutePoints: []
       - fieldName: falseConnection
         node: {fileID: 2010934434486638699}
+        reroutePoints: []
+      - fieldName: falseConnection
+        node: {fileID: -5687266246999281657}
         reroutePoints: []
       _direction: 0
       _connectionType: 0
@@ -883,7 +1043,7 @@ MonoBehaviour:
   m_Name: Enter Building
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: 2584, y: 184}
+  position: {x: 2952, y: 184}
   ports:
     keys:
     - enter
@@ -1214,6 +1374,7 @@ MonoBehaviour:
     - query
     - trueConnection
     - falseConnection
+    - item
     values:
     - _fieldName: enter
       _node: {fileID: 8126405599149948254}
@@ -1272,9 +1433,19 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
+    - _fieldName: item
+      _node: {fileID: 8126405599149948254}
+      _typeQualifiedName: Item, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      connections: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
   query:
     index: 
     type: 
     indexVal: []
     typeVal: []
+  item: {fileID: 0}
   mode: 2

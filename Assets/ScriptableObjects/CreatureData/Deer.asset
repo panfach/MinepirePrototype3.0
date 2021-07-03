@@ -15,15 +15,15 @@ MonoBehaviour:
   _name: "\u041E\u043B\u0435\u043D\u044C"
   index: 2
   type: 2
-  maxHealth: 4
+  maxHealth: 12
   drop:
   - resourceIndex: 6
-    minAmount: 0.5
-    maxAmount: 2.5
+    minAmount: 4
+    maxAmount: 8
     chance: 1
   - resourceIndex: 7
-    minAmount: 0.5
-    maxAmount: 1.5
+    minAmount: 1
+    maxAmount: 3
     chance: 1
   minRandomAge: 1
   maxRandomAge: 10

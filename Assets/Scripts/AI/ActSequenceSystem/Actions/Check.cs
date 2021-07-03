@@ -9,6 +9,7 @@ namespace ActSequenceSystem
     {
         [Input] public Connection enter;
         [Input] public ResourceQuery query;
+        [Input] public Item item;
 
         [NonSerialized] ActionType type = ActionType.CHECK;
         [NonSerialized] public int priority = 0;
@@ -19,6 +20,7 @@ namespace ActSequenceSystem
 
 
         public ResourceQuery ResourceQuery { get => GetInputValue("query", query); }
+        public Item Item { get => GetInputValue("item", item); }
 
 
         public override ActionType Type { get => type; }
@@ -38,6 +40,7 @@ namespace ActSequenceSystem
     {
         EMPTYINV,
         EMPTYQUERY,
-        AMILEADER
+        AMILEADER,
+        PLACEFORITEM
     }
 }

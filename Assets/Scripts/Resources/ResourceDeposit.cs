@@ -6,7 +6,7 @@ using UnityEngine;
 public class ResourceDeposit : MonoBehaviour
 {
     [Header("Entity")]
-    [SerializeField] Entity entity;
+    public Entity entity;
 
     [Header("Settings")]
     [SerializeField] Transform extractPoint;
@@ -62,13 +62,13 @@ public class ResourceDeposit : MonoBehaviour
 
     public void RemoveOccupation(int ind, GeneralAI _villager)
     {
-        if (_villager == owner[ind])
-        {
-            occupied[ind] = false;
-            owner[ind] = null;
+        if (_villager != owner[ind]) return;
 
-            statusChangedEvent?.Invoke();
-        }
+        occupied[ind] = false;
+        owner[ind] = null;
+        _villager.ForgetExtractedResource();
+
+        statusChangedEvent?.Invoke();
     }
 
     public void ForceRemoveFromExtractionQueue(int ind)
@@ -80,7 +80,7 @@ public class ResourceDeposit : MonoBehaviour
         if (occupied[ind])
         {
             GeneralAI villager = owner[ind];
-            owner = null;
+            owner[ind] = null;
             villager.ForgetExtractedResource();
             villager.DefineBehaviour(7);
         }
@@ -154,6 +154,11 @@ public class ResourceDeposit : MonoBehaviour
     {
                                                                                   // Handle cases when nature object deletes itself while someone go
                                                                                   // to extract resource or is extracting
+                                                                                  // Need to remove extractable resource link form queue
+        for (int i = 0; i < Size; i++)
+        {
+            ForceRemoveFromExtractionQueue(i);
+        }
     }
 }
 
@@ -166,6 +171,22 @@ public class ExtractedResourceLink : IEquatable<ExtractedResourceLink>
     {
         deposit = _deposit;
         ind = _ind;
+    }
+
+    public bool Occupy(GeneralAI _owner)
+    {
+        if (deposit.Occupy(ind, _owner))
+        {
+            _owner.DestExtractedResource = this;
+            return true;
+        }
+
+        return false;
+    }
+
+    public void RemoveOccupation(GeneralAI _owner)
+    {
+        deposit.RemoveOccupation(ind, _owner);
     }
 
     public bool Equals(ExtractedResourceLink obj)

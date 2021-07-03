@@ -2,6 +2,7 @@
 using UnityEngine.AI;
 
 // ------------------------------------------- // MINEPIRE // ------------------------------------------- //
+[DefaultExecutionOrder(-5)]
 public class ConnectorInit : MonoBehaviour
 {
     public VillageDataInit villageDataInit;
@@ -25,6 +26,8 @@ public class ConnectorInit : MonoBehaviour
     public PhysicMaterial terrainPhysMat;
     public Notification notification;
     public EffectSoundManager effectSoundManager;
+    public Statistics statistics;
+    public TechManager techManager;
 
     public GameObject buildingSelectionPlane, villagerSelectionPlane, resourceSourceSelectionPlane,
                       villagerSilhouette;
@@ -51,6 +54,8 @@ public class ConnectorInit : MonoBehaviour
         Connector.dynamicGameCanvas = dynamicGameCanvas;
         Connector.notification = notification;
         Connector.effectSoundManager = effectSoundManager;
+        Connector.statistics = statistics;
+        Connector.techManager = techManager;
 
         //Villager.selectionPlanePrefab = villagerSelectionPlane;
         //Villager.silhouettePrefab = villagerSilhouette;
@@ -84,4 +89,6 @@ public static class Connector
     public static DynamicGameCanvas dynamicGameCanvas;
     public static Notification notification;
     public static EffectSoundManager effectSoundManager;
+    public static Statistics statistics;
+    public static TechManager techManager;
 }

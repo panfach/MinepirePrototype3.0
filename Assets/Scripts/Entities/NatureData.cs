@@ -12,7 +12,7 @@ public class NatureData : ScriptableObject
     {
         public ResourceData resource;
         public int amount;
-        public float extractSpeed;
+        public float laborIntensity;
         public float recoverySpeed;
         public bool restorable;
         public bool sourceDeletionAfterExhaustion;
@@ -28,7 +28,7 @@ public class NatureData : ScriptableObject
     public ResourceData ResData(int i) => resources[i].resource;
     public IEnumerable Amount() { return from item in resources select item.amount; }
     public int Amount(int i) => resources[i].amount;
-    public float ExtractSpeed(int i) => resources[i].extractSpeed;
+    public float LaborIntensity(int i) => resources[i].laborIntensity;
     public float RecoverySpeed(int i) => resources[i].recoverySpeed;
     public bool Restorable(int i) => resources[i].restorable;
     public bool DeletionAfterExhaustion(int i) => resources[i].sourceDeletionAfterExhaustion;

@@ -36,6 +36,25 @@ public static class Distance
         return nearest;
     }
 
+    public static Item ChooseNearestItem(List<Item> items, Vector3 point)
+    {
+        if (items.Count == 0) return null;
+
+        Item nearest = null;
+        float distance, minDistance = float.MaxValue;
+
+        foreach (Item item in items)
+        {
+            if ((distance = Vector3.SqrMagnitude(point - item.transform.position)) < minDistance)
+            {
+                nearest = item;
+                minDistance = distance;
+            }
+        }
+
+        return nearest;
+    }
+
 
 
     /*public static Entity ChooseNearest<T>(List<T> comparableObjects, Vector3 targetPoint)

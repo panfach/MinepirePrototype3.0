@@ -18,7 +18,7 @@ MonoBehaviour:
   index: 5
   sizeX: 2
   sizeZ: 2
-  constructionCost: 80
+  constructionCost: 104
   resourceCost:
     index: 010000000200000007000000
     type: 
@@ -27,6 +27,5 @@ MonoBehaviour:
     - 999
     - 999
     typeVal: []
-  maxPeople: 0
   type: 1
   profession: 0

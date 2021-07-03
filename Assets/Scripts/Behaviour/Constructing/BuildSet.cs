@@ -72,7 +72,7 @@ public class BuildSet : MonoBehaviour
         if (!CheckStartConstructionConditions()) return false;
 
         if (hasGridVolume && entity.GridObject != null) entity.GridObject.OccupyPlace();
-        if (hasResourceCost) SpendResource();
+        if (hasResourceCost) VillageData.SpendResource(entity.BldData.ResourceCost);
         entity.BldProp?.AssignUniqueIndex(_uniqueIndex);
         TransformIntoConstruction(_process);
 
@@ -107,7 +107,7 @@ public class BuildSet : MonoBehaviour
             Notification.Invoke(NotifType.PLACEBUILD);
             return false;
         }
-        if (hasResourceCost && !CheckResourceAvailability())
+        if (hasResourceCost && !VillageData.CheckResourceAvailability(entity.BldData.ResourceCost))
         {
             Notification.Invoke(NotifType.RESBUILD);
             return false;
@@ -188,7 +188,7 @@ public class BuildSet : MonoBehaviour
         return entity;
     }
 
-    bool CheckResourceAvailability()
+    /*bool CheckResourceAvailability()
     {
         if (BuildingProperties.constructionMode == ConstructionMode.ORD)
         {
@@ -215,7 +215,7 @@ public class BuildSet : MonoBehaviour
                     if (value <= 0) break;
                 }
 
-                if (value > 0) { /*Debug.Log("Not enough resources! Need " + value + " " + resQuery.index[i] + " more");*/ Notification.Invoke(NotifType.RESBUILD); return false; }
+                if (value > 0) { *//*Debug.Log("Not enough resources! Need " + value + " " + resQuery.index[i] + " more");*//* Notification.Invoke(NotifType.RESBUILD); return false; }
                 //else Debug.Log("There is necessary amount of " + resQuery.index[i]);
             }
         }
@@ -223,9 +223,9 @@ public class BuildSet : MonoBehaviour
         //if (VillageData.resources[(int)resQuery.index[i]] < resQuery.indexVal[i]) return false;
 
         return true;
-    }
+    }*/
 
-    void SpendResource()
+    /*void SpendResource()
     {
         float value;
         ResourceQuery resQuery = entity.BldData.ResourceCost;
@@ -251,7 +251,7 @@ public class BuildSet : MonoBehaviour
         }
 
         InfoDisplay.Refresh();                                                                                   // Need to use UIController
-    }
+    }*/
 }
 
 public enum ConstructionStatus

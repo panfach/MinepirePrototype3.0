@@ -1,5 +1,35 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &99093705622982045
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2354992289736384134}
+  m_Layer: 0
+  m_Name: InteractionSpot0
+  m_TagString: Untagged
+  m_Icon: {fileID: 4422084297763085224, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2354992289736384134
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 99093705622982045}
+  m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: -0.7071068}
+  m_LocalPosition: {x: 0, y: 0, z: -0.3}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1390737856591773155}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 270, z: 0}
 --- !u!1 &1849628756713061535
 GameObject:
   m_ObjectHideFlags: 0
@@ -58,6 +88,36 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   colliderHandler: {fileID: 4763219298603265601}
+--- !u!1 &2237675419804695017
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2019366786436376332}
+  m_Layer: 0
+  m_Name: InteractionTarget
+  m_TagString: Untagged
+  m_Icon: {fileID: 4162164826716764455, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2019366786436376332
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2237675419804695017}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.3, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1390737856591773155}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6075187239781035605
 GameObject:
   m_ObjectHideFlags: 0
@@ -105,6 +165,7 @@ GameObject:
   - component: {fileID: 2809723624352678607}
   - component: {fileID: 4763219298603265601}
   - component: {fileID: 9152559309189816294}
+  - component: {fileID: 6870125837136644803}
   m_Layer: 0
   m_Name: CobblestoneHeap
   m_TagString: Untagged
@@ -147,6 +208,7 @@ MonoBehaviour:
   resourceDeposit: {fileID: 5934702893937151089}
   uiController: {fileID: 2809723624352678607}
   colliderHandler: {fileID: 4763219298603265601}
+  interactive: {fileID: 6870125837136644803}
   gridObject: {fileID: 9152559309189816294}
 --- !u!114 &6346463141021347651
 MonoBehaviour:
@@ -179,7 +241,10 @@ MonoBehaviour:
   reactToMouseDrag: 0
   reactToZeroAppointedPeople: 0
   reactToResourceDepositStatus: 1
+  reactToHomeAbsence: 0
+  reactToHealthChanges: 0
   height: 0.5
+  smallInfo: {fileID: 0}
 --- !u!114 &8799345173755310119
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -194,9 +259,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   entity: {fileID: 4010562023854556455}
   hasSelectionPlane: 1
+  hasSilhouette: 0
   hasDisplayedInventory: 0
+  hasProductionDisplay: 0
   itemSpot: []
   selectionPlane: {fileID: 3364682158864505358}
+  silhouette: {fileID: 0}
+  productionProcessItem: []
+  productionHarvestItem: []
 --- !u!114 &5934702893937151089
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -230,6 +300,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   entity: {fileID: 4010562023854556455}
   openInfoOnClick: 1
+  reactToInventoryChanges: 0
+  reactToHealthChanges: 0
+  reactToSatietyChanges: 0
+  reactToProductionChanges: 0
 --- !u!114 &4763219298603265601
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -259,6 +333,27 @@ MonoBehaviour:
   useBuildSet: 0
   useCellPointers: 0
   cellPointer: []
+--- !u!114 &6870125837136644803
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7453501832349646518}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 262f618ca6693714e9842a9c3912b5ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  entity: {fileID: 4010562023854556455}
+  interactionSpots:
+  - spot: {fileID: 2354992289736384134}
+    interactionTarget: {fileID: 2019366786436376332}
+    eatType: 0
+    produceType: 0
+    reapType: 0
+    extractType: 1
+    duration: 0
 --- !u!1001 &156865818891035225
 PrefabInstance:
   m_ObjectHideFlags: 0

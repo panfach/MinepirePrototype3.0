@@ -424,6 +424,9 @@ MonoBehaviour:
   - {fileID: 1268250557781479491}
   - {fileID: 1625202028775459594}
   - {fileID: 7422642933778627753}
+  coordinates:
+    _x: 0
+    _z: 0
 --- !u!114 &4787176949477674793
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -455,6 +458,7 @@ MonoBehaviour:
   entity: {fileID: 1039132906586807899}
   reactToMouseEnter: 1
   reactToMouseDrag: 0
+  activateAllSmallBuildingInfoWhileDragging: 0
   reactToZeroAppointedPeople: 0
   reactToResourceDepositStatus: 0
   reactToHomeAbsence: 0
@@ -548,7 +552,7 @@ MonoBehaviour:
   - recipeName: "\u0412\u044F\u043B\u0435\u043D\u043E\u0435 \u043C\u044F\u0441\u043E"
     professional: 0
     interactionSpotIndex: 00000000
-    laborIntensity: 20
+    laborIntensity: 60
     requiredRes:
       index: 06000000
       type: 
@@ -564,7 +568,7 @@ MonoBehaviour:
   - recipeName: "\u0412\u044F\u043B\u0435\u043D\u043E\u0435 \u043C\u044F\u0441\u043E"
     professional: 0
     interactionSpotIndex: 01000000
-    laborIntensity: 20
+    laborIntensity: 60
     requiredRes:
       index: 06000000
       type: 

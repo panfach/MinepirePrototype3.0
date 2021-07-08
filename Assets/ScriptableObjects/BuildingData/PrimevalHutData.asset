@@ -20,7 +20,7 @@ MonoBehaviour:
   sizeZ: 1
   constructionCost: 48
   resourceCost:
-    index: 0100000007000000
+    index: 0100000008000000
     type: 
     indexVal:
     - 3

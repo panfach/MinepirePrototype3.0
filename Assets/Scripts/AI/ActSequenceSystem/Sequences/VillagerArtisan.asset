@@ -399,6 +399,61 @@ MonoBehaviour:
   initialDelay: 0
   priority: 5
   finalDelay: 0
+--- !u!114 &-4926685289076271575
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b95055f665483234e80a3665d65dd785, type: 3}
+  m_Name: Put
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: -168, y: 568}
+  ports:
+    keys:
+    - enter
+    - trueConnection
+    - falseConnection
+    values:
+    - _fieldName: enter
+      _node: {fileID: -4926685289076271575}
+      _typeQualifiedName: ActSequenceSystem.Connection, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: trueConnection
+        node: {fileID: 3518084661028992789}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: trueConnection
+      _node: {fileID: -4926685289076271575}
+      _typeQualifiedName: ActSequenceSystem.Connection, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: enter
+        node: {fileID: 3666923497748266871}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: falseConnection
+      _node: {fileID: -4926685289076271575}
+      _typeQualifiedName: ActSequenceSystem.Connection, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+  priority: 0
+  mode: 0
 --- !u!114 &-4649434033750004861
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1051,6 +1106,7 @@ MonoBehaviour:
   - {fileID: -3713606898035628345}
   - {fileID: 3666923497748266871}
   - {fileID: 1816536651440814920}
+  - {fileID: -4926685289076271575}
 --- !u!114 &195815685887380409
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1454,7 +1510,7 @@ MonoBehaviour:
   m_Name: Start Action
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: -184, y: 552}
+  position: {x: -424, y: 568}
   ports:
     keys:
     - trueConnection
@@ -1465,7 +1521,7 @@ MonoBehaviour:
         Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: enter
-        node: {fileID: 3666923497748266871}
+        node: {fileID: -4926685289076271575}
         reroutePoints: []
       _direction: 1
       _connectionType: 0
@@ -1598,7 +1654,7 @@ MonoBehaviour:
         Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: trueConnection
-        node: {fileID: 3518084661028992789}
+        node: {fileID: -4926685289076271575}
         reroutePoints: []
       _direction: 0
       _connectionType: 0

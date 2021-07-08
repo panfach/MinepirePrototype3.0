@@ -101,8 +101,13 @@ public class CreatureManager : MonoBehaviour
 
     public Creature SpawnRandomVillager()
     {
-        //Names _names = Connector.names ?? GameObject.Find("GameManager").GetComponent<Names>();
-        return null;                                                                                                           // Finish up
+        CreatureData data = DataList.GetCreatureObj(CreatureIndex.VILLAGER).GetComponent<Creature>().CrtData;
+        Creature creature = SpawnVillager(
+            _gender: Random.Range(0, 2) == 0 ? true : false,
+            _name: Connector.names.GetRndName(true),
+            _age: Random.Range(data.MinRandomAge, data.MaxRandomAge)
+            );
+        return creature;
     }
 
 /*    public void SpawnVillager(VillagerData data)

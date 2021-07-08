@@ -447,6 +447,9 @@ MonoBehaviour:
   - {fileID: 8595322699077057255}
   - {fileID: 7123147589325846250}
   - {fileID: 3950822613537610595}
+  coordinates:
+    _x: 0
+    _z: 0
 --- !u!114 &6499119476282192408
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -497,6 +500,7 @@ MonoBehaviour:
   entity: {fileID: 3370807516507604620}
   reactToMouseEnter: 1
   reactToMouseDrag: 0
+  activateAllSmallBuildingInfoWhileDragging: 0
   reactToZeroAppointedPeople: 1
   reactToResourceDepositStatus: 0
   reactToHomeAbsence: 0
@@ -563,7 +567,7 @@ MonoBehaviour:
       \u0438\u0437 \u0448\u043A\u0443\u0440"
     professional: 1
     interactionSpotIndex: 00000000
-    laborIntensity: 20
+    laborIntensity: 60
     requiredRes:
       index: 07000000
       type: 

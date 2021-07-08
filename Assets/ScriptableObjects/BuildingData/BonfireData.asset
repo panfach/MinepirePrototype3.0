@@ -19,10 +19,11 @@ MonoBehaviour:
   sizeZ: 1
   constructionCost: 8
   resourceCost:
-    index: 01000000
+    index: 0100000002000000
     type: 
     indexVal:
-    - 3
+    - 1
+    - 1
     typeVal: []
   type: 5
   profession: 0

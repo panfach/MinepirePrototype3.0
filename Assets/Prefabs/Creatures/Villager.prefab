@@ -915,6 +915,7 @@ MonoBehaviour:
   entity: {fileID: 2567622910954858697}
   reactToMouseEnter: 1
   reactToMouseDrag: 1
+  activateAllSmallBuildingInfoWhileDragging: 0
   reactToZeroAppointedPeople: 0
   reactToResourceDepositStatus: 0
   reactToHomeAbsence: 1
@@ -983,7 +984,7 @@ MonoBehaviour:
   warehouseType: 0
   hasOccupiedProperty: 0
   destroyOnEmpty: 0
-  storedPackSize: 1
+  storedPackSize: 2
   storedPacksAmount: 2
   occupied: 0
   owner: {fileID: 0}
@@ -1007,6 +1008,7 @@ MonoBehaviour:
   reactToHealthChanges: 1
   reactToSatietyChanges: 1
   reactToProductionChanges: 0
+  refreshResourceInfo: 0
 --- !u!1 &7539057658276171806
 GameObject:
   m_ObjectHideFlags: 0

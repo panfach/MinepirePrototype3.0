@@ -56,16 +56,19 @@ public class PauseMenu : MonoBehaviour
 
     private void Awake()
     {
-        if (pauseMenuWindow.activeSelf)
-        {
-            CloseAllSections();
-            pauseMenuWindow.SetActive(false);
-        }
+        //if (pauseMenuWindow.activeSelf)
+        //{
+        //    CloseAllSections();
+        //    pauseMenuWindow.SetActive(false);
+        //}
+
+        Open(PauseMenuSection.Load);
     }
 
     public void Open(PauseMenuSection sect)
     {
-        /*if (SaveLoader.state == SaveLoadState.START && sect != PauseMenuSection.Load) return;*/
+        Debug.Log("SaveLoadState : " + SaveLoader.state);
+        if (SaveLoader.state == SaveLoadState.START && sect != PauseMenuSection.Load) return;
 
         if (sect != activeSection)
         {

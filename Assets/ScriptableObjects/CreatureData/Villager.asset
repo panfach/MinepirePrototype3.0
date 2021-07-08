@@ -31,4 +31,4 @@ MonoBehaviour:
   defaultActionDistance: 0.2
   takingDelay: 0.98
   maxDistFromHome: 5
-  maxRandomWalkDelay: 5
+  maxRandomWalkDelay: 3

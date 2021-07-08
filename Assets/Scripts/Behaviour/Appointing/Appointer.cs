@@ -94,7 +94,7 @@ public class Appointer : MonoBehaviour
         {
             if (target.enabled == false) return;
             //return Appoint(target);
-            Appoint(target);
+            if (Appoint(target)) Connector.effectSoundManager.PlaySmoothClick();
             return;
         }
         //return false;

@@ -73,13 +73,14 @@ public class TurnManager : MonoBehaviour
     void RandomEvents()
     {
         // New villagers
-        float chance = Mathf.Clamp((VillageData.happiness - 0.5f) * 2f, 0f, 1f); // foodRatio = 2 => chance = 0; foodRatio = 6 => chance = 1;
+        float chance = Mathf.Clamp((VillageData.happiness - 0.3f) * 2f, 0f, 1f); // foodRatio = 2 => chance = 0; foodRatio = 6 => chance = 1;
         Debug.Log("Chance = " + chance);
 
         if (Random.Range(0f, 1f) < chance)
         {
             for (int i = 0; i < 2; i++)
             {
+                Debug.Log("Spawning 2 villagers ...");
                 Connector.creatureManager.SpawnRandomVillager();
             }
         }
@@ -152,7 +153,7 @@ public class TurnManager : MonoBehaviour
             VillageData.happiness += 0.10f;
         }
 
-        Mathf.Clamp(VillageData.happiness, 0.0f, 1.0f);
+        VillageData.happiness = Mathf.Clamp(VillageData.happiness, 0.0f, 1.0f);
     }
 }
 

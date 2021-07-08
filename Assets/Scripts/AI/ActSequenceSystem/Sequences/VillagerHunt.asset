@@ -1114,7 +1114,7 @@ MonoBehaviour:
         Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: trueConnection
-        node: {fileID: 5313044243667304902}
+        node: {fileID: 7493954293912793992}
         reroutePoints: []
       _direction: 0
       _connectionType: 0
@@ -1199,6 +1199,7 @@ MonoBehaviour:
   - {fileID: 7369472871875539138}
   - {fileID: -5769423682567845587}
   - {fileID: -8103223169959875223}
+  - {fileID: 7493954293912793992}
 --- !u!114 &2010934434486638699
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1575,7 +1576,7 @@ MonoBehaviour:
   m_Name: Start Action
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: -520, y: -136}
+  position: {x: -744, y: -136}
   ports:
     keys:
     - trueConnection
@@ -1586,7 +1587,7 @@ MonoBehaviour:
         Culture=neutral, PublicKeyToken=null
       connections:
       - fieldName: enter
-        node: {fileID: -10222665960704768}
+        node: {fileID: 7493954293912793992}
         reroutePoints: []
       _direction: 1
       _connectionType: 0
@@ -2022,6 +2023,61 @@ MonoBehaviour:
   mode: 0
   radius: 0
   item: {fileID: 0}
+--- !u!114 &7493954293912793992
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b95055f665483234e80a3665d65dd785, type: 3}
+  m_Name: Put
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: -504, y: -136}
+  ports:
+    keys:
+    - enter
+    - trueConnection
+    - falseConnection
+    values:
+    - _fieldName: enter
+      _node: {fileID: 7493954293912793992}
+      _typeQualifiedName: ActSequenceSystem.Connection, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: trueConnection
+        node: {fileID: 5313044243667304902}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: trueConnection
+      _node: {fileID: 7493954293912793992}
+      _typeQualifiedName: ActSequenceSystem.Connection, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: enter
+        node: {fileID: -10222665960704768}
+        reroutePoints: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: falseConnection
+      _node: {fileID: 7493954293912793992}
+      _typeQualifiedName: ActSequenceSystem.Connection, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+  priority: 0
+  mode: 0
 --- !u!114 &8126405599149948254
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,3 +1,1 @@
-# Minepire_1.2.0
-
-йоу
+# Minepire_PROTOTYPE_3.0

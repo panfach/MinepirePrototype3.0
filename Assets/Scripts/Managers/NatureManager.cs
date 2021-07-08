@@ -56,11 +56,12 @@ public class NatureManager : MonoBehaviour
     }
 
 
-    public void ClearEnvironment()
+    public void Clear()
     {
-        foreach (Nature nature in natures)
+        int count = natures.Count;
+        for (int i = 0; i < count; i++)
         {
-            nature.Die();
+            natures[0].Die();
         }
         natures.Clear();
     }

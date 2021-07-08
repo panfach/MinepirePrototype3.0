@@ -28,3 +28,4 @@ MonoBehaviour:
     typeVal: []
   type: 3
   profession: 2
+  requiredTech: 5

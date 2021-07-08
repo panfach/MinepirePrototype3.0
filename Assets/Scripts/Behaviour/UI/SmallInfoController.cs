@@ -9,6 +9,7 @@ public class SmallInfoController : MonoBehaviour
     [Header("Settings")]
     [SerializeField] bool reactToMouseEnter;
     [SerializeField] bool reactToMouseDrag;                                                        // react to villager dragging
+    [SerializeField] bool activateAllSmallBuildingInfoWhileDragging;                                                      
     [SerializeField] bool reactToZeroAppointedPeople;
     [SerializeField] bool reactToResourceDepositStatus;
     [SerializeField] bool reactToHomeAbsence;
@@ -39,6 +40,7 @@ public class SmallInfoController : MonoBehaviour
         {
             entity.ColliderHandler.mouseDragEvent += SetAllBuilding;                        // Strange place
             entity.ColliderHandler.mouseUpEvent += SetAllBuilding;
+            entity.ColliderHandler.mouseUpEvent += Set;
         }
         if (reactToZeroAppointedPeople) entity.Appointer.appointmentChangedEvent += Set;
         if (reactToResourceDepositStatus) entity.ResourceDeposit.statusChangedEvent += Set;
@@ -58,8 +60,20 @@ public class SmallInfoController : MonoBehaviour
         if (smallInfo.gameObject.activeSelf) smallInfo.Refresh();
     }
 
+    public static void MouseDragHandler()
+    {
+        StateManager.VillagerDragging = true;
+        SetAllBuilding();
+    }
+
+    public static void MouseUpHandler()
+    {
+        StateManager.VillagerDragging = false;
+        SetAllBuilding();
+    }
+
     public static void SetAllBuilding()                                                                          // THIS MUST BE IN "DYNAMIC GAME CANVAS" // And generalize
-    {                                                                                                       
+    {
         foreach (Building item in VillageData.Buildings)
         {
             item.SmallInfoController.Set();
@@ -170,6 +184,7 @@ public class SmallInfoController : MonoBehaviour
         {     
             entity.ColliderHandler.mouseDragEvent -= SetAllBuilding;
             entity.ColliderHandler.mouseUpEvent -= SetAllBuilding;
+            entity.ColliderHandler.mouseUpEvent -= Set;
         }
         if (reactToZeroAppointedPeople) entity.Appointer.appointmentChangedEvent -= Set;
         if (reactToResourceDepositStatus) entity.ResourceDeposit.statusChangedEvent -= Set;

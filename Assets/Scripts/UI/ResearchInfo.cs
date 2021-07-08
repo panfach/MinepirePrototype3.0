@@ -97,7 +97,7 @@ public class ResearchInfo : MonoBehaviour
                     reqResValue[i].color = standardTextColor;
                 else
                     reqResValue[i].color = lackTextColor;
-                reqResValue[i].text = $"{amount:F1}/{data.RequiredRes.indexVal[i]}";
+                reqResValue[i].text = $"{amount:F0}/{data.RequiredRes.indexVal[i]}";
             }
             else reqRes[i].SetActive(false);
         }
@@ -112,7 +112,7 @@ public class ResearchInfo : MonoBehaviour
                     reqStatResValue[i].color = standardTextColor;
                 else
                     reqStatResValue[i].color = lackTextColor;
-                reqStatResValue[i].text = $"{Connector.statistics.ReceivedResource(resInd):F1}/{data.RequiredStatRes.indexVal[i]}";
+                reqStatResValue[i].text = $"{Connector.statistics.ReceivedResource(resInd):F0}/{data.RequiredStatRes.indexVal[i]}";
             }
             else reqStatRes[i].SetActive(false);
         }

@@ -78,7 +78,7 @@ MonoBehaviour:
       _dynamic: 0
   entity: {fileID: 0}
   initialDelay: 0
-  priority: 0
+  priority: 5
   mode: 2
   finalDelay: 0
   spot:
@@ -219,6 +219,7 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
+  priority: 0
   mode: 0
 --- !u!114 &-5481852083578358753
 MonoBehaviour:
@@ -396,7 +397,7 @@ MonoBehaviour:
     duration: 0
   interactionType: 2
   initialDelay: 0
-  priority: 0
+  priority: 5
   finalDelay: 0
 --- !u!114 &-4649434033750004861
 MonoBehaviour:
@@ -590,7 +591,7 @@ MonoBehaviour:
       _dynamic: 0
   entity: {fileID: 0}
   initialDelay: 0
-  priority: 0
+  priority: 5
   mode: 2
   finalDelay: 0
   spot:
@@ -760,6 +761,7 @@ MonoBehaviour:
     indexVal: []
     typeVal: []
   item: {fileID: 0}
+  priority: 0
   mode: 1
 --- !u!114 &-3303675249674839391
 MonoBehaviour:
@@ -847,7 +849,7 @@ MonoBehaviour:
     duration: 0
   interactionType: 1
   initialDelay: 0
-  priority: 0
+  priority: 5
   finalDelay: 0
 --- !u!114 &-1404153737440984420
 MonoBehaviour:
@@ -936,6 +938,7 @@ MonoBehaviour:
     type: 
     indexVal: []
     typeVal: []
+  priority: 0
   bldType: 2
   mode: 1
   building: {fileID: 0}
@@ -952,7 +955,7 @@ MonoBehaviour:
   m_Name: Enter Building
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: 616, y: 936}
+  position: {x: 616, y: 1112}
   ports:
     keys:
     - enter
@@ -1061,7 +1064,7 @@ MonoBehaviour:
   m_Name: Go To Building
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: 392, y: 1080}
+  position: {x: 360, y: 1192}
   ports:
     keys:
     - enter
@@ -1263,6 +1266,9 @@ MonoBehaviour:
       - fieldName: trueConnection
         node: {fileID: -398106782429539203}
         reroutePoints: []
+      - fieldName: falseConnection
+        node: {fileID: 7308740931164537580}
+        reroutePoints: []
       _direction: 0
       _connectionType: 0
       _typeConstraint: 0
@@ -1288,6 +1294,7 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
+  priority: 5
   mode: 0
 --- !u!114 &1816536651440814920
 MonoBehaviour:
@@ -1342,6 +1349,7 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
+  priority: 5
   mode: 1
 --- !u!114 &1881188034251725870
 MonoBehaviour:
@@ -1431,6 +1439,7 @@ MonoBehaviour:
     indexVal: []
     typeVal: []
   item: {fileID: 0}
+  priority: 5
   mode: 0
 --- !u!114 &3518084661028992789
 MonoBehaviour:
@@ -1671,6 +1680,7 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
+  priority: 0
   mode: 1
   query:
     index: 
@@ -1751,7 +1761,10 @@ MonoBehaviour:
       _node: {fileID: 7308740931164537580}
       _typeQualifiedName: ActSequenceSystem.Connection, Assembly-CSharp, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
-      connections: []
+      connections:
+      - fieldName: enter
+        node: {fileID: 1201224286075681722}
+        reroutePoints: []
       _direction: 1
       _connectionType: 0
       _typeConstraint: 0
@@ -1761,6 +1774,7 @@ MonoBehaviour:
     type: 
     indexVal: []
     typeVal: []
+  priority: 5
   bldType: 2
   mode: 4
   building: {fileID: 0}

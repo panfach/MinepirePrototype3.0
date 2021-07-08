@@ -95,7 +95,7 @@ public class DisplayedItems : MonoBehaviour
             shift = 0f;
             for (int j = 0; j <= (int)((value - 0.001f) / 2); j++)
             {
-                Debug.Log(index);
+                //Debug.Log(index);
                 displayedItem[i * entity.Inventory.PackSize + j] = Instantiate(DataList.GetResourceModel(index), itemSpot[i]);
                 displayedItem[i * entity.Inventory.PackSize + j].transform.localPosition = new Vector3(0f, shift, 0f);
                 //displayedItem[i].transform.localScale = new Vector3(5f, 2.5f, 5f);

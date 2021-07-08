@@ -479,6 +479,7 @@ MonoBehaviour:
   reactToHealthChanges: 0
   reactToSatietyChanges: 0
   reactToProductionChanges: 1
+  refreshResourceInfo: 0
 --- !u!114 &5094159857424218080
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -544,7 +545,9 @@ MonoBehaviour:
   entity: {fileID: 1039132906586807899}
   performance: 1
   recipe:
-  - interactionSpotIndex: 00000000
+  - recipeName: "\u0412\u044F\u043B\u0435\u043D\u043E\u0435 \u043C\u044F\u0441\u043E"
+    professional: 0
+    interactionSpotIndex: 00000000
     laborIntensity: 20
     requiredRes:
       index: 06000000
@@ -558,7 +561,9 @@ MonoBehaviour:
       indexVal:
       - 1
       typeVal: []
-  - interactionSpotIndex: 01000000
+  - recipeName: "\u0412\u044F\u043B\u0435\u043D\u043E\u0435 \u043C\u044F\u0441\u043E"
+    professional: 0
+    interactionSpotIndex: 01000000
     laborIntensity: 20
     requiredRes:
       index: 06000000

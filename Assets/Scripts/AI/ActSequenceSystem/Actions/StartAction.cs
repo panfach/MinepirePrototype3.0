@@ -16,6 +16,7 @@ namespace ActSequenceSystem
 
 
         public override ActionType Type { get => type; }
+        public override int Priority { get => priority; }
 
         public override IEnumerator Algorithm(Creature creature)
         {

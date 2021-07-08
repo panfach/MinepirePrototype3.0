@@ -14,6 +14,7 @@ public class TechManager : MonoBehaviour
 
     public TechGraph Graph => graph;
     public TechStatus GetTechStatus(TechIndex techInd) { return techStatus[(int)techInd]; }
+    public bool IsTechResearched(TechIndex techInd) { return techStatus[(int)techInd] == TechStatus.RESEARCHED; }
     public bool IsAvailableForResearch(TechIndex techIndex)
     {
         TechData data = DataList.GetTech(techIndex);
@@ -28,10 +29,11 @@ public class TechManager : MonoBehaviour
     void Awake()
     {
         techStatus = new TechStatus[Enum.GetNames(typeof(TechIndex)).Length];
+        techStatus[(int)TechIndex.STARTTECH] = TechStatus.RESEARCHED;
     }
 
 
-    public bool TryToResearch(TechIndex techIndex)
+    public bool TryToResearch(TechIndex techIndex, bool instant = false)
     {
         if (!IsAvailableForResearch(techIndex)) return false;
 
@@ -40,6 +42,12 @@ public class TechManager : MonoBehaviour
 
         changedEvent?.Invoke();
         return true;
+    }
+
+    public void InitTechStatus(TechIndex techInd, TechStatus status)
+    {
+        techStatus[(int)techInd] = status;
+        changedEvent?.Invoke();
     }
 }
 

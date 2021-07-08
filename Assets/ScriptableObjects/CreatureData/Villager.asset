@@ -15,7 +15,7 @@ MonoBehaviour:
   _name: "\u0416\u0438\u0442\u0435\u043B\u044C"
   index: 1
   type: 1
-  maxHealth: 4
+  maxHealth: 24
   drop: []
   minRandomAge: 16
   maxRandomAge: 40

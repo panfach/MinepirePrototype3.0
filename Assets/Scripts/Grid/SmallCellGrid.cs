@@ -12,6 +12,12 @@ public class SmallCellGrid : MonoBehaviour
 
     public void Awake()
     {
+        Init();
+    }
+
+
+    public void Init()
+    {
         cellState = new CellState[sizeX, sizeZ];
         CellStateDefaultInit();
         SetSlopes();
@@ -33,6 +39,7 @@ public class SmallCellGrid : MonoBehaviour
     public void SetSlopes()
     {
         Cell cell1, cell2, cell3, cell4;
+        bool coast;
         
         // Определение склонов вдоль оси х
         for (int i = 0; i < sizeX / 4; i++)
@@ -45,15 +52,18 @@ public class SmallCellGrid : MonoBehaviour
                 //Debug.Log($"{i} {j} and {i + 1} {j} : slope : {cell1.Elevation != cell2.Elevation}");
                 if (cell1.Elevation != cell2.Elevation)
                 {
+                    coast = CheckCoastConditions(cell1, cell2);
                     for (int k = 1; k <= 3; k++)
                     {
                         cellState[4 * i + 3, 4 * j + 3 - k].slope = true;
+                        cellState[4 * i + 3, 4 * j + 3 - k].coast = coast;
                     }
                     /*if (i != 0)
                     {
                         cellState[4 * i + 3, 4 * j + 3 - 4].slope = true;
                     }*/
                 }
+                
             }
         }
 
@@ -68,9 +78,11 @@ public class SmallCellGrid : MonoBehaviour
                 //Debug.Log($"{i} {j} and {i + 1} {j} : slope : {cell1.Elevation == cell2.Elevation}");
                 if (cell1.Elevation != cell2.Elevation)
                 {
+                    coast = CheckCoastConditions(cell1, cell2);
                     for (int k = 1; k <= 3; k++)
                     {
                         cellState[4 * i + 3 - k, 4 * j + 3].slope = true;
+                        cellState[4 * i + 3 - k, 4 * j + 3].coast = coast;
                     }
                     /*if (j != 0)
                     {
@@ -97,6 +109,11 @@ public class SmallCellGrid : MonoBehaviour
                 }
             }
         }
+    }
+
+    bool CheckCoastConditions(Cell cell1, Cell cell2)
+    {
+        return ((cell1.Elevation == 0 && cell2.Elevation == 1) || (cell1.Elevation == 1 && cell2.Elevation == 0));
     }
 
     public static bool CheckPlaceAvailability(Entity sender)
@@ -248,6 +265,27 @@ public class SmallCellGrid : MonoBehaviour
         else return 0f;
     }
 
+    public static CellState GetNearestCoastCellState(Vector3 position)
+    {
+        CellState nearest = null;
+        float sqrDistance, minSqrDistance = float.MaxValue;
+
+        for (int i = 0; i < sizeX; i++)
+        {
+            for (int j = 0; j < sizeZ; j++)
+            {
+                if (cellState[i, j].coast && (sqrDistance = Vector3.SqrMagnitude(SCCoord.GetCenter(cellState[i, j].coord) - position)) < minSqrDistance)
+                {
+                    nearest = cellState[i, j];
+                    minSqrDistance = sqrDistance;
+                }
+            }
+        }
+
+        return nearest;
+    }
+
+
     public void Save(BinaryWriter writer)
     {
         for (int i = 0; i < sizeX; i++)
@@ -261,8 +299,10 @@ public class SmallCellGrid : MonoBehaviour
 
     public void Load(BinaryReader reader)
     {
-        Awake();
+        Init();
 
+        // loading information about array "cellState" from savefile
+        // But by design, it shouldn't store bool fields "building", "slope" etc. Firstly, info about natures at least (field "resource")
         for (int i = 0; i < sizeX; i++)
         {
             for (int j = 0; j < sizeZ; j++)
@@ -281,6 +321,7 @@ public class CellState
     public bool building;
     public bool slope;
     public bool enter;
+    public bool coast;
     public List<NatureIndex> resource;
     public GameObject buildingRef;
 
@@ -289,7 +330,8 @@ public class CellState
         coord = new SCCoord(cellCounter / SmallCellGrid.sizeX, cellCounter % SmallCellGrid.sizeX);
         building = false;
         slope = false;
-        //Debug.Log("CellState() constructor");
+        enter = false;
+        coast = false;
         resource = new List<NatureIndex>();
         buildingRef = null;
 
@@ -298,8 +340,9 @@ public class CellState
 
     public void Save(BinaryWriter writer)
     {
-        writer.Write(building); // Transform theese bool values into ~boolarrays (examine c#)
-        writer.Write(slope);
+        writer.Write(building);                                    // Transform theese bool values into ~boolarrays (examine c#)
+        writer.Write(slope);                                       // There are detailed comments in method Load() ...
+
         writer.Write((byte)resource.Count);
         for (int i = 0; i < resource.Count; i++)
         {
@@ -311,15 +354,15 @@ public class CellState
     {
         NatureIndex res_read;
 
-        building = reader.ReadBoolean();
-        reader.ReadBoolean();
-        byte resourceCount = reader.ReadByte();
-        for (int i = 0; i < resourceCount; i++)
+        building = reader.ReadBoolean();                             // It's no need to store this data. While instant building field "building" turns to true
+        reader.ReadBoolean();                                        // ??? it is for slopes? This code must be deleted
+
+        byte resourceCount = reader.ReadByte();                      // It remains
+        for (int i = 0; i < resourceCount; i++)                      
         {
             res_read = (NatureIndex)reader.ReadByte();
-            //resource.Add(res_read);
             Connector.natureManager.AddItem(coord, res_read);
-            /*Debug.Log($"SmallCellGrid.Load() resource[{i}] is loaded.");*/
+            //Debug.Log($"SmallCellGrid.Load() resource[{i}] is loaded.");
         }
     }
 }

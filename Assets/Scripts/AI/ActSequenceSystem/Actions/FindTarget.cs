@@ -10,7 +10,7 @@ namespace ActSequenceSystem
         [Input] public Connection enter;
 
         [NonSerialized] public ActionType type = ActionType.FINDTARGET;
-        [NonSerialized] public int priority = 0;
+        [Range(0, 100)] public int priority;
         public BuildingIndex[] indices;
         public FindTargetMode mode;
 
@@ -20,6 +20,7 @@ namespace ActSequenceSystem
 
 
         public override ActionType Type { get => type; }
+        public override int Priority { get => priority; }
 
         public override IEnumerator Algorithm(Creature creature)
         {

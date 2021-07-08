@@ -16,7 +16,7 @@ PlayerSettings:
   productName: Minepire Prototype 2.1
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
-  m_SplashScreenBackgroundColor: {r: 0.15908688, g: 0.23584908, b: 0.22049664, a: 1}
+  m_SplashScreenBackgroundColor: {r: 0.08235294, g: 0.16862746, b: 0.16470589, a: 1}
   m_ShowUnitySplashScreen: 1
   m_ShowUnitySplashLogo: 1
   m_SplashScreenOverlayOpacity: 0.5

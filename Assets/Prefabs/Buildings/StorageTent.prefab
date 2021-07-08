@@ -730,6 +730,7 @@ MonoBehaviour:
   reactToHealthChanges: 0
   reactToSatietyChanges: 0
   reactToProductionChanges: 0
+  refreshResourceInfo: 1
 --- !u!114 &6838012774800053311
 MonoBehaviour:
   m_ObjectHideFlags: 0

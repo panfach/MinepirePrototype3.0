@@ -11,9 +11,9 @@ public class BuildingData : ScriptableObject
     [SerializeField] int sizeZ;
     [SerializeField] int constructionCost;
     [SerializeField] ResourceQuery resourceCost;
-    //[SerializeField] int maxPeople;
     [SerializeField] BuildingType type;
     [SerializeField] Profession profession;
+    [SerializeField] TechnologySystem.TechIndex requiredTech;
 
     public string Name { get => _name; }
     public string Name_rus { get => _name_rus; }
@@ -22,9 +22,9 @@ public class BuildingData : ScriptableObject
     public int SizeZ { get => sizeZ; }
     public int ConstrCost { get => constructionCost; }
     public ResourceQuery ResourceCost { get => resourceCost; }
-    //public int MaxPeople { get => maxPeople; }
     public BuildingType BldType { get => type; }
     public Profession Profession { get => profession; }
+    public TechnologySystem.TechIndex RequiredTech { get => requiredTech; }
 
     public int[] Size
     {

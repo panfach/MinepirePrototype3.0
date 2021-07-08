@@ -35,8 +35,9 @@ public class Building : Entity
 
     public override void Die()
     {
+        Debug.Log("Building.Die() start");
         if (buildSet.ConstrStatus == ConstructionStatus.CONSTR) VillageData.Constructions.Remove(this);
-        else if (buildSet.ConstrStatus == ConstructionStatus.READY) VillageData.Buildings.Remove(this);
+        else if (buildSet.ConstrStatus == ConstructionStatus.READY) { Debug.Log("Building.Die() : " + BldData.Name); VillageData.Buildings.Remove(this); }
 
         Destroy(gameObject);
     }

@@ -5,6 +5,7 @@ using XNode;
 
 public abstract class ActionNode : Node
 {
+    abstract public int Priority { get; }
     abstract public ActionType Type { get; }
     abstract public IEnumerator Algorithm(Creature creature);
 }
@@ -41,7 +42,9 @@ public enum ActionType
     FINDTARGET,
     FINDITEM,
     GETNATURE,
-    FINDRECIPE
+    FINDRECIPE,
+    GOTO,
+    EXTRACT
 }
 
 

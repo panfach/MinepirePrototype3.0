@@ -72,7 +72,7 @@ public class BuildSet : MonoBehaviour
         if (!CheckStartConstructionConditions()) return false;
 
         if (hasGridVolume && entity.GridObject != null) entity.GridObject.OccupyPlace();
-        if (hasResourceCost) VillageData.SpendResource(entity.BldData.ResourceCost);
+        if (hasResourceCost && BuildingProperties.constructionMode != ConstructionMode.INSTBLD) VillageData.SpendResource(entity.BldData.ResourceCost);
         entity.BldProp?.AssignUniqueIndex(_uniqueIndex);
         TransformIntoConstruction(_process);
 
@@ -110,6 +110,11 @@ public class BuildSet : MonoBehaviour
         if (hasResourceCost && !VillageData.CheckResourceAvailability(entity.BldData.ResourceCost))
         {
             Notification.Invoke(NotifType.RESBUILD);
+            return false;
+        }
+        if (!Connector.techManager.IsTechResearched(entity.BldData.RequiredTech))
+        {
+            Notification.Invoke(NotifType.REQTECH);
             return false;
         }
 

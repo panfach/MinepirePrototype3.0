@@ -40,6 +40,7 @@ namespace TechnologySystem
         FISHING,
         SKINCLOTHING,
         STONETOOLS,
-        ADVANCEDFOODGATHERING
+        ADVANCEDFOODGATHERING,
+        STARTTECH
     }
 }

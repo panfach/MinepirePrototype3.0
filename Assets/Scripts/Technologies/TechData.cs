@@ -8,6 +8,7 @@ namespace TechnologySystem
     public class TechData : ScriptableObject
     {
         [SerializeField] string techName;
+        [SerializeField] string techName_rus;
         [SerializeField] TechIndex index;
         [SerializeField] ResourceQuery requiredStatRes;
         [SerializeField] ResourceQuery requiredRes;
@@ -15,6 +16,7 @@ namespace TechnologySystem
         [SerializeField] TechNode node;
 
         public string Name => techName;
+        public string Name_rus => techName_rus;
         public TechIndex Index => index;
         public ResourceQuery RequiredStatRes => requiredStatRes; 
         public ResourceQuery RequiredRes => requiredRes; 

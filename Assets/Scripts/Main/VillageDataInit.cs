@@ -55,23 +55,11 @@ public static class VillageData
     public static Building townhall = null;
     public static BuildingIndex townhallIndex = BuildingIndex.TRIBLEADER;
     public static List<ExtractedResourceLink> extractionQueue = new List<ExtractedResourceLink>();
-    // --------------------------------------------------------------------------------------------------------------------- //
 
+    // --------------------------------------------------------------------------------------------------------------------- //
     public static List<GameObject> staticBatchingObjects = new List<GameObject>();
+
     // --------------------------------------------------------------------------------------------------------------------- //
-
-    /*public static Creature NewRandomVillager()
-    {
-        //Names _names = Connector.names ?? GameObject.Find("GameManager").GetComponent<Names>();
-        return Connector.creatureManager.SpawnRandomVillager();
-    }*/
-
-    /*public static void RemoveVillager(Creature creature)
-    {
-        if (Villagers.Remove(data)) Population--;
-    }*/
-
-    //public static int GetBuildPoint() => Builders * 1;
 
     public static void AddConstruction(Building item)
     {
@@ -139,6 +127,18 @@ public static class VillageData
                 if (outInd != resInd) continue;
                 amount += outValue;
             }
+        }
+
+        return amount;
+    }
+
+    public static float FreeSpaceForResource(ResourceIndex resInd)
+    {
+        float amount = 0f;
+
+        foreach (Inventory item in Warehouses)
+        {
+            amount += item.FreeSpaceForResource(resInd);
         }
 
         return amount;
@@ -269,41 +269,24 @@ public static class VillageData
         }
     }
 
-/*    public static void CleanDeletedObjects()
+    public static void AddResourceIntoFreeWarehouse(ResourceIndex index, float amount)
     {
-        foreach (Villager item in deletedVillagersQueue)
+        float remainder = amount;
+        foreach (Inventory item in Warehouses)
         {
-            Villagers.Remove(item.data);
-            item.SelfDeletion();
+            remainder = item.CreateResource(index, remainder);
+            if (remainder < 0.001f) return;
         }
-        deletedVillagersQueue.Clear();
+    }
 
-        foreach (SmallInfo item in deletedSmallInfoQueue)
-        {
-            if (item is SmallBuildingInfo)
-                DynamicGameCanvas.buildingSmallInfoList.Remove(item);
-            else if (item is SmallVillagerInfo)
-                DynamicGameCanvas.villagerSmallInfoList.Remove(item);
-            else if (item is SmallAnimalInfo)
-                DynamicGameCanvas.animalSmallInfoList.Remove(item);
-            else if (item is SmallResourceInfo)
-                DynamicGameCanvas.resourceSmallInfoList.Remove(item);
-            else if (item is SmallResourceSourceInfo)
-                DynamicGameCanvas.resourceSourceSmallInfoList.Remove(item);
-
-
-            //if (item is SmallVillagerInfo) item.Delete();
-        }
-        deletedSmallInfoQueue.Clear();
-    }*/
 
     public static void Save(BinaryWriter writer)
     {
-        writer.Write((short)BuildingProperties.maxUniqueIndex); //Debug.Log("VillageData.Save() Building.maxUniqueIndex = " + Building.maxUniqueIndex);
-        writer.Write((short)Constructions.Count); //Debug.Log("VillageData.Save() Constructions.Count = " + Constructions.Count);
+        writer.Write((short)BuildingProperties.maxUniqueIndex);           //Debug.Log("VillageData.Save() Building.maxUniqueIndex = " + Building.maxUniqueIndex);
+        writer.Write((short)Constructions.Count);                         //Debug.Log("VillageData.Save() Constructions.Count = " + Constructions.Count);
         foreach (Building building in Constructions)
         {
-            if (!building.isActiveAndEnabled) continue;                                                                                           // I don't know, when it is useful
+            //if (!building.isActiveAndEnabled) continue;                                                                                           // I don't know, when it is useful
             writer.Write((byte)building.BldData.Index);
             writer.Write((short)building.BldProp.UniqueIndex);
             writer.Write((short)building.GridObject.coordinates.X);
@@ -311,19 +294,19 @@ public static class VillageData
             writer.Write((short)building.BuildSet.Process);
         }
 
-        writer.Write((short)Buildings.Count); //Debug.Log("VillageData.Save() Buildings.Count = " + Buildings.Count);
+        writer.Write((short)Buildings.Count);                             //Debug.Log("VillageData.Save() Buildings.Count = " + Buildings.Count);
         foreach (Building building in Buildings)
         {
-            if (!building.isActiveAndEnabled) continue;
+            //if (!building.isActiveAndEnabled) continue;
             writer.Write((byte)building.BldData.Index);
-            writer.Write((short)building.BldProp.UniqueIndex); //Debug.Log("VillageData.Save() uniqueIndex = " + building.uniqueIndex);
+            writer.Write((short)building.BldProp.UniqueIndex);            //Debug.Log("VillageData.Save() uniqueIndex = " + building.uniqueIndex);
             writer.Write((byte)building.GridObject.angle.Index);
-            writer.Write((short)building.GridObject.coordinates.X); //Debug.Log("VillageData.Load() (short)building.coordinates.X = " + (short)building.coordinates.X);
-            writer.Write((short)building.GridObject.coordinates.Z); //Debug.Log("VillageData.Load() (short)building.coordinates.Z = " + (short)building.coordinates.Z);
+            writer.Write((short)building.GridObject.coordinates.X);       //Debug.Log("VillageData.Load() (short)building.coordinates.X = " + (short)building.GridObject.coordinates.X);
+            writer.Write((short)building.GridObject.coordinates.Z);       //Debug.Log("VillageData.Load() (short)building.coordinates.Z = " + (short)building.GridObject.coordinates.Z);
             //writer.Write((byte)((ReadySet)building).People);
         }
 
-        writer.Write((short)CreatureManager.villagerPopulation); //Debug.Log("VillageData.Load() (short)Population = " + (short)Population);
+        writer.Write((short)CreatureManager.villagerPopulation);          //Debug.Log("VillageData.Load() (short)Population = " + (short)Population);
         foreach (Creature data in CreatureManager.Villagers)
         {
             writer.Write(data.CrtProp.Gender);
@@ -346,164 +329,27 @@ public static class VillageData
             writer.Write((float)animal.Health.Value);
         }
 
-        for (int i = 0; i < resources.Length; i++)
+        for (int i = 0; i < 256; i++)
         {
-            writer.Write((float)resources[i]);
+            if (i < resources.Length) writer.Write(resources[i]);
+            else writer.Write(0f);
+        }
+
+        for (int i = 0; i < 256; i++)
+        {
+            if (i < resources.Length) writer.Write(Connector.statistics.ReceivedResource((ResourceIndex)i));
+            else writer.Write(0f);
+        }
+
+        for (int i = 0; i < 256; i++)
+        {
+            if (i < Enum.GetNames(typeof(TechnologySystem.TechIndex)).Length) writer.Write((byte)Connector.techManager.GetTechStatus((TechnologySystem.TechIndex)i));
+            else writer.Write((byte)TechStatus.NOTRESEARCHED);
         }
     }
 
     // OLD LOAD FUNCTION
-    //public static void Load_old1(BinaryReader reader)
-    //{
-    //    BuildingIndex bldIndex;
-    //    AnimalIndex animIndex;
-    //    SCCoord scc;
-    //    short uniqueIndex;
-
-    //    BuildingProperties.maxUniqueIndex = reader.ReadInt16(); //Debug.Log("VillageData.Load() Building.maxUniqueIndex = " + Building.maxUniqueIndex);
-    //    short constructionsCount = reader.ReadInt16(); //Debug.Log("VillageData.Load() constructionsCount = " + constructionsCount);
-    //    for (int i = 0; i < constructionsCount; i++)
-    //    {
-    //        bldIndex = (BuildingIndex)reader.ReadByte();
-    //        uniqueIndex = reader.ReadInt16();
-    //        scc = new SCCoord(reader.ReadInt16(), reader.ReadInt16());
-    //        Connector.generalBuilder.InstantConstruction(bldIndex, scc, uniqueIndex, reader.ReadInt16());
-    //        //cs.uniqueIndex = uniqueIndex;
-    //        //cs.IncreaseProcess(reader.ReadInt16());
-    //    }
-    //    CleanDeletedObjects();
-
-    //    short readyCount = reader.ReadInt16(); //Debug.Log("VillageData.Load() readyCount = " + readyCount);
-    //    for (int i = 0; i < readyCount; i++)
-    //    {
-    //        bldIndex = (BuildingIndex)reader.ReadByte(); //Debug.Log("VillageData.Load() trying to read bldIndex. bldIndex = " + bldIndex);
-    //        uniqueIndex = reader.ReadInt16(); //Debug.Log("VillageData.Load() trying to read uniqueIndex. uniqueIndex = " + uniqueIndex);
-    //        scc = new SCCoord(reader.ReadInt16(), reader.ReadInt16()); //Debug.Log("VillageData.Load() scc of building = " + scc);
-    //        Connector.generalBuilder.InstantBuilding(bldIndex, scc, uniqueIndex);
-    //        //rs = obj.GetComponent<ReadySet>();                          
-    //        //rs.uniqueIndex = uniqueIndex;
-    //    }
-
-    //    Population = reader.ReadInt16(); //Debug.Log("VillageData.Load() Population = " + Population);
-    //    for (int i = 0; i < Population; i++)
-    //    {
-    //        Villagers.Add(new VillagerData(
-    //            reader.ReadBoolean(),
-    //            reader.ReadString(),
-    //            reader.ReadByte(),
-    //            ((uniqueIndex = reader.ReadInt16()) == 0) ? null : uniqIndexDict[uniqueIndex].GetComponent<Building>(),
-    //            ((uniqueIndex = reader.ReadInt16()) == 0) ? null : uniqIndexDict[uniqueIndex].GetComponent<Building>()
-    //        ));
-    //    }
-
-    //    int animalPopul = reader.ReadInt16();
-    //    Debug.Log("animalPopul = " + animalPopul);
-    //    for (int i = 0; i < animalPopul; i++)
-    //    {
-    //        animIndex = (AnimalIndex)reader.ReadByte();
-    //        scc = new SCCoord(reader.ReadInt16(), reader.ReadInt16());
-    //        Connector.animalManager.InstantSpawnAnimal(SCCoord.GetCenter(scc), animIndex, reader.ReadSingle());
-    //    }
-
-    //    /*
-    //    Population = 0;
-    //    Villagers.Clear();
-    //    for (int i = 0; i < 6; i++)
-    //    {
-    //        NewRandomVillager();
-    //    }
-    //    Recalculate();
-    //    */
-
-    //    Connector.villagerManager.SpawnAllVillagers();
-    //    extractionQueue = new List<ResourceDeposit>();
-    //    VillagerPlacesReassigning();
-    //    Recalculate();
-    //    SmallInfoController.SetAllBuilding();
-    //}
-
-    // OLD LOAD FUNCTION 2
-    //public static void Load_old2(BinaryReader reader)
-    //{
-    //    BuildingIndex bldIndex;
-    //    AnimalIndex animIndex;
-    //    SCCoord scc;
-    //    short uniqueIndex;
-
-    //    Building.maxUniqueIndex = reader.ReadInt16(); //Debug.Log("VillageData.Load() Building.maxUniqueIndex = " + Building.maxUniqueIndex);
-    //    short constructionsCount = reader.ReadInt16(); //Debug.Log("VillageData.Load() constructionsCount = " + constructionsCount);
-    //    for (int i = 0; i < constructionsCount; i++)
-    //    {
-    //        bldIndex = (BuildingIndex)reader.ReadByte();
-    //        uniqueIndex = reader.ReadInt16();
-    //        scc = new SCCoord(reader.ReadInt16(), reader.ReadInt16());
-    //        Connector.generalBuilder.InstantConstruction(bldIndex, scc, uniqueIndex, reader.ReadInt16());
-    //        //cs.uniqueIndex = uniqueIndex;
-    //        //cs.IncreaseProcess(reader.ReadInt16());
-    //    }
-    //    CleanDeletedObjects();
-
-    //    short readyCount = reader.ReadInt16(); //Debug.Log("VillageData.Load() readyCount = " + readyCount);
-    //    for (int i = 0; i < readyCount; i++)
-    //    {
-    //        bldIndex = (BuildingIndex)reader.ReadByte(); //Debug.Log("VillageData.Load() trying to read bldIndex. bldIndex = " + bldIndex);
-    //        uniqueIndex = reader.ReadInt16(); //Debug.Log("VillageData.Load() trying to read uniqueIndex. uniqueIndex = " + uniqueIndex);
-    //        scc = new SCCoord(reader.ReadInt16(), reader.ReadInt16()); //Debug.Log("VillageData.Load() scc of building = " + scc);
-    //        Connector.generalBuilder.InstantBuilding(bldIndex, scc, uniqueIndex);
-    //        //rs = obj.GetComponent<ReadySet>();                          
-    //        //rs.uniqueIndex = uniqueIndex;
-    //    }
-
-    //    Population = reader.ReadInt16(); //Debug.Log("VillageData.Load() Population = " + Population);
-    //    for (int i = 0; i < Population; i++)
-    //    {
-    //        Villagers.Add(new VillagerData(
-    //            reader.ReadBoolean(),
-    //            reader.ReadString(),
-    //            reader.ReadByte(),
-    //            ((uniqueIndex = reader.ReadInt16()) == 0) ? null : uniqIndexDict[uniqueIndex].GetComponent<ReadySet>(),
-    //            ((uniqueIndex = reader.ReadInt16()) == 0) ? null : uniqIndexDict[uniqueIndex].GetComponent<ReadySet>(),
-    //            reader.ReadSingle()
-    //        ));
-    //    }
-
-    //    int animalPopul = reader.ReadInt16();
-    //    for (int i = 0; i < animalPopul; i++)
-    //    {
-    //        animIndex = (AnimalIndex)reader.ReadByte();
-    //        scc = new SCCoord(reader.ReadInt16(), reader.ReadInt16());
-    //        Connector.animalManager.InstantSpawnAnimal(SCCoord.GetCenter(scc), animIndex, reader.ReadSingle());
-    //    }
-
-    //    for (int i = 0; i < resources.Length; i++)
-    //    {
-    //        resources[i] = reader.ReadSingle();
-    //    }
-
-    //    /*
-    //    Population = 0;
-    //    Villagers.Clear();
-    //    for (int i = 0; i < 6; i++)
-    //    {
-    //        NewRandomVillager();
-    //    }
-    //    Recalculate();
-    //    */
-        
-    //    if (Connector.villageDataInit.startVillageInit)
-    //    {
-    //        Connector.villageDataInit.Start();
-    //    }
-    //    Connector.villagerManager.SpawnAllVillagers();
-    //    extractionQueue = new List<ResourceDeposit>();
-    //    ResourcesReassigning();
-    //    VillagerPlacesReassigning();
-    //    Recalculate();
-    //    Building.SetAllSmallInfo();
-    //}
-
-    // NEW LOAD FUNCTION
-    public static void Load(BinaryReader reader)
+    public static void Load_old(BinaryReader reader)
     {
         BuildingIndex bldIndex;
         CreatureIndex animIndex;
@@ -588,6 +434,90 @@ public static class VillageData
         extractionQueue.Clear();
         ResourcesReassigning();
         //VillagerPlacesReassigning();
+        Recalculate();
+        SmallInfoController.SetAllBuilding();
+    }
+
+    // New LOAD FUNCTION
+    public static void Load(BinaryReader reader)
+    {
+        BuildingIndex bldIndex;
+        CreatureIndex animIndex;
+        SCCoord scc;
+        short uniqueIndex;
+        byte angle;
+
+        BuildingProperties.maxUniqueIndex = reader.ReadInt16();           //Debug.Log("VillageData.Load() Building.maxUniqueIndex = " + Building.maxUniqueIndex);
+        short constructionsCount = reader.ReadInt16();                    //Debug.Log("VillageData.Load() constructionsCount = " + constructionsCount);
+        for (int i = 0; i < constructionsCount; i++)
+        {
+            bldIndex = (BuildingIndex)reader.ReadByte();
+            uniqueIndex = reader.ReadInt16();
+            scc = new SCCoord(reader.ReadInt16(), reader.ReadInt16());
+            Connector.generalBuilder.InstantConstruction(bldIndex, scc, uniqueIndex, reader.ReadInt16());
+        }
+
+        short readyCount = reader.ReadInt16();                            //Debug.Log("VillageData.Load() readyCount = " + readyCount);
+        for (int i = 0; i < readyCount; i++)
+        {
+            bldIndex = (BuildingIndex)reader.ReadByte();                  //Debug.Log("VillageData.Load() trying to read bldIndex. bldIndex = " + bldIndex);
+            uniqueIndex = reader.ReadInt16();                             //Debug.Log("VillageData.Load() trying to read uniqueIndex. uniqueIndex = " + uniqueIndex);
+            angle = reader.ReadByte();
+            scc = new SCCoord(reader.ReadInt16(), reader.ReadInt16());    //Debug.Log("VillageData.Load() scc of building = " + scc);
+            Connector.generalBuilder.InstantBuilding(bldIndex, scc, uniqueIndex, angle);
+        }
+
+        int population = reader.ReadInt16();                              //Debug.Log("VillageData.Load() Population = " + Population);
+        for (int i = 0; i < population; i++)
+        {
+            Connector.creatureManager.SpawnVillager
+                (reader.ReadBoolean(),
+                reader.ReadString(),
+                reader.ReadByte(),
+                ((uniqueIndex = reader.ReadInt16()) == 0) ? null : uniqIndexDict[uniqueIndex].GetComponent<Building>(), 
+                ((uniqueIndex = reader.ReadInt16()) == 0) ? null : uniqIndexDict[uniqueIndex].GetComponent<Building>(),
+                _satiety: reader.ReadSingle());
+        }
+
+        int animalPopul = reader.ReadInt16();
+        for (int i = 0; i < animalPopul; i++)
+        {
+            reader.ReadByte();
+            animIndex = CreatureIndex.DEER;
+
+            //animIndex = (CreatureIndex)reader.ReadByte();
+            scc = new SCCoord(reader.ReadInt16(), reader.ReadInt16());
+            Connector.creatureManager.Spawn
+                (SCCoord.GetCenter(scc),
+                animIndex,
+                healthPoints: -1f);
+            reader.ReadSingle();
+        }
+
+        for (int i = 0; i < 256; i++)
+        {
+            if (i < resources.Length) resources[i] = reader.ReadSingle();
+            else reader.ReadSingle();
+        }
+
+        for (int i = 0; i < 256; i++)
+        {
+            if (i < resources.Length) Connector.statistics.ChangeReceivedResource((ResourceIndex)i, reader.ReadSingle());
+            else reader.ReadSingle();
+        }
+
+        for (int i = 0; i < 256; i++)
+        {
+            if (i < Enum.GetNames(typeof(TechnologySystem.TechIndex)).Length) Connector.techManager.InitTechStatus((TechnologySystem.TechIndex)i, (TechStatus)reader.ReadByte());
+            else reader.ReadByte();
+        }
+
+        if (Connector.villageDataInit.startVillageInit)
+        {
+            Connector.villageDataInit.Start();
+        }
+        extractionQueue.Clear();
+        ResourcesReassigning();
         Recalculate();
         SmallInfoController.SetAllBuilding();
     }

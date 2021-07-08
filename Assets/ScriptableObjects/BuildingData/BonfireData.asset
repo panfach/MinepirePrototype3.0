@@ -24,6 +24,6 @@ MonoBehaviour:
     indexVal:
     - 3
     typeVal: []
-  maxPeople: 0
   type: 5
   profession: 0
+  requiredTech: 5

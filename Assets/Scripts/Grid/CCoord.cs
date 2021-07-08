@@ -72,13 +72,16 @@ public struct CCoord
 [System.Serializable]
 public struct SCCoord
 {
-	public int X { get; private set; }
-	public int Z { get; private set; }
+	[SerializeField] int _x;
+	[SerializeField] int _z;
+
+	public int X { get => _x; private set { _x = value; } }
+	public int Z { get => _z; private set { _z = value; } }
 
 	public SCCoord(int x, int z)
 	{
-		X = x;
-		Z = z;
+		_x = x;
+		_z = z;
 	}
 
 	public static SCCoord FromOffsetCoord(int x, int z)

@@ -61,6 +61,7 @@ public class Appointer : MonoBehaviour
     /// <returns>Successful</returns>
     public bool Appoint(Appointer target)
     {
+        if (target == this) return false;
         if (!CheckAppointConditions(target))
         {
             Connector.effectSoundManager.PlayCancelSound();
@@ -91,6 +92,7 @@ public class Appointer : MonoBehaviour
            ((target = hit.collider.GetComponent<CollideListener>()?.colliderHandler.GetComponent<Appointer>()) != null) ||                                  // Bad . Maybe create class (RayCaster)
            (target = hit.collider.GetComponent<Appointer>()) != null)
         {
+            if (target.enabled == false) return;
             //return Appoint(target);
             Appoint(target);
             return;
@@ -103,7 +105,7 @@ public class Appointer : MonoBehaviour
     /// </summary>
     public void Remove(AppointerType _type, int index)
     {
-        if (appointment[(int)_type].Count < index) return;
+        if (index >= appointment[(int)_type].Count) return;
         Remove(appointment[(int)_type][index]);
     }
 
@@ -205,7 +207,7 @@ public class Appointer : MonoBehaviour
 
         // workSequence = ActSequenceList.GetWorkSequence(profession);                        ///////////////////////////
 
-        entity.GeneralAI.DefineBehaviour();     
+        entity.GeneralAI.DefineBehaviour(30);     
     }
 
     void VillagerRemoveHandler(Appointer target)
@@ -223,7 +225,7 @@ public class Appointer : MonoBehaviour
                 break;
         }
 
-        entity.GeneralAI.DefineBehaviour();
+        entity.GeneralAI.DefineBehaviour(30);
     }
 
     void LivingPlaceAddHandler(Appointer target)

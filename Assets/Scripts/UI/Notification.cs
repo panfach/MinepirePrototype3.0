@@ -44,6 +44,9 @@ public class Notification : MonoBehaviour
             case NotifType.RESRESEARCH:
                 notifText.text = "Не выполнены условия для изучения";
                 break;
+            case NotifType.REQTECH:
+                notifText.text = "Не изучена требуемая технология";
+                break;
         }
     }
 
@@ -56,5 +59,6 @@ public enum NotifType
     PLACEBUILD,
     EMPTYHOME,
     RESSOURCE,
-    RESRESEARCH
+    RESRESEARCH,
+    REQTECH
 }

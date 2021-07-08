@@ -13,6 +13,7 @@ public static class StateManager
     public static bool FightMode { get; private set; }*/
 
     public static GameState GeneralState { get; private set; }
+    public static TimeScaleIndex TimeScale { get; set; }
 
     static bool buildingInfo = false;
     static bool resourceSourceInfo = false;
@@ -48,7 +49,7 @@ public static class StateManager
 
     public static bool SetBuildMode() 
     {
-        if (GeneralState == GameState.ORD)
+        if (GeneralState == GameState.ORD || GeneralState == GameState.MAPEDIT)
         {
             GeneralState = GameState.BUILD;
             return true;
@@ -321,4 +322,12 @@ public enum GameState
     MAPEDIT,
     CHANGETURN,
     FIGHT
+}
+
+public enum TimeScaleIndex
+{
+    FREEZED,
+    SCALE1,
+    SCALE3,
+    SCALE6
 }

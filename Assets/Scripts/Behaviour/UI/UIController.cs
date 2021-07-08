@@ -12,8 +12,10 @@ public class UIController : MonoBehaviour
     [SerializeField] bool reactToHealthChanges;
     [SerializeField] bool reactToSatietyChanges;
     [SerializeField] bool reactToProductionChanges;
+    [SerializeField] bool refreshResourceInfo;
 
     public bool ReactToInventoryChanges { get => reactToInventoryChanges; }
+    public bool RefreshResourceInfo { get => refreshResourceInfo; }
 
 
     private void OnEnable()

@@ -57,7 +57,8 @@ public class PanelInvoker : MonoBehaviour
 
     public void BuildModeOn(int index)
     {
-        if (StateManager.GeneralState == GameState.ORD)
+        Debug.Log("General state : " + StateManager.GeneralState);
+        if (StateManager.GeneralState == GameState.ORD || StateManager.GeneralState == GameState.MAPEDIT)
             Connector.generalBuilder.BuildModeActivate((BuildingIndex)index);
     }
 
@@ -81,6 +82,8 @@ public class PanelInvoker : MonoBehaviour
     // General function, that determines, what info should open
     public void OpenInfo(Entity entity)
     {
+        if (SaveLoader.state == SaveLoadState.EXITING) return;
+
         if (entity is Building)
             OpenBuildingInfo(entity as Building);
         else if (entity is Nature)
@@ -93,6 +96,8 @@ public class PanelInvoker : MonoBehaviour
     // General function, that determines, what info should close
     public void CloseInfo(Entity entity)
     {
+        if (SaveLoader.state == SaveLoadState.EXITING) return;
+
         if (entity is Building && BuildingInfo.activeBuilding == entity as Building)
             CloseBuildingInfo(entity as Building);
         else if (entity is Nature && NatureInfo.activeNature == entity as Nature)
@@ -105,8 +110,16 @@ public class PanelInvoker : MonoBehaviour
     // General function, that updates information
     public void RefreshInfo(Entity entity)
     {
-        if (entity is Building && BuildingInfo.activeBuilding == entity as Building)
-            RefreshBuildingInfo();
+        if (SaveLoader.state == SaveLoadState.EXITING) return;
+
+        //Debug.Log("PanelInvoker Refreshing Info ...");
+        if (entity is Building)
+        {
+            if (BuildingInfo.activeBuilding == entity as Building)
+                RefreshBuildingInfo();
+            if (entity.UIController.RefreshResourceInfo)
+                Connector.infoDisplay.resInfo.Refresh();
+        }
         else if (entity is Nature && NatureInfo.activeNature == entity as Nature)
             RefreshNatureInfo();
         else if (entity is Creature)
@@ -192,7 +205,23 @@ public class PanelInvoker : MonoBehaviour
 
     public void SetTimeScale(int speed)
     {
+        switch (speed)
+        {
+            case 0:
+                StateManager.TimeScale = TimeScaleIndex.FREEZED;
+                break;
+            case 1:
+                StateManager.TimeScale = TimeScaleIndex.SCALE1;
+                break;
+            case 3:
+                StateManager.TimeScale = TimeScaleIndex.SCALE3;
+                break;
+            case 6:
+                StateManager.TimeScale = TimeScaleIndex.SCALE6;
+                break;
+        }
         Time.timeScale = speed;
+        Connector.infoDisplay.RefreshTimePanelButtons();
     } 
 
     public void OpenBuildPanelInfo(int index)
@@ -214,5 +243,10 @@ public class PanelInvoker : MonoBehaviour
     public void CloseResearchWindow()
     {
         researchInfo.Set(false);
+    }
+
+    public void AddResource(int index)
+    {
+        VillageData.AddResourceIntoFreeWarehouse((ResourceIndex)index, 1f);
     }
 }

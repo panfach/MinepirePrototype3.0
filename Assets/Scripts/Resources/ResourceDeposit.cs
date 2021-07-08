@@ -80,8 +80,7 @@ public class ResourceDeposit : MonoBehaviour
         if (occupied[ind])
         {
             GeneralAI villager = owner[ind];
-            owner[ind] = null;
-            villager.ForgetExtractedResource();
+            RemoveOccupation(ind, villager);
             villager.DefineBehaviour(7);
         }
 
@@ -123,6 +122,7 @@ public class ResourceDeposit : MonoBehaviour
         }
 
         resourceChangedEvent?.Invoke();
+        statusChangedEvent?.Invoke();
     }
 
     public void Recover()

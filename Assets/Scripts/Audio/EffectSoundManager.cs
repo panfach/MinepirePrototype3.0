@@ -1,13 +1,26 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
 // -------------------- // MINEPIRE demo // -------------------- //
 public class EffectSoundManager : MonoBehaviour
 {
     public AudioSource _as;
+    public float playDelayDuration;
     public AudioClip buttonSound, smoothClick, cancelSound, slideSound, nextTurnSound, constructionSound;
 
+    WaitForSeconds playDelay;
+
+
+    void Awake()
+    {
+        playDelay = new WaitForSeconds(playDelayDuration);
+    }
+
+
     public void PlayButtonSound() {
-        _as.PlayOneShot(buttonSound);
+        StopAllCoroutines();
+        StartCoroutine(PlayWithDelay(buttonSound));
     }
 
     public void PlaySmoothClick() {
@@ -15,11 +28,13 @@ public class EffectSoundManager : MonoBehaviour
     }
 
     public void PlayCancelSound() {
-        _as.PlayOneShot(cancelSound);
+        StopAllCoroutines();
+        StartCoroutine(PlayWithDelay(cancelSound));
     }
 
     public void PlaySlideSound() {
-        _as.PlayOneShot(slideSound);
+        StopAllCoroutines();
+        StartCoroutine(PlayWithDelay(slideSound));
     }
 
     public void PlayNextTurnSound() {
@@ -28,5 +43,12 @@ public class EffectSoundManager : MonoBehaviour
 
     public void PlayConstructionSound() {
         _as.PlayOneShot(constructionSound);
+    }
+
+
+    IEnumerator PlayWithDelay(AudioClip clip)
+    {
+        yield return playDelay;
+        _as.PlayOneShot(clip);
     }
 }

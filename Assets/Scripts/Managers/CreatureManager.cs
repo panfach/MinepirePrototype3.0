@@ -41,7 +41,7 @@ public class CreatureManager : MonoBehaviour
         (Vector3 position,
         CreatureIndex index = CreatureIndex.DEER,
         bool gender = false,
-        string _name = "Potato",
+        string _name = "Олень",
         int age = 0,
         Building home = null,
         Building work = null,
@@ -52,7 +52,7 @@ public class CreatureManager : MonoBehaviour
         Creature entity = creature.GetComponent<Creature>();
         Add(entity);
         entity.CrtProp.Init(gender, _name, age, home, work, satiety, healthPoints);
-        entity.Health.Value = (healthPoints >= 0) ? healthPoints : entity.CrtData.MaxHealth;
+        //entity.Health.Value = (healthPoints >= 0) ? healthPoints : entity.CrtData.MaxHealth;
 
         return entity;
     }
@@ -61,7 +61,7 @@ public class CreatureManager : MonoBehaviour
         (Vector3 _position,
         CreatureIndex _index = CreatureIndex.DEER,
         bool _gender = false,
-        string _name = "Potato",
+        string _name = "Олень",
         int _age = 0,
         Building _home = null,
         Building _work = null,
@@ -88,7 +88,7 @@ public class CreatureManager : MonoBehaviour
 
     public Creature SpawnVillager
         (bool _gender = false,
-        string _name = "Potato",
+        string _name = "Олень",
         int _age = 0,
         Building _home = null,
         Building _work = null,
@@ -212,13 +212,15 @@ public class CreatureManager : MonoBehaviour
 
     public void Clear()
     {
-        foreach (Creature item in Animals)
+        int count = Animals.Count;
+        for (int i = 0; i < count; i++)
         {
-            Destroy(item);
+            Destroy(Animals[i].gameObject);
         }
-        foreach (Creature item in Villagers)
+        count = Villagers.Count;
+        for (int i = 0; i < count; i++)
         {
-            Destroy(item);
+            Destroy(Villagers[i].gameObject);
         }
         Animals.Clear();
         Villagers.Clear();

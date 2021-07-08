@@ -6,6 +6,7 @@ using UnityEngine;
 [System.Serializable]
 public class Recipe
 {
+    public string recipeName;
     public bool professional;
     public int[] interactionSpotIndex;
     public float laborIntensity = 1f;
@@ -61,7 +62,7 @@ public class Recipe
 
     public void RemoveOccupation()
     {
-        worker.DestRecipe = null;
+        if (worker != null) worker.DestRecipe = null;
         worker = null;
     }
 

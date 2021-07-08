@@ -25,7 +25,7 @@ public class SmallInfo : MonoBehaviour
         SmallInfoController controller = instance.SmallInfoController;
 
         SetInfoBox(controller.ReactToMouseEnter && instance.ColliderHandler.MouseOver || 
-                   controller.ReactToMouseDrag && StateManager.VillagerDragging);
+                   StateManager.VillagerDragging);
         SetIconBox(controller.ReactToZeroAppointedPeople && instance.Appointer.enabled && instance.Appointer.People == 0 ||
                    controller.ReactToResourceDepositStatus && instance.ResourceDeposit.ExtractableResourceExists() ||
                    controller.ReactToHomeAbsence && instance.Appointer.Home == null);

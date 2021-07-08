@@ -42,6 +42,8 @@ public class NatureInfo : MonoBehaviour
 
     public void Set(bool state)
     {
+        if (SaveLoader.state == SaveLoadState.EXITING) return;
+
         NatureInfoTurnedOn = state;
         StateManager.ResourceSourceInfo = state;
         if (state)
@@ -52,37 +54,44 @@ public class NatureInfo : MonoBehaviour
 
     public void Refresh()
     {
-        if (natureInfoTurnedOn)
+        if (!natureInfoTurnedOn || SaveLoader.state == SaveLoadState.EXITING) return;
+
+        _name.text = activeNature.NtrData.Name_rus;
+
+        for (int i = 0; i < interactButton.Length; i++)
         {
-            _name.text = activeNature.NtrData.Name_rus;
-
-            for (int i = 0; i < interactButton.Length; i++)
-            {
-                interactButton[i].SetActive(false);
-            }
-
-            int j = 0;
-            for (int i = 0; i < activeNature.ResourceDeposit.Size; i++)
-            {
-                resourceField[i].SetActive(true);
-                resourceName[i].text = DataList.GetResource(activeNature.ResourceDeposit.Index(i)).Name_rus;
-                resourceSlider[i].maxValue = activeNature.NtrData.Amount(i);
-                resourceSlider[i].value = activeNature.ResourceDeposit.Amount(i);
-                resourceValue[i].text = activeNature.ResourceDeposit.Amount(i).ToString("F2");
-
-                if (i == 0 || i == 1)
-                {
-                    interactButton[i].SetActive(true);
-                    interactButtonText[i].text = "Собрать\n" + DataList.GetResource(activeNature.ResourceDeposit.Index(i)).Name_rus;
-                }
-
-                j++;
-            }
-            for (int i = j; i < resourceField.Length; i++)
-            {
-                resourceField[i].SetActive(false);
-            }
+            interactButton[i].SetActive(false);
         }
+
+        int j = 0;
+        for (int i = 0; i < activeNature.ResourceDeposit.Size; i++)
+        {
+            resourceField[i].SetActive(true);
+            resourceName[i].text = DataList.GetResource(activeNature.ResourceDeposit.Index(i)).Name_rus;
+            resourceSlider[i].maxValue = activeNature.NtrData.Amount(i);
+            resourceSlider[i].value = activeNature.ResourceDeposit.Amount(i);
+            resourceValue[i].text = activeNature.ResourceDeposit.Amount(i).ToString("F2");
+
+            if (i == 0 || i == 1)
+            {
+                interactButton[i].SetActive(true);
+                interactButtonText[i].text = "Собрать\n" + DataList.GetResource(activeNature.ResourceDeposit.Index(i)).Name_rus;
+            }
+
+            j++;
+        }
+        for (int i = j; i < resourceField.Length; i++)
+        {
+            resourceField[i].SetActive(false);
+        }
+    }
+
+    public void OnClickExtractButton(int index)
+    {
+        if (activeNature.ResourceDeposit.Extractable(index))
+            TurnOffExtractable(index);
+        else
+            TurnOnExtractable(index);
     }
 
     public void TurnOnExtractable(int index)

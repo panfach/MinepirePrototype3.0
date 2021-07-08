@@ -56,5 +56,6 @@ public class CreatureProperties : MonoBehaviour
         if (entity.Appointer != null && _work != null) entity.Appointer.Appoint(_work.Appointer);
         entity.Satiety.Value = _satiety;
         entity.Health.Value = (_health == -1f) ? entity.CrtData.MaxHealth : _health;
+        //if (entity.CrtData.Index == CreatureIndex.DEER) Debug.Log("_health = " + _health + ". entity.CrtData.MaxHealth = " + entity.CrtData.MaxHealth);
     }
 }

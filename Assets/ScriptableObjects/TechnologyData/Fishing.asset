@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Fishing
   m_EditorClassIdentifier: 
   techName: "\u0420\u044B\u0431\u043E\u043B\u043E\u0432\u0441\u0442\u0432\u043E"
+  techName_rus: "\u0420\u044B\u0431\u043E\u043B\u043E\u0432\u0441\u0442\u0432\u043E"
   index: 1
   requiredStatRes:
     index: 06000000

@@ -5,7 +5,8 @@ using System.IO;
 
 public class SaveLoader : MonoBehaviour
 {
-	public static bool mapIsLoaded = true;
+	//public static bool mapIsLoaded = true;
+	public static SaveLoadState state = SaveLoadState.START;
 
 	public CellGrid cellGrid;
 	public SmallCellGrid smallCellGrid;
@@ -19,39 +20,42 @@ public class SaveLoader : MonoBehaviour
 
 		string path = Path.Combine(Application.persistentDataPath, filename);
 
+		state = SaveLoadState.SAVING;
 		using (BinaryWriter writer = new BinaryWriter(File.Open(path, FileMode.Create)))
 		{
 			cellGrid.Save(writer);
 			smallCellGrid.Save(writer);
 			VillageData.Save(writer);
 		}
-
-
+		state = SaveLoadState.DEFAULT;
 	}
 
 	public void Load(string filename)
 	{
+		state = SaveLoadState.LOADING;
 		using (BinaryReader reader = new BinaryReader(File.Open(filename, FileMode.Open)))
 		{
 			ClearGame();
 			Sunlight.timeOfDay = 0.86f;
 			Sunlight.theEndOfDay = false;
 			cellGrid.Load(reader);
-			Connector.navMeshSurface.BuildNavMesh();
+			//Connector.navMeshSurface.BuildNavMesh();
 			smallCellGrid.Load(reader);
+			Connector.navMeshSurface.BuildNavMesh();
 			VillageData.Load(reader);
 			InfoDisplay.Refresh();
 			//StaticBatchingUtility.Combine(VillageData.staticBatchingObjects.ToArray(), Connector.environmentSpawnedObjects);
 			//VillageData.staticBatchingObjects.Clear();
 			//StartCoroutine(TurnOnStaticBatching());
-			mapIsLoaded = true;
+			//mapIsLoaded = true;
 			//StartCoroutine(CellGrid.NavMeshRefresh(0.001f));
 		}
+		state = SaveLoadState.DEFAULT;
 	}
 
 	public void LoadNewGame()
 	{
-		//using (BinaryReader reader = new BinaryReader(new MemoryStream(save.bytes)))
+		state = SaveLoadState.LOADING;
 		using (BinaryReader reader = new BinaryReader(new MemoryStream(save.bytes)))
 		{
 			ClearGame();
@@ -63,8 +67,9 @@ public class SaveLoader : MonoBehaviour
 			VillageData.Load(reader);
 			InfoDisplay.Refresh();
 			StartCoroutine(TurnOnStaticBatching());
-			mapIsLoaded = true;
+			//mapIsLoaded = true;
 		}
+		state = SaveLoadState.DEFAULT;
 	}
 
 	public static string[] GetLoadFilenames()
@@ -76,10 +81,11 @@ public class SaveLoader : MonoBehaviour
 
 	public void ClearGame()
     {
-		Connector.natureManager.ClearEnvironment();
+		Connector.natureManager.Clear();
 		Connector.creatureManager.Clear();
 		Connector.generalBuilder.Clear();
 		Connector.creatureManager.Clear();
+		Connector.statistics.Clear();
 		VillageData.Clear();
 	}
 
@@ -90,4 +96,19 @@ public class SaveLoader : MonoBehaviour
 		StaticBatchingUtility.Combine(VillageData.staticBatchingObjects.ToArray(), Connector.environmentSpawnedObjects);
 		//VillageData.staticBatchingObjects.Clear();
 	}
+
+
+	void OnApplicationQuit()
+    {
+		state = SaveLoadState.EXITING;
+	}
+}
+
+public enum SaveLoadState
+{
+	START,
+	DEFAULT,
+	LOADING,
+	SAVING,
+	EXITING
 }

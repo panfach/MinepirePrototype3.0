@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Go To Building
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: 936, y: 328}
+  position: {x: 1016, y: 312}
   ports:
     keys:
     - enter
@@ -172,7 +172,7 @@ MonoBehaviour:
   m_Name: Exit Building
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: 1592, y: 424}
+  position: {x: 1672, y: 408}
   ports:
     keys:
     - enter
@@ -203,7 +203,6 @@ MonoBehaviour:
       _typeConstraint: 0
       _dynamic: 0
   initialDelay: 0
-  priority: 80
   finalDelay: 0
 --- !u!114 &-1083643072190467167
 MonoBehaviour:
@@ -284,6 +283,7 @@ MonoBehaviour:
     indexVal: []
     typeVal: []
   item: {fileID: 0}
+  priority: 5
   mode: 0
 --- !u!114 &11400000
 MonoBehaviour:
@@ -309,6 +309,7 @@ MonoBehaviour:
   - {fileID: 1018403541585915815}
   - {fileID: -2367793220182226886}
   - {fileID: 7812747404018033167}
+  - {fileID: 7875834307211617987}
 --- !u!114 &1018403541585915815
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -322,7 +323,7 @@ MonoBehaviour:
   m_Name: Put
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: 1400, y: 280}
+  position: {x: 1480, y: 264}
   ports:
     keys:
     - enter
@@ -362,6 +363,7 @@ MonoBehaviour:
       _connectionType: 0
       _typeConstraint: 0
       _dynamic: 0
+  priority: 5
   mode: 0
 --- !u!114 &1414181433660636130
 MonoBehaviour:
@@ -600,7 +602,10 @@ MonoBehaviour:
       _node: {fileID: 3318512701662205932}
       _typeQualifiedName: ActSequenceSystem.Connection, Assembly-CSharp, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
-      connections: []
+      connections:
+      - fieldName: enter
+        node: {fileID: 7875834307211617987}
+        reroutePoints: []
       _direction: 1
       _connectionType: 0
       _typeConstraint: 0
@@ -610,6 +615,7 @@ MonoBehaviour:
     type: 
     indexVal: []
     typeVal: []
+  priority: 5
   bldType: 2
   mode: 4
   building: {fileID: 0}
@@ -626,7 +632,7 @@ MonoBehaviour:
   m_Name: Enter Building
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: 1160, y: 184}
+  position: {x: 1240, y: 168}
   ports:
     keys:
     - enter
@@ -681,7 +687,6 @@ MonoBehaviour:
       _dynamic: 0
   building: {fileID: 0}
   initialDelay: 0
-  priority: 80
   finalDelay: 0
 --- !u!114 &7812747404018033167
 MonoBehaviour:
@@ -696,7 +701,7 @@ MonoBehaviour:
   m_Name: Check
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000}
-  position: {x: 1160, y: -200}
+  position: {x: 1240, y: -216}
   ports:
     keys:
     - enter
@@ -762,6 +767,59 @@ MonoBehaviour:
     indexVal: []
     typeVal: []
   item: {fileID: 0}
+  priority: 5
+  mode: 0
+--- !u!114 &7875834307211617987
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b95055f665483234e80a3665d65dd785, type: 3}
+  m_Name: Put
+  m_EditorClassIdentifier: 
+  graph: {fileID: 11400000}
+  position: {x: 1016, y: 552}
+  ports:
+    keys:
+    - enter
+    - trueConnection
+    - falseConnection
+    values:
+    - _fieldName: enter
+      _node: {fileID: 7875834307211617987}
+      _typeQualifiedName: ActSequenceSystem.Connection, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections:
+      - fieldName: falseConnection
+        node: {fileID: 3318512701662205932}
+        reroutePoints: []
+      _direction: 0
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: trueConnection
+      _node: {fileID: 7875834307211617987}
+      _typeQualifiedName: ActSequenceSystem.Connection, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+    - _fieldName: falseConnection
+      _node: {fileID: 7875834307211617987}
+      _typeQualifiedName: ActSequenceSystem.Connection, Assembly-CSharp, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      connections: []
+      _direction: 1
+      _connectionType: 0
+      _typeConstraint: 0
+      _dynamic: 0
+  priority: 0
   mode: 0
 --- !u!114 &8097998229544536990
 MonoBehaviour:

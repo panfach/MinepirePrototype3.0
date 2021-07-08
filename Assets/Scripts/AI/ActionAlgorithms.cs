@@ -439,13 +439,6 @@ public static class ActionAlgorithms
     /// </summary>
     public static IEnumerator GoToInteraction(Creature creature, ActSequenceSystem.GoToInteraction action)
     {
-        // Checking the possibility of execution
-        if (action.Entity == null || creature.CrtProp.PlaceOfStay != null)
-        {
-            FalseReaction(creature, action);
-            yield break;
-        }
-
         // Initial delay
         yield return new WaitForSeconds(action.initialDelay);
 
@@ -475,7 +468,12 @@ public static class ActionAlgorithms
                     if (creature.CrtProp.PlaceOfStay.entity.Interactive.Occupy(ind, creature.GeneralAI))
                     {
                         _spot = creature.CrtProp.PlaceOfStay.entity.Interactive.Spot(ind);
+                        Debug.Log("ind: " + ind + " true");
                         break;
+                    }
+                    else
+                    {
+                        Debug.Log("ind: " + ind + " false");
                     }
                 }
                 action.spot = _spot;
@@ -502,7 +500,7 @@ public static class ActionAlgorithms
                 yield break;
             }
 
-            if (Vector3.SqrMagnitude(destPoint - creature.transform.position) < creature.CrtData.defaultActionDistance)
+            if (Vector3.SqrMagnitude(destPoint - creature.transform.position) < creature.CrtData.defaultAttackDistance)
             {
                 yield return new WaitForSeconds(action.finalDelay);
                 action.spot = spot;
@@ -560,6 +558,8 @@ public static class ActionAlgorithms
     public static IEnumerator Check(Creature creature, ActSequenceSystem.Check action)
     {
         // Body
+        yield return null;
+
         switch (action.mode)
         {
             case CheckMode.EMPTYQUERY:
@@ -607,7 +607,7 @@ public static class ActionAlgorithms
                 }
                 break;
             case CheckMode.PLACEFORITEM:
-                if (!creature.Inventory.CheckPlaceFor(action.Item.Inventory))
+                if (action.Item == null || !creature.Inventory.CheckPlaceFor(action.Item.Inventory))
                 {
                     FalseReaction(creature, action);
                     yield break;
@@ -708,48 +708,71 @@ public static class ActionAlgorithms
     public static IEnumerator FindWork(Creature creature, ActSequenceSystem.FindWork action)
     {
         // Body
-        yield return new WaitForSeconds(creature.CrtData.checkEventsDelay);
+        yield return tick;
 
         if (creature.Appointer.Work == null)
         {
-            foreach (ExtractedResourceLink item in VillageData.extractionQueue)
+            int rndIndex = Random.Range(0, 4);
+
+            switch (rndIndex)
             {
-                if (item.Occupy(creature.GeneralAI))
-                {
-                    action.sequence = ActSequenceIndex.VILLAGER_EXTRACT;
-                    TrueReaction(creature, action);
-                    yield break;
-                }
-            }
+                case 0:
+                    foreach (Item item in ItemManager.items)
+                    {
+                        for (int i = 0; i < item.Inventory.PacksAmount; i++)
+                        {
+                            if (VillageData.FreeSpaceForResource(item.Inventory.StoredRes[i]) > 0.001f && item.Inventory.Occupy(creature))
+                            {
+                                action.sequence = ActSequenceIndex.VILLAGER_CARRIER;
+                                TrueReaction(creature, action);
+                                yield break;
+                            }
+                        }
+                    }
+                    break;
+                case 1:
+                    foreach (ExtractedResourceLink item in VillageData.extractionQueue)
+                    {
+                        if (item.Occupy(creature.GeneralAI))
+                        {
+                            action.sequence = ActSequenceIndex.VILLAGER_EXTRACT;
+                            TrueReaction(creature, action);
+                            yield break;
+                        }
+                    }
+                    break;
+                case 2:
+                    Recipe recipe;
+                    foreach (Production item in VillageData.Productions)
+                    {
+                        if ((recipe = item.GetProduceWork()) != null)
+                        {
+                            recipe.Occupy(creature.GeneralAI);
+                            action.sequence = ActSequenceIndex.VILLAGER_PRODUCE;
+                            TrueReaction(creature, action);
+                            yield break;
+                        }
 
-            Recipe recipe;
-            foreach (Production item in VillageData.Productions)
-            {
-                if ((recipe = item.GetProduceWork()) != null)
-                {
-                    recipe.Occupy(creature.GeneralAI);
-                    action.sequence = ActSequenceIndex.VILLAGER_PRODUCE;
-                    TrueReaction(creature, action);
-                    yield break;
-                }
+                        if ((recipe = item.GetReapWork()) != null)
+                        {
+                            recipe.Occupy(creature.GeneralAI);
+                            action.sequence = ActSequenceIndex.VILLAGER_REAP;
+                            TrueReaction(creature, action);
+                            yield break;
+                        }
+                    }
+                    break;
+                case 3:
+                    foreach (Building item in VillageData.Constructions)
+                    {
+                        if (item.BuildSet.ConstrStatus != ConstructionStatus.CONSTR) continue;
 
-                if ((recipe = item.GetReapWork()) != null)
-                {
-                    recipe.Occupy(creature.GeneralAI);
-                    action.sequence = ActSequenceIndex.VILLAGER_REAP;
-                    TrueReaction(creature, action);
-                    yield break;
-                }
-            }
-
-            foreach (Building item in VillageData.Constructions)
-            {
-                if (item.BuildSet.ConstrStatus != ConstructionStatus.CONSTR) continue;
-
-                action.sequence = ActSequenceIndex.VILLAGER_CONSTRUCT;
-                creature.GeneralAI.DestEntity = item;
-                TrueReaction(creature, action);
-                yield break;
+                        action.sequence = ActSequenceIndex.VILLAGER_CONSTRUCT;
+                        creature.GeneralAI.DestEntity = item;
+                        TrueReaction(creature, action);
+                        yield break;
+                    }
+                    break;
             }
         }
         else
@@ -767,6 +790,20 @@ public static class ActionAlgorithms
                 TrueReaction(creature, action);
                 yield break;
             }
+
+            if (creature.Appointer.Profession == Profession.TAILOR)
+            {
+                action.sequence = ActSequenceIndex.VILLAGER_ARTISAN;
+                TrueReaction(creature, action);
+                yield break;
+            }
+
+            if (creature.Appointer.Profession == Profession.FISHERMAN)
+            {
+                action.sequence = ActSequenceIndex.VILLAGER_FISH;
+                TrueReaction(creature, action);
+                yield break;
+            }
         }
 
         FalseReaction(creature, action);
@@ -780,10 +817,10 @@ public static class ActionAlgorithms
         // Body
         yield return new WaitForSeconds(creature.CrtData.checkEventsDelay);
 
-        Building placeOfStay;
-        if ((placeOfStay = (Building)creature.CrtProp.PlaceOfStay.entity) != null)
+        CreatureContainer placeOfStay;
+        if ((placeOfStay = creature.CrtProp.PlaceOfStay) != null)
         {
-            creature.Inventory.Give(placeOfStay.Inventory);
+            creature.Inventory.Give(placeOfStay.entity.Inventory);
         }
         else
         {
@@ -926,6 +963,8 @@ public static class ActionAlgorithms
                 }
                 else if (!creature.Appointer.Work.entity.Workplace.attackPermission)
                 {
+                    creature.GeneralAI.SwitchToWalk();
+
                     // Final delay
                     yield return new WaitForSeconds(action.finalDelay);
 
@@ -940,6 +979,7 @@ public static class ActionAlgorithms
                 {
                     creature.Appointer.Work.entity.Workplace.attackPermission = false;
                 }
+                creature.GeneralAI.SwitchToWalk();
 
                 // Final delay
                 yield return new WaitForSeconds(action.finalDelay);
@@ -1042,26 +1082,44 @@ public static class ActionAlgorithms
         else if (action.mode == FindItemMode.DROP)
         {
             Item item;
-            if ((item = creature.AttackController.GetFirstDropItem()) == null)
+            if ((item = creature.AttackController.GetFirstDropItem()) == null || !item.Inventory.Occupy(creature))
             {
                 FalseReaction(creature, action);
                 yield break;
             }
-            item.Inventory.Occupy(creature);
             action.item = item;
         }
         else if (action.mode == FindItemMode.RADIUS)
         {
             Item item = Distance.ChooseNearestItem(ItemManager.items, creature.transform.position);
-            if (item == null || Vector3.SqrMagnitude(item.transform.position - creature.transform.position) > Mathf.Pow(action.radius, 2))
+            if (item == null || !item.Inventory.Occupy(creature) || Vector3.SqrMagnitude(item.transform.position - creature.transform.position) > Mathf.Pow(action.radius, 2))
             {
                 FalseReaction(creature, action);
                 yield break;
             }
-            item.Inventory.Occupy(creature);
-            action.item = Distance.ChooseNearestItem(ItemManager.items, creature.transform.position);
+            action.item = item;
         }
+        else if (action.mode == FindItemMode.DESTINV)
+        {
+            Item item = (Item)creature.GeneralAI.DestInv.entity;
+            if (item == null || !item.Inventory.Occupy(creature))
+            {
 
+                FalseReaction(creature, action);
+                yield break;
+            }
+            action.item = item;
+        }
+        else if (action.mode == FindItemMode.HASSPACEINWAREHOUSE)
+        {
+            Item item = Distance.ChooseNearestItemWithFreeSpaceInWarehouse(ItemManager.items, creature.transform.position);
+            if (item == null || !item.Inventory.Occupy(creature))
+            {
+                FalseReaction(creature, action);
+                yield break;
+            }
+            action.item = item;
+        }
 
         TrueReaction(creature, action);
     }
@@ -1100,13 +1158,65 @@ public static class ActionAlgorithms
         if (action.mode == FindRecipeMode.PROFPRODUCEWORK)
         {
             if ((recipe = creature.Appointer.Work.entity.Production.GetProduceWork(true)) != null)
+            {
                 recipe.Occupy(creature.GeneralAI);
+                TrueReaction(creature, action);
+                yield break;
+            }
         }
         else if (action.mode == FindRecipeMode.PROFREAPWORK)
         {
             if ((recipe = creature.Appointer.Work.entity.Production.GetReapWork(true)) != null)
+            {
                 recipe.Occupy(creature.GeneralAI);
+                TrueReaction(creature, action);
+                yield break;
+            }
         }
+
+        FalseReaction(creature, action);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public static IEnumerator GoTo(Creature creature, ActSequenceSystem.GoTo action)
+    {
+        // Initial delay
+        yield return new WaitForSeconds(action.initialDelay);
+
+        // Body
+        Vector3 targetPos = creature.transform.position;
+        switch (action.mode)
+        {
+            case GoToMode.NEARCOAST:
+                targetPos = SCCoord.GetCenter(SmallCellGrid.GetNearestCoastCellState(creature.transform.position).coord);
+                break;
+        }
+        creature.Agent.SetDestination(targetPos);
+        while (true)
+        {
+            if (Vector3.SqrMagnitude(targetPos - creature.transform.position) < creature.CrtData.defaultAttackDistance)
+            {
+                // Final delay
+                yield return new WaitForSeconds(action.finalDelay);
+
+                TrueReaction(creature, action);
+                yield break;
+            }
+
+            yield return new WaitForSeconds(creature.CrtData.checkEventsDelay);
+        }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public static IEnumerator Extract(Creature creature, ActSequenceSystem.Extract action)
+    {
+        // Body
+        yield return new WaitForSeconds(action.duration);
+        creature.Inventory.CreateResource(action.query);
 
         TrueReaction(creature, action);
     }

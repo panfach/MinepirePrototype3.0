@@ -817,7 +817,7 @@ MonoBehaviour:
   entity: {fileID: 2567622910954858697}
   maxRandomWalkDelay: 7
   generalActSequence: 1
-  debugLogActions: 1
+  debugLogActions: 0
   destRecipe:
     id: 0
   destInteractionSpot:

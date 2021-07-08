@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
+using System.IO;
 
 // ------------------------------------------- // MINEPIRE // ------------------------------------------- //
 /// <summary>
@@ -32,6 +33,8 @@ public class PauseMenuLoad : MonoBehaviour
 
         foreach (string item in SaveLoader.GetLoadFilenames())
         {
+            if (Path.GetExtension(item) != ".map") continue;
+
             PauseMenu.loadFilenames.Add(item);
             loadFile = Instantiate(loadPrefab, transform);
 
@@ -39,7 +42,8 @@ public class PauseMenuLoad : MonoBehaviour
             loadFile.GetComponent<Button>().onClick.AddListener(
                 () => OnClickReaction(EventSystem.current.currentSelectedGameObject.name) 
             );
-            loadFile.GetComponentInChildren<Text>().text = item.Substring(Application.persistentDataPath.Length + 1);
+            string _item = item.Substring(Application.persistentDataPath.Length + 1);
+            loadFile.GetComponentInChildren<Text>().text = _item.Substring(0, _item.Length - 4);
             i++;
 
             PauseMenu.activeLoadfileIndex = -1;

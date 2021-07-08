@@ -65,7 +65,7 @@ public class PauseMenu : MonoBehaviour
 
     public void Open(PauseMenuSection sect)
     {
-        if (!SaveLoader.mapIsLoaded && sect != PauseMenuSection.Load) return; 
+        /*if (SaveLoader.state == SaveLoadState.START && sect != PauseMenuSection.Load) return;*/
 
         if (sect != activeSection)
         {

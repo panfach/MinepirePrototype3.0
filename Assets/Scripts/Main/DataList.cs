@@ -47,7 +47,10 @@ public class DataList : MonoBehaviour
     {
         {Profession.NONE, "Нет"},
         {Profession.LABORER, "Разнорабочий"},
-        {Profession.HUNTER, "Охотник"}
+        {Profession.HUNTER, "Охотник"},
+        {Profession.ARTISAN, "Ремесленник" },
+        {Profession.FISHERMAN, "Рыбак" },
+        {Profession.TAILOR, "Портной" }
     };
 
 

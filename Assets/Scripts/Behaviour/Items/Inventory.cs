@@ -6,7 +6,7 @@ using UnityEngine;
 public class Inventory : MonoBehaviour
 {
     [Header("Entity")]
-    [SerializeField] Entity entity;                                                                                        // Fix to Entity
+    public Entity entity;                                                                          
 
     [Header("Settings")]
     [SerializeField] bool warehouseType;
@@ -176,7 +176,8 @@ public class Inventory : MonoBehaviour
 
     public void LayOut(int packIndex, float value = float.MaxValue)
     {
-        Item item = Connector.itemManager.CreateEmptyItem(transform.position);
+        if (storedRes[packIndex] == ResourceIndex.NONE || storedRes[packIndex] == ResourceIndex.EXECUTEDQUERY) return;
+        Item item = Connector.itemManager.CreateEmptyItem(new Vector3(transform.position.x, SCCoord.GetHeight(transform.position), transform.position.z));
         Give(item.Inventory, packIndex, value);
     }
 
@@ -500,6 +501,7 @@ public class Inventory : MonoBehaviour
         float remainder = PutResource(ind, val);
         Connector.statistics.ChangeReceivedResource(ind, val - remainder);
         if (!withoutGeneralAccounting) VillageData.resources[(int)ind] += val - remainder;
+        invChangedEvent?.Invoke();
         return remainder;
     }
 

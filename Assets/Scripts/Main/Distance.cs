@@ -55,6 +55,35 @@ public static class Distance
         return nearest;
     }
 
+    public static Item ChooseNearestItemWithFreeSpaceInWarehouse(List<Item> items, Vector3 point)
+    {
+        if (items.Count == 0) return null;
+
+        Item nearest = null;
+        float distance, minDistance = float.MaxValue;
+
+        foreach (Item item in items)
+        {
+            if ((distance = Vector3.SqrMagnitude(point - item.transform.position)) < minDistance && HasFreeSpaceInWarehouse(item))
+            {
+                nearest = item;
+                minDistance = distance;
+            }
+        }
+
+        return nearest;
+    }
+
+    static bool HasFreeSpaceInWarehouse(Item item)
+    {
+        for (int i = 0; i < item.Inventory.PacksAmount; i++)
+        {
+            if (VillageData.FreeSpaceForResource(item.Inventory.StoredRes[i]) > 0.001f)
+                return true;
+        }
+        return false;
+    }
+
 
 
     /*public static Entity ChooseNearest<T>(List<T> comparableObjects, Vector3 targetPoint)

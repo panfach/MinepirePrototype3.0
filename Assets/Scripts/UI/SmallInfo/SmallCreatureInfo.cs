@@ -37,7 +37,8 @@ public class SmallCreatureInfo : SmallInfo
     {
         if (!gameObject.activeSelf) return;
 
-        _name.text = instance.CrtData.Name;
+        _name.text = instance.CrtProp.Name;
+        healthPoints.maxValue = instance.CrtData.MaxHealth;
         healthPoints.value = instance.Health.Value;
     }
 }

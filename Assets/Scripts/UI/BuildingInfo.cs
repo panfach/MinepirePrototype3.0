@@ -32,25 +32,6 @@ public class BuildingInfo : MonoBehaviour
     public TextMeshProUGUI[] warehouseResName;
     public TextMeshProUGUI[] warehouseValue;
 
-    // -------------------------------------------------------------------------------------------------- //
-
-    /*    private void LateUpdate()
-        {
-            if (cameraAngleDifference)
-            {
-                AdjustAllSmallInfoAngles();
-                cameraAngleDifference = false;
-            }
-            if (cameraHeightDifference)
-            {
-                additionalSmallInfoScale = CellMetrics.XYdir * 10 * Mathf.Pow((1f - CameraScript.Height), 1f);
-                AdjustAllSmallInfoScales();
-                cameraHeightDifference = false;
-            }
-        }*/
-
-    // -------------------------------------------------------------------------------------------------- //
-
     public bool BuildingInfoTurnedOn
     {
         get
@@ -65,8 +46,11 @@ public class BuildingInfo : MonoBehaviour
         }
     }
 
+
     public void Set(bool state)
     {
+        if (SaveLoader.state == SaveLoadState.EXITING) return;
+
         BuildingInfoTurnedOn = state;
         StateManager.BuildingInfo = state;
         if (state)
@@ -77,7 +61,7 @@ public class BuildingInfo : MonoBehaviour
 
     public void Refresh()
     {
-        if (!buildingInfoTurnedOn) return;
+        if (!buildingInfoTurnedOn || SaveLoader.state == SaveLoadState.EXITING) return;
 
         buildingName.text = activeBuilding.BldData.Name_rus;
 
@@ -135,7 +119,7 @@ public class BuildingInfo : MonoBehaviour
                     productionRecipe[i].SetActive(res);
                     if (res)
                     {
-                        recipeName[i].text = "Высушенная шкура оленя";
+                        recipeName[i].text = activeBuilding.Production.Recipe(i).recipeName;       
                         recipeQueue[i].text = activeBuilding.Production.Recipe(i).Queue.ToString();
                         productionProcessSlider[i].value = activeBuilding.Production.Recipe(i).Progress;
                     }
@@ -153,7 +137,7 @@ public class BuildingInfo : MonoBehaviour
                     if (!res) continue;
 
                     rs.Inventory.Look(i, out ResourceIndex resInd, out float resVal);
-                    Debug.Log(resInd);
+                    //Debug.Log(resInd);
                     warehouseSlider[i].maxValue = rs.Inventory.PackSize;
                     warehouseSlider[i].value = resVal;
                     if (resInd == ResourceIndex.NONE)
@@ -165,6 +149,11 @@ public class BuildingInfo : MonoBehaviour
             }
             else warehouseSection.SetActive(false);
         }
+    }
+
+    public void Dismiss(int ind)                                                                      // Theese 4 methods should be called "OnClick..."
+    {
+        activeBuilding.Appointer.Remove(AppointerType.VILLAGER, ind);
     }
 
     public void AddItemToQueue(int recipeInd)

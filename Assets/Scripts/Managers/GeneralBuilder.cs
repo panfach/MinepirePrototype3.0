@@ -182,13 +182,16 @@ public class GeneralBuilder : MonoBehaviour
     {
         Vector3 _pos = SCCoord.GetCorner(coord, SCCoord.GetHeight(coord));
         hitPointBuild = _pos;
+        //hit.point = SCCoord.GetCenter(coord, SCCoord.GetHeight(coord));
 
         buildModeObject = Instantiate(DataList.GetBuildingObj(buildingIndex), _pos, Quaternion.identity);
 
         activeBuildingTransform = buildModeObject.transform;
         activeBuilding = buildModeObject.GetComponent<Building>();
+        activeBuilding.GridObject.coordinates = coord;
         RotateBuildingClockwise(angl);
         buildingAngle.Set(activeBuilding.GridObject.angle.Index);
+        //AdjustBuildModeObjectPosition();
         RefreshModelPosition();
 
         InstantlyBuild(uniqueIndex);
@@ -199,13 +202,16 @@ public class GeneralBuilder : MonoBehaviour
     {
         Vector3 _pos = SCCoord.GetCorner(coord, SCCoord.GetHeight(coord));
         hitPointBuild = _pos;
+        //hit.point = SCCoord.GetCenter(coord, SCCoord.GetHeight(coord));
 
         buildModeObject = Instantiate(DataList.GetBuildingObj(buildingIndex), _pos, Quaternion.identity);
 
         activeBuildingTransform = buildModeObject.transform;
         activeBuilding = buildModeObject.GetComponent<Building>();
+        activeBuilding.GridObject.coordinates = coord;
         RotateBuildingClockwise(angl);
         buildingAngle.Set(activeBuilding.GridObject.angle.Index);
+        //AdjustBuildModeObjectPosition();
         RefreshModelPosition();
 
         InstantlyConstruct(uniqueIndex, processValue);
@@ -611,7 +617,7 @@ public class GeneralBuilder : MonoBehaviour
 
         if (activeBuildingTransform.position.x != oldPos.x || activeBuildingTransform.position.z != oldPos.z)
         {
-            activeBuilding.GridObject.coordinates = SCCoord.FromPos(CalculateHitPointBuildUnrotated(hit));
+            activeBuilding.GridObject.coordinates = SCCoord.FromPos(CalculateHitPointBuild(hit) + new Vector3(0.1f, 0f, 0.1f));
             activeBuilding.GridObject.RefreshCellPointers();
             RefreshModelPosition();
         }
@@ -704,14 +710,16 @@ public class GeneralBuilder : MonoBehaviour
 
     public void Clear()
     {
-        foreach (Building item in VillageData.Buildings)
+        int count = VillageData.Buildings.Count;
+        for (int i = 0; i < count; i++)
         {
-            item.Die();
+            VillageData.Buildings[0].Die();
         }
 
-        foreach (Building item in VillageData.Constructions)
+        count = VillageData.Constructions.Count;
+        for (int i = 0; i < count; i++)
         {
-            item.Die();
+            VillageData.Constructions[0].Die();
         }
     }
 }

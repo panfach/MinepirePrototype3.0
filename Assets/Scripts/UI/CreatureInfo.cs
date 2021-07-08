@@ -27,6 +27,8 @@ public class CreatureInfo : MonoBehaviour
 
     public void Set(bool state)
     {
+        if (SaveLoader.state == SaveLoadState.EXITING) return;
+
         creatureInfoTurnedOn = state;
         StateManager.CreatureInfo = state;
         creatureInfoWindow.SetActive(state);
@@ -40,37 +42,36 @@ public class CreatureInfo : MonoBehaviour
     {
         if (activeCreature == creature) Refresh();
     }
-        
+
     public void Refresh()
     {
-        if (creatureInfoTurnedOn)
-        {
-            creatureName.text = activeCreature.CrtData.Name;
-            healthSlider.value = activeCreature.Health.Value;
-            satietySlider.value = activeCreature.Satiety.Value;
-            gender.text = activeCreature.CrtProp.Gender ? "мужчина" : "женщина";
-            age.text = activeCreature.CrtProp.Age.ToString();
-            if (activeCreature.Appointer != null)
-                profession.text = DataList.profNameDict_rus[activeCreature.Appointer.Profession];
-            else
-                profession.text = DataList.profNameDict_rus[Profession.NONE];
+        if (!creatureInfoTurnedOn || SaveLoader.state == SaveLoadState.EXITING) return;
 
-            if (activeCreature.UIController.ReactToInventoryChanges)
+        creatureName.text = activeCreature.CrtProp.Name;
+        healthSlider.value = activeCreature.Health.Value;
+        satietySlider.value = activeCreature.Satiety.Value;
+        gender.text = activeCreature.CrtProp.Gender ? "мужчина" : "женщина";
+        age.text = activeCreature.CrtProp.Age.ToString();
+        if (activeCreature.Appointer != null)
+            profession.text = DataList.profNameDict_rus[activeCreature.Appointer.Profession];
+        else
+            profession.text = DataList.profNameDict_rus[Profession.NONE];
+
+        if (activeCreature.UIController.ReactToInventoryChanges)
+        {
+            inventory.SetActive(true);
+            for (int i = 0; i < activeCreature.Inventory.PacksAmount; i++)
             {
-                inventory.SetActive(true);
-                for (int i = 0; i < activeCreature.Inventory.PacksAmount; i++)
-                {
-                    activeCreature.Inventory.Look(i, out ResourceIndex resInd, out float resVal);
-                    warehouseSlider[i].maxValue = activeCreature.Inventory.PackSize;
-                    warehouseSlider[i].value = resVal;
-                    if (resInd == ResourceIndex.NONE)
-                        warehouseResName[i].text = "";
-                    else
-                        warehouseResName[i].text = DataList.GetResource(resInd).Name_rus;
-                    warehouseValue[i].text = resVal.ToString("F1");
-                }
+                activeCreature.Inventory.Look(i, out ResourceIndex resInd, out float resVal);
+                warehouseSlider[i].maxValue = activeCreature.Inventory.PackSize;
+                warehouseSlider[i].value = resVal;
+                if (resInd == ResourceIndex.NONE)
+                    warehouseResName[i].text = "";
+                else
+                    warehouseResName[i].text = DataList.GetResource(resInd).Name_rus;
+                warehouseValue[i].text = resVal.ToString("F1");
             }
-            else inventory.SetActive(false);
         }
+        else inventory.SetActive(false);
     }
 }

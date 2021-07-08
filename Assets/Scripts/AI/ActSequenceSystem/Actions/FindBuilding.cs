@@ -11,7 +11,7 @@ namespace ActSequenceSystem
         [Input] public ResourceQuery query;
 
         [NonSerialized] public ActionType type = ActionType.FINDBUILDING;
-        [NonSerialized] public int priority = 0;
+        [Range(0, 100)] public int priority;
         public BuildingType bldType;
         public FindBuildingMode mode;
 
@@ -24,6 +24,7 @@ namespace ActSequenceSystem
 
 
         public override ActionType Type { get => type; }
+        public override int Priority { get => priority; }
 
         public override IEnumerator Algorithm(Creature creature)
         {

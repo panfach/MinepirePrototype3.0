@@ -39,4 +39,13 @@ public class Statistics : MonoBehaviour
         }
         return true;
     }
+
+
+    public void Clear()
+    {
+        for (int i = 0; i < receivedResources.Length; i++)
+        {
+            receivedResources[i] = 0f;
+        }
+    }
 }

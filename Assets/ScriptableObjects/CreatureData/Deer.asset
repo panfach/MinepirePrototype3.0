@@ -15,7 +15,7 @@ MonoBehaviour:
   _name: "\u041E\u043B\u0435\u043D\u044C"
   index: 2
   type: 2
-  maxHealth: 12
+  maxHealth: 24
   drop:
   - resourceIndex: 6
     minAmount: 4

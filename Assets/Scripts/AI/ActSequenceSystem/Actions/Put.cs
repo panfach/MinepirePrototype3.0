@@ -10,7 +10,7 @@ namespace ActSequenceSystem
         [Input] public Connection enter;
 
         [NonSerialized] ActionType type = ActionType.PUT;
-        [NonSerialized] public int priority;
+        [Range(0, 100)] public int priority;
         public PutMode mode;
 
         [Output] public Connection trueConnection;
@@ -18,6 +18,7 @@ namespace ActSequenceSystem
 
 
         public override ActionType Type { get => type; }
+        public override int Priority { get => priority; }
 
         public override IEnumerator Algorithm(Creature creature)
         {

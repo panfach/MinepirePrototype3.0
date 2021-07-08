@@ -200,7 +200,7 @@ public class Interactive : MonoBehaviour
 
     public IEnumerator SetCreaturePosition(Creature creature, InteractionSpot spot)
     {
-        LeanTween.move(creature.gameObject, spot.Spot.position + creature.CrtProp.HeightVector / 2, 1f);
+        LeanTween.move(creature.gameObject, spot.Spot.position + creature.CrtProp.HeightVector, 1f);
         yield return new WaitForSeconds(1f);
         LeanTween.rotate(creature.gameObject, new Vector3(0f, GeneralAI.GetViewAngle(spot.InteractionTarget.position - creature.transform.position), 0f), creature.CrtData.checkEventsDelay);
         yield return new WaitForSeconds(creature.CrtData.checkEventsDelay);

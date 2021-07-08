@@ -27,10 +27,12 @@ public class GeneralAI : MonoBehaviour
     [SerializeField] ActionType actionType;
     [SerializeField] ActionNode currentAction;
     [SerializeField] ActSequenceGraph currentSequence;
+    bool deferredDefineBehaviour;
+    int deferredBehaviourPriority;
 
     public ActionType ActionType { get => actionType; }
     public void ForgetExtractedResource() { destExtractedResource = null; }                // ? Remake extractedResourceLink. Merge occupation of extracted resources and interaction spots ???
-    public void ForgetDestRecipe() { destRecipe = null; }
+    public void ForgetDestRecipe() { Debug.Log("ForgetDestRecipe!"); destRecipe = null; }
     public void ForgetInteractionSpot() { destInteractionSpot = null; }
     public void ForgetDestEntity() { destEntity = null; }
     public void ForgetDestInventory() { destInv = null; }
@@ -42,7 +44,7 @@ public class GeneralAI : MonoBehaviour
     public Recipe DestRecipe
     {
         get => destRecipe;
-        set => destRecipe = value;
+        set { Debug.Log("DestRecipe set: " + value); destRecipe = value; }
     }
     public InteractionSpot DestInteractionSpot
     {
@@ -74,7 +76,18 @@ public class GeneralAI : MonoBehaviour
 
     public void DefineBehaviour(int priority = 0)
     {
-        // Deffered definebehaviour
+        if (currentAction != null && priority < currentAction.Priority)
+        {
+            deferredDefineBehaviour = true;
+            if (priority > deferredBehaviourPriority)
+                deferredBehaviourPriority = priority;
+            return;
+        }
+        else
+        {
+            deferredDefineBehaviour = false;
+            deferredBehaviourPriority = 0;
+        }
 
         FreeOccupations();
 
@@ -98,18 +111,19 @@ public class GeneralAI : MonoBehaviour
             currentAction = currentSequence.GetStart();
         }
 
-        // Deferred DefineBehaviour                                                                                  // Add deferred define behaviour
-
         while(currentAction != null)
         {
+            if (deferredDefineBehaviour) DefineBehaviour(deferredBehaviourPriority);
+
             actionType = currentAction.Type;
+            SwitchToWalk();
             yield return StartCoroutine(currentAction.Algorithm(entity as Creature));
         }
     }
 
     public void SwitchCurrentAction(ActionNode action)
     {
-        if (debugLogActions && action != null) Debug.Log("Switching to action : " + action.Type);
+        if (debugLogActions && action != null) Debug.Log(entity.CrtData.Name + " : Switching to action : " + action.Type);
         if (action == null)
             DefineBehaviour(100);
         else
@@ -118,7 +132,7 @@ public class GeneralAI : MonoBehaviour
 
     public void SwitchCurrentSequence(ActSequenceIndex sequenceIndex)
     {
-        if (debugLogActions) Debug.Log("Switching to sequemce : " + sequenceIndex);
+        if (debugLogActions) Debug.Log(entity.CrtData.Name + " : Switching to sequemce : " + sequenceIndex);
         if (sequenceIndex == ActSequenceIndex.NONE)
             currentSequence = ActSequenceList.GetSequence(generalActSequence);
         else

@@ -19,6 +19,8 @@ public class Appointer : MonoBehaviour
     [Tooltip("Element 0: Villager \nElement 1: Workplace \nElement 2: Livingplace \nElement 3: Warehouse")]
     [SerializeField] List<Appointer>[] appointment;
 
+    Appointer lastTarget;
+
     public event SimpleEventHandler appointmentChangedEvent;                                                                     // does it work? -> InfoDisplay.Refresh();
 
     public static int AppointerTypeSize { get => Enum.GetNames(typeof(AppointerType)).Length; }
@@ -52,6 +54,7 @@ public class Appointer : MonoBehaviour
             appointment[i] = new List<Appointer>();
         }
         if (appointByDragging) entity.ColliderHandler.mouseUpEvent += AppointByDragging;
+        appointmentChangedEvent += Connector.infoDisplay.populInfo.Refresh;
     }
 
 
@@ -75,6 +78,7 @@ public class Appointer : MonoBehaviour
         if (type == AppointerType.LIVINGPLACE) LivingPlaceAddHandler(target);
         if (type == AppointerType.WORKPLACE) WorkPlaceAddHandler(target);
 
+        appointmentChangedEvent?.Invoke();
         return true;
     }
 
@@ -123,6 +127,7 @@ public class Appointer : MonoBehaviour
         if (type == AppointerType.LIVINGPLACE) LivingPlaceRemoveHandler(target);
         if (type == AppointerType.WORKPLACE) WorkPlaceRemoveHandler(target);
 
+        appointmentChangedEvent?.Invoke();
         return true;
     }
 
@@ -174,7 +179,8 @@ public class Appointer : MonoBehaviour
             appointment[(int)target.type].Add(target);
         }
         else appointment[(int)target.type].Add(target);
-        appointmentChangedEvent?.Invoke();                                                                      // Add special conditions
+        lastTarget = target;
+        //appointmentChangedEvent?.Invoke();                                                                      // Add special conditions
     }
 
     /// <summary>
@@ -183,7 +189,8 @@ public class Appointer : MonoBehaviour
     void RemoveAppointment(Appointer target)
     {
         appointment[(int)target.type].Remove(target);
-        appointmentChangedEvent?.Invoke();
+        lastTarget = target;
+        //appointmentChangedEvent?.Invoke();
     }
 
     void VillagerAddHandler(Appointer target)
@@ -202,6 +209,7 @@ public class Appointer : MonoBehaviour
                 break;
             case AppointerType.LIVINGPLACE:
                 VillageData.homeless--;
+                VillageData.workers[(int)Profession.LABORER]++;
                 break;
         }
 
@@ -216,12 +224,13 @@ public class Appointer : MonoBehaviour
         {
             case AppointerType.WORKPLACE:
                 VillageData.workersCount--;                                                   // ? Add property in VillageData
-                VillageData.workers[(int)Profession]--;
+                VillageData.workers[(int)target.entity.BldData.Profession]--;
                 VillageData.workers[(int)Profession.LABORER]++;
                 break;
             case AppointerType.LIVINGPLACE:
                 if (Work != null) Remove(AppointerType.WORKPLACE, 0);
                 VillageData.homeless++;
+                VillageData.workers[(int)Profession.LABORER]--;
                 break;
         }
 
@@ -280,6 +289,7 @@ public class Appointer : MonoBehaviour
             appointment[i].Clear();
         }
         if (appointByDragging) entity.ColliderHandler.mouseUpEvent -= AppointByDragging;
+        appointmentChangedEvent -= Connector.infoDisplay.populInfo.Refresh;
     }
 }
 

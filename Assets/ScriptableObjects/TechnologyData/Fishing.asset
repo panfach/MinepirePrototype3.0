@@ -16,10 +16,11 @@ MonoBehaviour:
   techName_rus: "\u0420\u044B\u0431\u043E\u043B\u043E\u0432\u0441\u0442\u0432\u043E"
   index: 1
   requiredStatRes:
-    index: 06000000
+    index: 060000000d000000
     type: 
     indexVal:
     - 120
+    - 10
     typeVal: []
   requiredRes:
     index: 06000000

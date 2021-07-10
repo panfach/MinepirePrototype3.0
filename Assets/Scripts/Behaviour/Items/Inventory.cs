@@ -499,8 +499,11 @@ public class Inventory : MonoBehaviour
     public float CreateResource(ResourceIndex ind, float val, bool withoutGeneralAccounting = false)                          // What is the difference from ItemInit() ?
     {
         float remainder = PutResource(ind, val);
-        Connector.statistics.ChangeReceivedResource(ind, val - remainder);
-        if (!withoutGeneralAccounting) VillageData.resources[(int)ind] += val - remainder;
+        if (!withoutGeneralAccounting)
+        {
+            Connector.statistics.ChangeReceivedResource(ind, val - remainder);
+            VillageData.resources[(int)ind] += val - remainder;
+        }
         invChangedEvent?.Invoke();
         return remainder;
     }

@@ -57,14 +57,8 @@ public class ConnectorInit : MonoBehaviour
         Connector.statistics = statistics;
         Connector.techManager = techManager;
 
-        //Villager.selectionPlanePrefab = villagerSelectionPlane;
-        //Villager.silhouettePrefab = villagerSilhouette;
-        //BuildingInfo.smallBuildingInfoPrefab = smallBuildingInfo;
-        //ResourceSourceInstance.selectionPlanePrefab = resourceSourceSelectionPlane;
-        //ResourceInstance.selectionPlanePrefab = resourceSourceSelectionPlane;
-        //Animal.selectionPlanePrefab = villagerSelectionPlane;
         CellGrid.physMat = terrainPhysMat;
-}
+    }
 }
 
 public static class Connector

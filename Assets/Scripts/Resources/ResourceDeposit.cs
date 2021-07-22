@@ -76,7 +76,7 @@ public class ResourceDeposit : MonoBehaviour
         if (!extractable[ind]) return;
 
         extractable[ind] = false;
-        VillageData.extractionQueue.Remove(new ExtractedResourceLink(this, ind));
+        VillageData.ExtractionQueue.Remove(new ExtractedResourceLink(this, ind));
         if (occupied[ind])
         {
             GeneralAI villager = owner[ind];
@@ -95,7 +95,7 @@ public class ResourceDeposit : MonoBehaviour
             return;
         }
 
-        VillageData.extractionQueue.Add(new ExtractedResourceLink(this, ind));
+        VillageData.ExtractionQueue.Add(new ExtractedResourceLink(this, ind));
         extractable[ind] = true;
         CreatureManager.DefineBehaviourOfFreeLaborers();
 
@@ -113,7 +113,7 @@ public class ResourceDeposit : MonoBehaviour
         if (amount[ind] == 0)
         {
             extractable[ind] = false;
-            VillageData.extractionQueue.Remove(new ExtractedResourceLink(this, ind));
+            VillageData.ExtractionQueue.Remove(new ExtractedResourceLink(this, ind));
 
             if (entity.NtrData.DeletionAfterExhaustion(ind))
             {

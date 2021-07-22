@@ -60,7 +60,7 @@ public class Inventory : MonoBehaviour
     {
         float remainder = PutResource(ind, val);
         Connector.statistics.ChangeReceivedResource(ind, val - remainder);
-        VillageData.resources[(int)ind] += val - remainder;
+        VillageData.AddResource(ind, val - remainder);
     }
 
     /// <summary>
@@ -411,7 +411,7 @@ public class Inventory : MonoBehaviour
             amount = storedVal[packIndex];
         }
 
-        VillageData.resources[(int)storedRes[packIndex]] -= amount;
+        VillageData.RemoveResource(storedRes[packIndex], amount);
         TakeResource(packIndex, amount);
         InfoDisplay.Refresh();                                                                // bad
 
@@ -502,7 +502,7 @@ public class Inventory : MonoBehaviour
         if (!withoutGeneralAccounting)
         {
             Connector.statistics.ChangeReceivedResource(ind, val - remainder);
-            VillageData.resources[(int)ind] += val - remainder;
+            VillageData.AddResource(ind, val - remainder);
         }
         invChangedEvent?.Invoke();
         return remainder;

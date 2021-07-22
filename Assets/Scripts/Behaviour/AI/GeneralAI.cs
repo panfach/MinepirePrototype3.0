@@ -6,8 +6,6 @@ using XNode;
 
 public class GeneralAI : MonoBehaviour
 {
-    public const float angleControlDelay = 0.1f;
-
     [Header("Entity")]
     public Entity entity;
 
@@ -29,6 +27,8 @@ public class GeneralAI : MonoBehaviour
     [SerializeField] ActSequenceGraph currentSequence;
     bool deferredDefineBehaviour;
     int deferredBehaviourPriority;
+    const float angleControlDelayDuration = 0.1f;
+    WaitForSeconds angleControlDelay = new WaitForSeconds(angleControlDelayDuration);
 
     public ActionType ActionType { get => actionType; }
     public void ForgetExtractedResource() { destExtractedResource = null; }                // ? Remake extractedResourceLink. Merge occupation of extracted resources and interaction spots ???
@@ -76,23 +76,14 @@ public class GeneralAI : MonoBehaviour
 
     public void DefineBehaviour(int priority = 0)
     {
-        if (currentAction != null && priority < currentAction.Priority)
-        {
-            deferredDefineBehaviour = true;
-            if (priority > deferredBehaviourPriority)
-                deferredBehaviourPriority = priority;
-            return;
-        }
-        else
-        {
-            deferredDefineBehaviour = false;
-            deferredBehaviourPriority = 0;
-        }
+        if (!CheckConditionsOfDeferredBehaviourDefenition(priority)) return;
 
         FreeOccupations();
 
         StopAllCoroutines();
-        // Stop Interaction Coroutines
+
+        // StopInteractionProcesses();                                                            // !!! Stop Interaction Coroutines
+
         actionType = ActionType.NONE;
         if (!gameObject.activeSelf) return;
 
@@ -124,6 +115,7 @@ public class GeneralAI : MonoBehaviour
     public void SwitchCurrentAction(ActionNode action)
     {
         if (debugLogActions && action != null) Debug.Log(entity.CrtData.Name + " : Switching to action : " + action.Type);
+
         if (action == null)
             DefineBehaviour(100);
         else
@@ -133,6 +125,7 @@ public class GeneralAI : MonoBehaviour
     public void SwitchCurrentSequence(ActSequenceIndex sequenceIndex)
     {
         if (debugLogActions) Debug.Log(entity.CrtData.Name + " : Switching to sequemce : " + sequenceIndex);
+
         if (sequenceIndex == ActSequenceIndex.NONE)
             currentSequence = ActSequenceList.GetSequence(generalActSequence);
         else
@@ -147,6 +140,23 @@ public class GeneralAI : MonoBehaviour
         if (destInteractionSpot != null) destInteractionSpot.RemoveOccupation();
         if (destEntity != null) ForgetDestEntity();
         if (destInv != null) destInv.RemoveOccupation((Creature)entity);
+    }
+
+    bool CheckConditionsOfDeferredBehaviourDefenition(int priority)
+    {
+        if (currentAction != null && priority < currentAction.Priority)
+        {
+            deferredDefineBehaviour = true;
+            if (priority > deferredBehaviourPriority)
+                deferredBehaviourPriority = priority;
+            return false;
+        }
+        else
+        {
+            deferredDefineBehaviour = false;
+            deferredBehaviourPriority = 0;
+            return true;
+        }
     }
 
     public void SwitchToWalk()
@@ -167,10 +177,8 @@ public class GeneralAI : MonoBehaviour
 
     void DefineAngle()
     {
-        //float angle = -180f * Mathf.Atan(entity.Agent.velocity.z / entity.Agent.velocity.x) / Mathf.PI + ((entity.Agent.velocity.x < 0f) ? 180f : 0f);
         float angle = GetViewAngle(entity.Agent.velocity);
-        //if (entity.Appointer != null && entity.Appointer.Home != null) Debug.Log(entity.Agent.velocity);
-        LeanTween.rotateY(gameObject, angle, angleControlDelay);
+        LeanTween.rotateY(gameObject, angle, angleControlDelayDuration);
     }
 
     public void StopAngleControl()
@@ -182,9 +190,8 @@ public class GeneralAI : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitForSeconds(angleControlDelay);
+            yield return angleControlDelay;
             if (entity.Agent.velocity.sqrMagnitude > 0.01f) DefineAngle();
-            //if (entity.Appointer != null && entity.Appointer.Home != null) Debug.Log("Angle Control");
         }
     }
 

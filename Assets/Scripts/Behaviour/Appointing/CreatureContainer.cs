@@ -15,15 +15,11 @@ public class CreatureContainer : MonoBehaviour
     [SerializeField] int creatures;
     [SerializeField] List<Creature> creatureList = new List<Creature>();
 
+    public event SimpleEventHandler changedEvent;
+
     public Transform Enter { get => enter[0]; }
     public Transform GetEnter(int i) { return enter[i]; }
     public int CreatureCount { get => creatures; }
-
-
-    private void OnEnable()
-    {
-        // Add reaction of change. Changes must refresh ui info at least
-    }
 
 
     public bool Add(Creature creature)
@@ -34,7 +30,7 @@ public class CreatureContainer : MonoBehaviour
         creatures++;
         creature.CrtProp.PlaceOfStay = this;
 
-        // ChangeEvent
+        changedEvent?.Invoke();
 
         return true;
     }
@@ -46,7 +42,7 @@ public class CreatureContainer : MonoBehaviour
         creatures--;
         creature.CrtProp.PlaceOfStay = null;
 
-        // ChangeEvent
+        changedEvent?.Invoke();
 
         return true;
     }
@@ -54,6 +50,9 @@ public class CreatureContainer : MonoBehaviour
 
     private void OnDisable()
     {
-
+        foreach (Creature item in creatureList)
+        {
+            Remove(item);
+        }
     }
 }

@@ -10,7 +10,7 @@ public static class TimeEvents
 
     public static void EndOfTheDay()
     {
-        Debug.Log("TimeEvents.EndOfTheDay");
+        //Debug.Log("TimeEvents.EndOfTheDay");
         CreatureManager.DefineVillagerBehaviours(3);
     }
 

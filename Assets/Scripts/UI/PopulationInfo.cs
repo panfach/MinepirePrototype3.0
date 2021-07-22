@@ -10,12 +10,11 @@ public class PopulationInfo : MonoBehaviour
     public void Refresh()
     {
         population.text = CreatureManager.villagerPopulation.ToString();
-        homeless.text = VillageData.homeless.ToString();
-        laborers.text = VillageData.workers[(int)Profession.LABORER].ToString();
-        //workers.text = VillageData.workersCount.ToString();
-        hunters.text = VillageData.workers[(int)Profession.HUNTER].ToString();
-        artisans.text = VillageData.workers[(int)Profession.ARTISAN].ToString();
-        tailors.text = VillageData.workers[(int)Profession.TAILOR].ToString();
-        fishermen.text = VillageData.workers[(int)Profession.FISHERMAN].ToString();
+        homeless.text = VillageData.Homeless.ToString();
+        laborers.text = VillageData.Workers(Profession.LABORER).ToString();
+        hunters.text = VillageData.Workers(Profession.HUNTER).ToString();
+        artisans.text = VillageData.Workers(Profession.ARTISAN).ToString();
+        tailors.text = VillageData.Workers(Profession.TAILOR).ToString();
+        fishermen.text = VillageData.Workers(Profession.FISHERMAN).ToString();
     }
 }

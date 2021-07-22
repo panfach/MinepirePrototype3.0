@@ -1,9 +1,14 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public interface IIndicator
+public class Indicator : MonoBehaviour
 {
-    event SimpleEventHandler changedValueEvent;
-    float Value { get; set; }
+    [Header("Entity")]
+    public Entity entity;
+
+    public event SimpleEventHandler changedValueEvent;
+
+
+    public virtual float Value { get; set; }
+
+    public void InvokeChangedEvent() { changedValueEvent?.Invoke(); }
 }

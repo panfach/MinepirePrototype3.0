@@ -74,8 +74,8 @@ public class InfoDisplay : MonoBehaviour
 
     void RefreshOtherElements()
     {
-        happinessSlider.value = VillageData.happiness;
-        happinessValue.text = (VillageData.happiness * 100.0f).ToString("F0");
+        happinessSlider.value = VillageData.Happiness;
+        happinessValue.text = (VillageData.Happiness * 100.0f).ToString("F0");
     }
 
 

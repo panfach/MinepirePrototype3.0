@@ -198,9 +198,8 @@ public class Appointer : MonoBehaviour
         switch (target.type)
         {
             case AppointerType.WORKPLACE:
-                VillageData.workers[(int)Profession.LABORER]--;                            
-                VillageData.workers[(int)Profession]++;
-                VillageData.workersCount++;                                                   // ? Add property in VillageData 
+                VillageData.RemoveWorker(Profession.LABORER);
+                VillageData.AddWorker(Profession);
                 if (Home == null)
                 {
                     Connector.effectSoundManager.PlayCancelSound();
@@ -208,8 +207,8 @@ public class Appointer : MonoBehaviour
                 }
                 break;
             case AppointerType.LIVINGPLACE:
-                VillageData.homeless--;
-                VillageData.workers[(int)Profession.LABORER]++;
+                VillageData.RemoveHomeless();
+                VillageData.AddWorker(Profession.LABORER);
                 break;
         }
 
@@ -223,14 +222,13 @@ public class Appointer : MonoBehaviour
         switch (target.type)
         {
             case AppointerType.WORKPLACE:
-                VillageData.workersCount--;                                                   // ? Add property in VillageData
-                VillageData.workers[(int)target.entity.BldData.Profession]--;
-                VillageData.workers[(int)Profession.LABORER]++;
+                VillageData.RemoveWorker(target.entity.BldData.Profession);
+                VillageData.AddWorker(Profession.LABORER);
                 break;
             case AppointerType.LIVINGPLACE:
                 if (Work != null) Remove(AppointerType.WORKPLACE, 0);
-                VillageData.homeless++;
-                VillageData.workers[(int)Profession.LABORER]--;
+                VillageData.AddHomeless();
+                VillageData.RemoveWorker(Profession.LABORER);
                 break;
         }
 

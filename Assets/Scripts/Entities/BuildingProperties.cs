@@ -13,7 +13,6 @@ public class BuildingProperties : MonoBehaviour
     public Entity entity;
 
     [Header("Other info")]
-    public bool deletionFlag;                                                        // Maybe it's not necessary, or it should be in Entity
     [SerializeField] int uniqueIndex;
 
     public int UniqueIndex { get => uniqueIndex; }
@@ -22,7 +21,7 @@ public class BuildingProperties : MonoBehaviour
     public void AssignUniqueIndex(int index = 0)                                     // Maybe create separate class "UniqueIndex" with methods "Get", "Assign"
     {
         uniqueIndex = (index == 0) ? ++maxUniqueIndex : index;
-        VillageData.uniqIndexDict.Add(uniqueIndex, entity as Building);
+        VillageData.UniqIndexDict.Add(uniqueIndex, entity as Building);
     }
 
     public override string ToString()

@@ -18,7 +18,6 @@ public class VillageDataInit : MonoBehaviour
         VillageData.Clear();
         DefaultInit();
         InfoDisplay.Refresh();
-        //Connector.villagerManager.SpawnAllVillagers();
     }
 
 
@@ -34,29 +33,38 @@ public class VillageDataInit : MonoBehaviour
 
 public static class VillageData
 {
-    // --------------------------------------------------- Data ------------------------------------------------------------ //
-    public static int homeless;
-    public static int workersCount;
-    public static int[] workers = new int[Enum.GetNames(typeof(Profession)).Length];
-    public static float happiness;
-    public static float foodAmount;
-    public static float foodRatio;
-    public static float foodServing;
+    // --------------------------------------------------------------------------------------------------------------------- //
+    static int homeless;
+    static int[] workers = new int[Enum.GetNames(typeof(Profession)).Length];
+    static float happiness;
+    static float foodAmount;
+    static float foodRatio;
+    static float foodServing;
+    static float[] resources = new float[Enum.GetNames(typeof(ResourceIndex)).Length];
 
-    public static int Builders { get; private set; }
+    public static int Homeless { get => homeless; }
+    public static void AddHomeless() { homeless++; }
+    public static void RemoveHomeless() { homeless--; }
+    public static int Workers(Profession profession) { return workers[(int)profession]; }
+    public static void AddWorker(Profession profession) { workers[(int)profession] += 1; }
+    public static void RemoveWorker(Profession profession) { workers[(int)profession] -= 1; }
+    public static float Happiness { get => happiness; set => happiness = value; }
+    public static float FoodAmount { get => foodAmount; set => foodAmount = value; }
+    public static float FoodRatio { get => foodRatio; set => foodRatio = value; }
+    public static float FoodServing { get => foodServing; set => foodServing = value; }
+    public static float Resources(ResourceIndex index) { return resources[(int)index]; }
+    public static void AddResource(ResourceIndex index, float amount) { resources[(int)index] += amount; }
+    public static void RemoveResource(ResourceIndex index, float amount) { resources[(int)index] -= amount; }
 
-    public static float[] resources = new float[Enum.GetNames(typeof(ResourceIndex)).Length];
-
-    public static List<Building> Constructions { get; private set; } = new List<Building>();                                         // Maybe GeneralBuilder (or BuildingManager) must contain it
+    public static List<Building> Constructions { get; private set; } = new List<Building>();         
     public static List<Building> Buildings { get; private set; } = new List<Building>();
     public static List<Production> Productions { get; private set; } = new List<Production>();
     public static List<Inventory> Warehouses { get; private set; } = new List<Inventory>();
-    public static Dictionary<int, Building> uniqIndexDict = new Dictionary<int, Building>();
-    public static Building townhall = null;
-    public static BuildingIndex townhallIndex = BuildingIndex.TRIBLEADER;
-    public static List<ExtractedResourceLink> extractionQueue = new List<ExtractedResourceLink>();
+    public static Dictionary<int, Building> UniqIndexDict { get; private set; } = new Dictionary<int, Building>();
+    public static Building Townhall = null;
+    public static BuildingIndex TownhallIndex = BuildingIndex.TRIBLEADER;
+    public static List<ExtractedResourceLink> ExtractionQueue = new List<ExtractedResourceLink>();
 
-    // --------------------------------------------------------------------------------------------------------------------- //
     public static List<GameObject> staticBatchingObjects = new List<GameObject>();
 
     // --------------------------------------------------------------------------------------------------------------------- //
@@ -74,17 +82,20 @@ public static class VillageData
     public static void AddBuilding(Building item)
     {
         Buildings.Add(item);
-        if (townhall == null && item.BldData.Index == townhallIndex)
+        if (Townhall == null && item.BldData.Index == TownhallIndex)
         {
-            townhall = item;
+            Townhall = item;
         }
     }
 
     public static void RemoveBuilding(Building item)
     {
-        Buildings.Remove(item); // Возможно, это очень неэффективно (Можно попробовать искать по уникальному номеру постройки)
+        Buildings.Remove(item);
     }
 
+    /// <summary>
+    /// Checking the presence of all resources from resource query in all warehouses in village
+    /// </summary>
     public static bool CheckResourceAvailability(ResourceQuery resQuery)
     {
         float value;
@@ -110,11 +121,12 @@ public static class VillageData
             //else Debug.Log("There is necessary amount of " + resQuery.index[i]);
         }
 
-        //if (VillageData.resources[(int)resQuery.index[i]] < resQuery.indexVal[i]) return false;
-
         return true;
     }
 
+    /// <summary>
+    /// Counting amount of specific resource in all warehouses in village
+    /// </summary>
     public static float CheckWarehouseResourceAmount(ResourceIndex resInd)
     {
         float amount = 0;
@@ -132,6 +144,9 @@ public static class VillageData
         return amount;
     }
 
+    /// <summary>
+    /// Returns free space in warehouses for specific resource
+    /// </summary>
     public static float FreeSpaceForResource(ResourceIndex resInd)
     {
         float amount = 0f;
@@ -144,6 +159,9 @@ public static class VillageData
         return amount;
     }
 
+    /// <summary>
+    /// Deleting resources from resource query from warehouses in village
+    /// </summary>
     public static void SpendResource(ResourceQuery resQuery)
     {
         float value;
@@ -170,10 +188,7 @@ public static class VillageData
 
     public static void Recalculate()
     {
-        //Builders = 1;
-        
         homeless = 0;
-        workersCount = 0;
         for (int i = 0; i < workers.Length; i++)
         {
             workers[i] = 0;
@@ -185,11 +200,13 @@ public static class VillageData
             else
             {
                 workers[(int)villager.Appointer.Profession]++;
-                if (villager.Appointer.Profession != Profession.LABORER) workersCount++;
             }
         }
 
-        foodAmount = resources[(int)ResourceIndex.APPLE] + resources[(int)ResourceIndex.WILDBERRIES] + resources[(int)ResourceIndex.RAWVENISON];
+        foodAmount = resources[(int)ResourceIndex.APPLE] + 
+                     resources[(int)ResourceIndex.WILDBERRIES] + 
+                     resources[(int)ResourceIndex.RAWVENISON] +
+                     resources[(int)ResourceIndex.FISH];
     }
 
     public static int CountReadyBuildings()
@@ -217,34 +234,6 @@ public static class VillageData
 
         return nearestBuilding;
     }
-
-/*    public static void VillagerPlacesReassigning()
-    {
-        if (!VillagerManager.villagersWereSpawned) return;
-
-        foreach (Building building in Buildings)
-        {
-            building.PeopleAppointer.ForgetPeopleAssignment();
-        }
-        foreach (VillagerData data in Villagers)
-        {
-            if (data.home != null)
-            {
-                data.Settle(data.home, AppointMode.REASSIGNING);
-                Villager villager = data.villagerAgent;
-                villager.agent.enabled = false;
-                villager.transform.position = data.home.GridObject.GetCenter();
-                villager.placeOfStay = data.home;
-                villager.state = VillagerState.INDOORS;
-                villager.DefineBehaviour();
-            }
-            else
-            {
-                data.villagerAgent.DefineBehaviour(-5);
-            }
-            if (data.work != null) data.AssignJob(data.work, AppointMode.REASSIGNING);
-        }
-    }*/
 
     public static void ResourcesReassigning()
     {
@@ -349,7 +338,7 @@ public static class VillageData
     }
 
     // OLD LOAD FUNCTION
-    public static void Load_old(BinaryReader reader)
+/*    public static void Load_old(BinaryReader reader)
     {
         BuildingIndex bldIndex;
         CreatureIndex animIndex;
@@ -388,8 +377,8 @@ public static class VillageData
                 (reader.ReadBoolean(),
                 reader.ReadString(),
                 reader.ReadByte(),
-                ((uniqueIndex = reader.ReadInt16()) == 0) ? null : uniqIndexDict[uniqueIndex].GetComponent<Building>(),                              // Dictionary Error (Maybe while construction doesn't refresh)
-                ((uniqueIndex = reader.ReadInt16()) == 0) ? null : uniqIndexDict[uniqueIndex].GetComponent<Building>(),
+                ((uniqueIndex = reader.ReadInt16()) == 0) ? null : UniqIndexDict[uniqueIndex].GetComponent<Building>(),                              // Dictionary Error (Maybe while construction doesn't refresh)
+                ((uniqueIndex = reader.ReadInt16()) == 0) ? null : UniqIndexDict[uniqueIndex].GetComponent<Building>(),
                 _satiety: reader.ReadSingle());
         }
 
@@ -416,7 +405,7 @@ public static class VillageData
         //resources[(int)ResourceIndex.RAWDEERSKIN] += 8.0f;
         //resources[(int)ResourceIndex.RAWVENISON] += 8.0f;
 
-        /*
+        *//*
         Population = 0;
         Villagers.Clear();
         for (int i = 0; i < 6; i++)
@@ -424,19 +413,19 @@ public static class VillageData
             NewRandomVillager();
         }
         Recalculate();
-        */
+        *//*
 
         if (Connector.villageDataInit.startVillageInit)
         {
             Connector.villageDataInit.Start();
         }
         //Connector.villagerManager.SpawnAllVillagers();
-        extractionQueue.Clear();
+        ExtractionQueue.Clear();
         ResourcesReassigning();
         //VillagerPlacesReassigning();
         Recalculate();
         SmallInfoController.SetAllBuilding();
-    }
+    }*/
 
     // New LOAD FUNCTION
     public static void Load(BinaryReader reader)
@@ -474,8 +463,8 @@ public static class VillageData
                 (reader.ReadBoolean(),
                 reader.ReadString(),
                 reader.ReadByte(),
-                ((uniqueIndex = reader.ReadInt16()) == 0) ? null : uniqIndexDict[uniqueIndex].GetComponent<Building>(), 
-                ((uniqueIndex = reader.ReadInt16()) == 0) ? null : uniqIndexDict[uniqueIndex].GetComponent<Building>(),
+                ((uniqueIndex = reader.ReadInt16()) == 0) ? null : UniqIndexDict[uniqueIndex].GetComponent<Building>(), 
+                ((uniqueIndex = reader.ReadInt16()) == 0) ? null : UniqIndexDict[uniqueIndex].GetComponent<Building>(),
                 _satiety: reader.ReadSingle());
         }
 
@@ -516,7 +505,7 @@ public static class VillageData
         {
             Connector.villageDataInit.Start();
         }
-        extractionQueue.Clear();
+        ExtractionQueue.Clear();
         ResourcesReassigning();
         Recalculate();
         SmallInfoController.SetAllBuilding();
@@ -525,7 +514,6 @@ public static class VillageData
     public static void Clear()
     {
         homeless = 0;
-        workersCount = 0;
         workers = new int[Enum.GetNames(typeof(Profession)).Length];
         happiness = 0.75f;
         foodAmount = 0.0f;
@@ -537,9 +525,9 @@ public static class VillageData
         resources = new float[Enum.GetNames(typeof(ResourceIndex)).Length];
 
         Buildings = new List<Building>();
-        uniqIndexDict = new Dictionary<int, Building>();
-        townhall = null;
-        extractionQueue.Clear();
+        UniqIndexDict = new Dictionary<int, Building>();
+        Townhall = null;
+        ExtractionQueue.Clear();
         staticBatchingObjects.Clear();
 
         BuildingProperties.maxUniqueIndex = 1;

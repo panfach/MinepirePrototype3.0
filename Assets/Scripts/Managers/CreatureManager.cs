@@ -15,27 +15,6 @@ public class CreatureManager : MonoBehaviour
     bool spawnBreak = false;
     float spawnDelay = 0.2f;
 
-    /*const float raycastLength = 100f;
-    Ray ray;
-    RaycastHit hit;*/
-
-    // -------------------------------------------------------------------------------------------------- //
-
-    /*    private void Update()
-        {
-
-            if (StateManager.VillagerDragging)
-            {
-                ray = Connector.mainCamera.ScreenPointToRay(Input.mousePosition);
-
-                if (Physics.Raycast(ray, out hit, raycastLength) *//*&& hit.collider.tag == "TerrainMesh"*//*)
-                {
-                    if (Villager.silhouette != null) Villager.silhouette.transform.position = hit.point;
-                }
-            }
-        }*/
-
-    // -------------------------------------------------------------------------------------------------- //
 
     public Creature Spawn
         (Vector3 position,
@@ -95,7 +74,7 @@ public class CreatureManager : MonoBehaviour
         float _satiety = 2.0f,
         float _healthPoints = -1)
     {
-        Vector3 _position = VillageData.townhall.transform.position + new Vector3(Random.Range(-0.5f, 0.5f), 0f, Random.Range(-0.5f, 0.5f));
+        Vector3 _position = VillageData.Townhall.transform.position + new Vector3(Random.Range(-0.5f, 0.5f), 0f, Random.Range(-0.5f, 0.5f));
         return Spawn(_position, CreatureIndex.VILLAGER, _gender, _name, _age, _home, _work, _satiety, _healthPoints);
     }
 
@@ -109,23 +88,6 @@ public class CreatureManager : MonoBehaviour
             );
         return creature;
     }
-
-/*    public void SpawnVillager(VillagerData data)
-    {
-        Vector3 spawnPos = VillageData.townhall.transform.position + new Vector3(Random.Range(-0.5f, 0.5f), 0f, Random.Range(-0.5f, 0.5f));
-        GameObject villager = Instantiate(villagerPrefab, spawnPos, Quaternion.identity);
-        Villager villagerScript = villager.GetComponent<Villager>();
-        villagerScript.data = data;
-        villagerScript.actions = null;
-        //villagerScript.uiElement.text = data.Name;
-        //villagerScript.DefineInventory(1, 2);
-
-        Villagers.Add(villagerScript);
-        villager.SetActive(true);
-
-        Connector.dynamicGameCanvas.SpawnInfo(villagerScript);
-        villagerScript.SetSmallInfo();
-    }*/
 
     public void Add(Creature creature)
     {
@@ -158,19 +120,6 @@ public class CreatureManager : MonoBehaviour
 
         return true;
     }
-        
-
-    /*public void SpawnAllAnimals()
-    {
-        if (VillageData.townhall != null)
-        {
-            foreach (Animal  in VillageData.Villagers)
-            {
-                SpawnAnimal(data); //////
-            }
-            animalsWereSpawned = true;
-        }
-    }*/
 
     public static void DefineVillagerBehaviours(int priority = 0)
     {
@@ -190,30 +139,6 @@ public class CreatureManager : MonoBehaviour
             }
         }
     }
-
-    public static void MorningBehaviourDefinition()
-    {
-        /*foreach (Creature item in Villagers)
-        {
-            switch (item.state)
-            {
-                case VillagerState.INDOORS:
-                    item.ExitBuilding();
-                    break;
-                case VillagerState.RNDWALK:
-                    item.DefineBehaviour();
-                    break;
-            }
-        }*/
-    }
-
-    /*public static void DeleteAnimal(Animal animal) //////////////// А что, если животное умрет, когда другой охотник будет перебирать цикл foreach при поиске 
-    {
-        Animals.Remove(animal);
-        DynamicGameCanvas.animalSmallInfoList.Remove(animal.smallInfo);
-        Destroy(animal.smallInfo.gameObject);
-        Destroy(animal.gameObject); Debug.Log("AnimalManager.DeleteAnimal()   Destroy...");
-    }*/
 
     public void Clear()
     {

@@ -58,8 +58,6 @@ public class DataList : MonoBehaviour
     {
         GameObject bld;
         Building bldScript;
-        //GameObject resObj;
-        //ResourceData resData;
         List<ResourceIndex>[] resIndices = new List<ResourceIndex>[Enum.GetNames(typeof(ResourceType)).Length];
         GameObject natureObj;
         NatureData natureData;
@@ -72,13 +70,6 @@ public class DataList : MonoBehaviour
             bldScript = bld.GetComponent<Building>();
             intBuildingObjDict.Add(bldScript.BldData.Index, bld);
         }
-
-        // Making dictionary of item prefabs (of game objects)
-        //for (int i = 0; i < itemObjects.Length; i++)
-        //{
-        //    resObj = itemObjects[i];
-        //    intItemObjDict.Add(resObj.GetComponent<Item>().data.index, resObj);
-        //}
 
         //
         emptyItem = itemObject;
@@ -141,7 +132,6 @@ public class DataList : MonoBehaviour
     }
 
     public static GameObject GetBuildingObj(BuildingIndex index) => intBuildingObjDict[index];
-    //public static GameObject GetResourceObj(ResourceIndex index) => intResourceObjDict[index];
     public static GameObject GetItemObject() => emptyItem;
     public static ResourceData GetResource(ResourceIndex index) => intResourceDict[index];
     public static GameObject GetResourceModel(ResourceIndex index) => intResourceModelDict[index];

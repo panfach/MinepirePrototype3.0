@@ -316,7 +316,7 @@ public static class ActionAlgorithms
         switch (action.mode)
         {
             case GetQueryMode.EAT:
-                action.query = new ResourceQuery(ResourceType.FOOD, VillageData.foodServing);
+                action.query = new ResourceQuery(ResourceType.FOOD, VillageData.FoodServing);
                 break;
             case GetQueryMode.RECIPE:
                 action.query = new ResourceQuery(creature.GeneralAI.DestRecipe.requiredRes);
@@ -732,7 +732,7 @@ public static class ActionAlgorithms
                         }
                         break;
                     case 1:
-                        foreach (ExtractedResourceLink item in VillageData.extractionQueue)
+                        foreach (ExtractedResourceLink item in VillageData.ExtractionQueue)
                         {
                             if (item.Occupy(creature.GeneralAI))
                             {

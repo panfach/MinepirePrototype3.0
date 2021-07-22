@@ -4,14 +4,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class CreatureInfo : MonoBehaviour
+public class CreatureInfo : InfoContainer
 {
     public static Creature activeCreature;
-    public static GameObject smallInfoPrefab;
+    static bool turnedOn = false;
 
-    static bool creatureInfoTurnedOn = false;
-
-    [Header("Managed object")]
+    [Header("Windows and sections")]
     public GameObject creatureInfoWindow;
 
     [Header("Components")]
@@ -23,29 +21,22 @@ public class CreatureInfo : MonoBehaviour
     public TextMeshProUGUI[] warehouseResName;
     public TextMeshProUGUI[] warehouseValue;
 
-    //public bool TurnedOn { get => villagerInfoTurnedOn; }                              // old: VillagerInfoTurnedOn
+    public bool TurnedOn { get => turnedOn; }
 
-    public void Set(bool state)
+
+    public override void Set(bool state)
     {
         if (SaveLoader.state == SaveLoadState.EXITING) return;
 
-        creatureInfoTurnedOn = state;
-        StateManager.CreatureInfo = state;
         creatureInfoWindow.SetActive(state);
-        if (state)
-        {
-            Refresh();
-        }
+        StateManager.CreatureInfo = state;
+        turnedOn = state;
+        if (state) Refresh();
     }
 
-    public void Refresh(Creature creature)
+    public override void Refresh()
     {
-        if (activeCreature == creature) Refresh();
-    }
-
-    public void Refresh()
-    {
-        if (!creatureInfoTurnedOn || SaveLoader.state == SaveLoadState.EXITING) return;
+        if (!turnedOn || SaveLoader.state == SaveLoadState.EXITING) return;
 
         creatureName.text = activeCreature.CrtProp.Name;
         healthSlider.value = activeCreature.Health.Value;
@@ -73,5 +64,10 @@ public class CreatureInfo : MonoBehaviour
             }
         }
         else inventory.SetActive(false);
+    }
+
+    public void Refresh(Creature creature)
+    {
+        if (activeCreature == creature) Refresh();
     }
 }

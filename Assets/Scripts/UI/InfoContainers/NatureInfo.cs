@@ -1,15 +1,13 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class NatureInfo : MonoBehaviour
+public class NatureInfo : InfoContainer
 {
     public static Nature activeNature;
-    public static bool natureInfoTurnedOn = false;
+    static bool turnedOn = false;
 
-    [Header("Managed object")]
+    [Header("Windows and sections")]
     public GameObject natureInfoWindow;
     public GameObject[] resourceField;
 
@@ -21,40 +19,31 @@ public class NatureInfo : MonoBehaviour
     public GameObject[] interactButton;
     public TextMeshProUGUI[] interactButtonText;
 
-    // -------------------------------------------------------------------------------------------------- //
+    public bool TurnedOn { get => turnedOn; }
 
 
-    // -------------------------------------------------------------------------------------------------- //
-
-    public bool NatureInfoTurnedOn
+    public void OnClickExtractButton(int index)
     {
-        get
-        {
-            return natureInfoTurnedOn;
-        }
-        set
-        {
-            natureInfoWindow.SetActive(value);
-            StateManager.ResourceSourceInfo = value;
-            natureInfoTurnedOn = value;
-        }
+        if (activeNature.ResourceDeposit.Extractable(index))
+            TurnOffExtractable(index);
+        else
+            TurnOnExtractable(index);
     }
 
-    public void Set(bool state)
+
+    public override void Set(bool state)
     {
         if (SaveLoader.state == SaveLoadState.EXITING) return;
 
-        NatureInfoTurnedOn = state;
+        natureInfoWindow.SetActive(state);
         StateManager.ResourceSourceInfo = state;
-        if (state)
-        {
-            Refresh();
-        }
+        turnedOn = state;
+        if (state) Refresh();
     }
 
-    public void Refresh()
+    public override void Refresh()
     {
-        if (!natureInfoTurnedOn || SaveLoader.state == SaveLoadState.EXITING) return;
+        if (!turnedOn || SaveLoader.state == SaveLoadState.EXITING) return;
 
         _name.text = activeNature.NtrData.Name_rus;
 
@@ -84,14 +73,6 @@ public class NatureInfo : MonoBehaviour
         {
             resourceField[i].SetActive(false);
         }
-    }
-
-    public void OnClickExtractButton(int index)
-    {
-        if (activeNature.ResourceDeposit.Extractable(index))
-            TurnOffExtractable(index);
-        else
-            TurnOnExtractable(index);
     }
 
     public void TurnOnExtractable(int index)

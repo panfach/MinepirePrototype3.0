@@ -1,15 +1,14 @@
-﻿using System.Collections.Generic;
-using TMPro;
+﻿using TMPro;
 using UnityEngine.UI;
 using UnityEngine;
 
 // ------------------------------------------- // MINEPIRE // ------------------------------------------- //
-public class BuildingInfo : MonoBehaviour
+public class BuildingInfo : InfoContainer                       
 {
     public static Building activeBuilding;
-    public static bool buildingInfoTurnedOn = false; 
+    private static bool turnedOn = false;
 
-    [Header("Managed object")]
+    [Header("Windows and sections")]
     public GameObject buildingInfoWindow;
     public GameObject peopleSection;
     public GameObject productionSection;
@@ -32,36 +31,22 @@ public class BuildingInfo : MonoBehaviour
     public TextMeshProUGUI[] warehouseResName;
     public TextMeshProUGUI[] warehouseValue;
 
-    public bool BuildingInfoTurnedOn
-    {
-        get
-        {
-            return buildingInfoTurnedOn;
-        }
-        set
-        {
-            buildingInfoWindow.SetActive(value);
-            StateManager.BuildingInfo = value;
-            buildingInfoTurnedOn = value;
-        }
-    }
+    public static bool TurnedOn { get => turnedOn; }
 
 
-    public void Set(bool state)
+    public override void Set(bool state)
     {
         if (SaveLoader.state == SaveLoadState.EXITING) return;
 
-        BuildingInfoTurnedOn = state;
+        buildingInfoWindow.SetActive(state);
         StateManager.BuildingInfo = state;
-        if (state)
-        {
-            Refresh();
-        }
+        turnedOn = state;
+        if (state) Refresh();
     }
 
-    public void Refresh()
+    public override void Refresh()
     {
-        if (!buildingInfoTurnedOn || SaveLoader.state == SaveLoadState.EXITING) return;
+        if (!turnedOn || SaveLoader.state == SaveLoadState.EXITING) return;
 
         buildingName.text = activeBuilding.BldData.Name_rus;
 

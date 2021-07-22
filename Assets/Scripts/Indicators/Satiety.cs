@@ -1,16 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class Satiety : MonoBehaviour, IIndicator
+public class Satiety : Indicator
 {
-    [Header("Entity")]
-    public Entity entity;
-
     [Header("Info")]
     [SerializeField] float satiety;
-
-    public event SimpleEventHandler changedValueEvent;
 
 
     private void OnEnable()
@@ -19,7 +12,7 @@ public class Satiety : MonoBehaviour, IIndicator
     }
 
 
-    public float Value
+    public override float Value
     {
         get => satiety;
         set
@@ -28,7 +21,7 @@ public class Satiety : MonoBehaviour, IIndicator
 
             satiety = value;
             satiety = Mathf.Clamp(satiety, 0f, 1f);
-            changedValueEvent?.Invoke();
+            InvokeChangedEvent();
 
             if (satiety <= 0f) entity.Die();
         }

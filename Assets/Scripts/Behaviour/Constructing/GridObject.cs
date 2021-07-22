@@ -108,46 +108,6 @@ public class GridObject : MonoBehaviour
         return SmallCellGrid.CheckPlaceAvailability(entity);
     }
 
-    // //////////////////////////////////////////////////////////////// This is example, how to write checking function for availability
-    //bool TryOccupyPlace()
-    //{
-    //    if (entity.GridObject == null) return false;
-
-    //    if (BuildingProperties.constructionMode == ConstructionMode.ORD)
-    //    {
-    //        bool enterAvialability = false;
-    //        foreach (CellPointer pointer in entity.GridObject.cellPointer)
-    //        {
-    //            if (pointer.enterCellPointer)
-    //            {
-    //                if (pointer.isEnableForBuild) enterAvialability = true;
-    //            }
-    //            else
-    //            {
-    //                if (!pointer.isEnableForBuild)
-    //                {
-    //                    Notification.Invoke(NotifType.PLACEBUILD);
-    //                    return false;
-    //                }
-    //            }
-    //        }
-
-    //        if (!enterAvialability)
-    //        {
-    //            Notification.Invoke(NotifType.PLACEBUILD);
-    //            return false;
-    //        }
-    //    }
-
-    //    SCCoord coord = SCCoord.FromPos(GeneralBuilder.hitPointBuild + CellMetrics.smallCellCenterShift);
-    //    int[] size = GeneralBuilder.buildModeObject.GetComponent<Building>().Data.Size;
-    //    OccupyPlace();
-    //    entity.GridObject.coordinates = coord;
-    //    HideCellPointers();
-
-    //    return true;
-    //}
-
     public void OccupyPlace()                                     // Curve fuction
     {
 

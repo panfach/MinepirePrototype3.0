@@ -10,20 +10,16 @@ public class ResourceInfo : MonoBehaviour
 
     public void Refresh()
     {
-        float[] res = VillageData.resources;
-
-        rawVenison.text = res[(int)ResourceIndex.RAWVENISON].ToString("F0");
-        rawDeerSkins.text = res[(int)ResourceIndex.RAWDEERSKIN].ToString("F0");
-        apples.text = res[(int)ResourceIndex.APPLE].ToString("F0");
-        wildberries.text = res[(int)ResourceIndex.WILDBERRIES].ToString("F0");
-        sticks.text = res[(int)ResourceIndex.STICKS].ToString("F0");
-        cobblestones.text = res[(int)ResourceIndex.COBBLESTONES].ToString("F0");
-        deerSkins.text = res[(int)ResourceIndex.DEERSKIN].ToString("F0");
-        stoneSpear.text = res[(int)ResourceIndex.STONESPEAR].ToString("F0");
-        roughClothesFromSkins.text = res[(int)ResourceIndex.ROUGHCLOTHINGOFSKINS].ToString("F0");
-        fish.text = res[(int)ResourceIndex.FISH].ToString("F0");
-        jerky.text = res[(int)ResourceIndex.JERKY].ToString("F0");
-
-        //Debug.Log("ResourceInfo cobblestones now: " + res[(int)ResourceIndex.COBBLESTONES].ToString("F6"));
+        rawVenison.text = VillageData.Resources(ResourceIndex.RAWVENISON).ToString("F0");
+        rawDeerSkins.text = VillageData.Resources(ResourceIndex.RAWDEERSKIN).ToString("F0");
+        apples.text = VillageData.Resources(ResourceIndex.APPLE).ToString("F0");
+        wildberries.text = VillageData.Resources(ResourceIndex.WILDBERRIES).ToString("F0");
+        sticks.text = VillageData.Resources(ResourceIndex.STICKS).ToString("F0");
+        cobblestones.text = VillageData.Resources(ResourceIndex.COBBLESTONES).ToString("F0");
+        deerSkins.text = VillageData.Resources(ResourceIndex.DEERSKIN).ToString("F0");
+        stoneSpear.text = VillageData.Resources(ResourceIndex.STONESPEAR).ToString("F0");
+        roughClothesFromSkins.text = VillageData.Resources(ResourceIndex.ROUGHCLOTHINGOFSKINS).ToString("F0");
+        fish.text = VillageData.Resources(ResourceIndex.FISH).ToString("F0");
+        jerky.text = VillageData.Resources(ResourceIndex.JERKY).ToString("F0");
     }
 }

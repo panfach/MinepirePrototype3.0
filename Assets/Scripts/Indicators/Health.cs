@@ -1,17 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class Health : MonoBehaviour, IIndicator
+public class Health : Indicator
 {
-    [Header("Entity")]
-    public Entity entity;
-
     [Header("Info")]
     [SerializeField] float health;
-    [SerializeField] AttackController lastAttacker;                                                                  // temporal ?
-
-    public event SimpleEventHandler changedValueEvent;
+    [SerializeField] AttackController lastAttacker;
 
     public AttackController LastAttacker { get => lastAttacker; }
 
@@ -22,7 +15,7 @@ public class Health : MonoBehaviour, IIndicator
     }
 
 
-    public float Value
+    public override float Value
     {
         get => health;
         set
@@ -31,7 +24,7 @@ public class Health : MonoBehaviour, IIndicator
 
             health = value;
             health = Mathf.Clamp(health, 0f, entity.CrtData.MaxHealth);
-            changedValueEvent?.Invoke();
+            InvokeChangedEvent();
 
             if (health <= 0f)
             {

@@ -79,26 +79,6 @@ public class BuildSet : MonoBehaviour
         return true;
     }
 
-    //public bool TryBuild(int _uniqueIndex = 0)
-    //{
-    //    if (!CheckResourceCost() || !TryOccupyPlace()) return false;
-
-    //    SpendResource();
-    //    desiredUniqueIndex = _uniqueIndex;
-    //    TransformIntoConstruction();
-
-    //    return true;
-    //}
-
-    //public bool TryConstruct(int _uniqueIndex = 0, int _process = 0)
-    //{
-    //    if (!CheckResourceCost() || !TryOccupyPlace()) return false;
-    //    desiredUniqueIndex = _uniqueIndex;
-    //    TransformIntoConstruction(_process);
-
-    //    return true;
-    //}
-
     public bool CheckStartConstructionConditions()
     {
         if (BuildingProperties.constructionMode == ConstructionMode.INSTBLD) return true;
@@ -128,17 +108,14 @@ public class BuildSet : MonoBehaviour
         constructionModel.SetActive(true);
 
         // List managing
-        VillageData.AddConstruction(entity as Building);                            // Generalize ? or not ?
+        VillageData.AddConstruction(entity as Building);                                           // Generalize ? or not ?
 
         // Model position adjustment
-        currentModel = constructionModel.transform.GetChild(0).gameObject;                     // Bad
+        currentModel = constructionModel.transform.GetChild(0).gameObject;                         // Perhaps not good
         ModelPos = new Vector3(currentModelPos.x, currentModel.transform.position.y, currentModelPos.z);
-        // cs.currentModel.transform.position = new Vector3(cs.currentModelPos.x, cs.currentModel.transform.position.y, cs.currentModelPos.z);                          // Why is 'y' calculated differently?
-
-        // Creating small info
-        if (entity.SmallInfoController != null) entity.SmallInfoController.enabled = true;                       // This thing must create small info in SmallInfoController
 
         // Turning on components
+        if (entity.SmallInfoController != null) entity.SmallInfoController.enabled = true;
         if (entity.ColliderHandler != null) entity.ColliderHandler.enabled = true;
         if (entity.DisplayedItems != null) entity.DisplayedItems.enabled = true;
         if (entity.SmallInfoController != null) entity.SmallInfoController.enabled = true;
@@ -163,10 +140,10 @@ public class BuildSet : MonoBehaviour
 
         // List managing
         VillageData.RemoveConstruction(entity as Building);
-        VillageData.AddBuilding(entity as Building);                            // Generalize ? or not ?
+        VillageData.AddBuilding(entity as Building);                                               // Generalize ? or not ?
 
         // Model position adjustment
-        currentModel = readyModel.transform.GetChild(0).gameObject;                        // Bad
+        currentModel = readyModel.transform.GetChild(0).gameObject;                                // Perhaps not good
         ModelPos = new Vector3(currentModelPos.x, currentModel.transform.position.y, currentModelPos.z);
 
         // Recreating small info
@@ -184,7 +161,8 @@ public class BuildSet : MonoBehaviour
         if (entity.Production != null) entity.Production.enabled = true;
 
         // Handling selecton plane
-        if (entity.DisplayedItems != null && entity.DisplayedItems.HasSelectionPlane) entity.DisplayedItems.SetParentOfSelectionPlane(readyModel.transform);
+        if (entity.DisplayedItems != null && entity.DisplayedItems.HasSelectionPlane) 
+            entity.DisplayedItems.SetParentOfSelectionPlane(readyModel.transform);
 
         constructionStatus = ConstructionStatus.READY;
 
@@ -192,71 +170,6 @@ public class BuildSet : MonoBehaviour
 
         return entity;
     }
-
-    /*bool CheckResourceAvailability()
-    {
-        if (BuildingProperties.constructionMode == ConstructionMode.ORD)
-        {
-            float value;
-            ResourceQuery resQuery = entity.BldData.ResourceCost;
-            IEnumerable<Building> warehousesArray = from item in VillageData.Buildings                               // It need to come up with a way to use queries such this conveniently
-                                                    where (item.BldData.BldType == BuildingType.WAREHOUSE)
-                                                    select item;
-
-            for (int i = 0; i < resQuery.index.Length; i++)
-            {
-                value = resQuery.indexVal[i];
-
-                foreach (Building item in warehousesArray)
-                {
-                    for (int j = 0; j < item.Inventory.PacksAmount; j++)
-                    {
-                        item.Inventory.Look(j, out ResourceIndex outInd, out float outValue);
-                        //Debug.Log(" : : : Checking warehouse: j=" + j + " resQuery.index[i] " + resQuery.index[i] + " outInd " + outInd + " outValue " + outValue);
-                        if (outInd != resQuery.index[i]) continue;
-                        value -= outValue;
-                        if (value <= 0) break;
-                    }
-                    if (value <= 0) break;
-                }
-
-                if (value > 0) { *//*Debug.Log("Not enough resources! Need " + value + " " + resQuery.index[i] + " more");*//* Notification.Invoke(NotifType.RESBUILD); return false; }
-                //else Debug.Log("There is necessary amount of " + resQuery.index[i]);
-            }
-        }
-
-        //if (VillageData.resources[(int)resQuery.index[i]] < resQuery.indexVal[i]) return false;
-
-        return true;
-    }*/
-
-    /*void SpendResource()
-    {
-        float value;
-        ResourceQuery resQuery = entity.BldData.ResourceCost;
-        IEnumerable<Building> warehousesArray = from item in VillageData.Buildings                               // It need to come up with a way to use queries such this conveniently
-                                                where (item.BldData.BldType == BuildingType.WAREHOUSE)
-                                                select item;
-
-        for (int i = 0; i < resQuery.index.Length; i++)
-        {
-            value = resQuery.indexVal[i];
-            VillageData.resources[(int)resQuery.index[i]] -= value;
-
-            foreach (Building item in warehousesArray)
-            {
-                for (int j = 0; j < item.Inventory.PacksAmount; j++)
-                {
-                    if (item.Inventory.StoredRes[j] != resQuery.index[i]) continue;
-                    value = item.Inventory.ClearPack(j, value);
-                    if (value <= 0) break;
-                }
-                if (value <= 0) break;
-            }
-        }
-
-        InfoDisplay.Refresh();                                                                                   // Need to use UIController
-    }*/
 }
 
 public enum ConstructionStatus

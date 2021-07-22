@@ -13,6 +13,7 @@ public class UIController : MonoBehaviour
     [SerializeField] bool reactToSatietyChanges;
     [SerializeField] bool reactToProductionChanges;
     [SerializeField] bool refreshResourceInfo;
+    [SerializeField] bool reactToCreatureContainerChanges;
 
     public bool ReactToInventoryChanges { get => reactToInventoryChanges; }
     public bool RefreshResourceInfo { get => refreshResourceInfo; }
@@ -56,5 +57,6 @@ public class UIController : MonoBehaviour
         if (entity.Appointer != null) entity.Appointer.appointmentChangedEvent -= RefreshInfo;
         if (entity.ResourceDeposit != null) entity.ResourceDeposit.resourceChangedEvent -= RefreshInfo;
         if (reactToProductionChanges && entity.Production != null) entity.Production.changedEvent -= RefreshInfo;
+        if (reactToCreatureContainerChanges && entity.CreatureContainer != null) entity.CreatureContainer.changedEvent -= RefreshInfo;
     }
 }

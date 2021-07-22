@@ -15,7 +15,6 @@ public class CreatureProperties : MonoBehaviour
     [SerializeField] bool gender;
     [SerializeField] float age;
     [SerializeField] CreatureContainer placeOfStay;                                              // ??? Maybe create separate class for this    // No, it's no need
-    //public Item[] droppedItems;                                                         // temporal
 
     public string Name { get => _name; }
     public bool Gender { get => gender; }
@@ -29,23 +28,7 @@ public class CreatureProperties : MonoBehaviour
             placeOfStay = value;
         }
     }
-    /*public Item[] DroppedItems { get => droppedItems; }*/
-    /*public GameObject[] DroppedItemsAsGameObjects
-    {
-        get
-        {
-            GameObject[] arr = new GameObject[droppedItems.Length];
-            for (int i = 0; i < droppedItems.Length; i++) arr[i] = droppedItems[i].gameObject;
-            return arr;
-        }
-    }*/
 
-
-/*    public void Init(bool _gender, float _age)
-    {
-        gender = _gender;
-        age = _age;
-    }*/
 
     public void Init(bool _gender, string __name, float _age, Building _home = null, Building _work = null, float _satiety = 2.0f, float _health = -1f)       // There is no need to have default values
     {

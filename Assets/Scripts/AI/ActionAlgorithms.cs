@@ -1047,7 +1047,7 @@ public static class ActionAlgorithms
                 yield break;
             }
 
-            action.target = Distance.ChooseNearestTarget(targets, creature.transform.position);
+            action.target = EntitySearch.ChooseNearestTarget(targets, creature.transform.position);
         }
         else if (action.mode == FindTargetMode.DESTENTITY)
         {
@@ -1093,7 +1093,7 @@ public static class ActionAlgorithms
         }
         else if (action.mode == FindItemMode.RADIUS)
         {
-            Item item = Distance.ChooseNearestItem(ItemManager.items, creature.transform.position);
+            Item item = EntitySearch.ChooseNearestItem(creature.transform.position);
             if (item == null || !item.Inventory.Occupy(creature) || Vector3.SqrMagnitude(item.transform.position - creature.transform.position) > Mathf.Pow(action.radius, 2))
             {
                 FalseReaction(creature, action);
@@ -1114,7 +1114,7 @@ public static class ActionAlgorithms
         }
         else if (action.mode == FindItemMode.HASSPACEINWAREHOUSE)
         {
-            Item item = Distance.ChooseNearestItemWithFreeSpaceInWarehouse(ItemManager.items, creature.transform.position);
+            Item item = EntitySearch.ChooseNearestItemWithFreeSpaceInWarehouse(creature.transform.position);
             if (item == null || !item.Inventory.Occupy(creature))
             {
                 FalseReaction(creature, action);

@@ -27,8 +27,6 @@ public class BuildSet : MonoBehaviour
         get => constructionProcess;
         set
         {
-            if (entity.BldProp.deletionFlag == true) return;
-
             constructionProcess = value;
             if (BuildingProperties.constructionMode == ConstructionMode.INSTBLD || constructionProcess >= entity.BldData.ConstrCost)
             {

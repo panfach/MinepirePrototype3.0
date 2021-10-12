@@ -1,4 +1,5 @@
 # Minepire_PROTOTYPE_3.0 ("Humanica" in future)
+July 2020
 
 Как поиграть в демку:
 1) Можете скачать билд Unity: https://disk.yandex.ru/d/AR9KP65-YC0j0w
